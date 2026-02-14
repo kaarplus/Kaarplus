@@ -32,11 +32,18 @@ Implement server-side photo upload via S3 presigned URLs, create ListingImage re
 ### Client-Side Upload Flow
 
 1. User selects files in dropzone (P1-T10 step 3)
-2. Client validates file type and size
-3. Client requests presigned URL from API
-4. Client uploads directly to S3 using presigned URL
-5. On success, client calls API to create ListingImage record
-6. Thumbnail preview shown from S3 URL
+2. **Display instructional tips overlay/tooltip:**
+   - \"Take photos in daylight for best results\"
+   - \"Include exterior from all angles (front, back, sides)\"
+   - \"Capture interior dashboard and seats\"
+   - \"Show engine bay and wheels\"
+   - \"Avoid blurry or dark images\"
+   - \"Include any damage or special features\"
+3. Client validates file type and size
+4. Client requests presigned URL from API
+5. Client uploads directly to S3 using presigned URL
+6. On success, client calls API to create ListingImage record
+7. Thumbnail preview shown from S3 URL
 
 ### Image Processing (Optional Enhancement)
 

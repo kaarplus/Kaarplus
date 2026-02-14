@@ -33,8 +33,8 @@ The goal of Phase 1 is a working, deployable application with core listing brows
 | ------ | ------------------------------------------- | ------ | ---------------- | ---- |
 | P1-T01 | Monorepo scaffolding & tooling              | ✅     | —                | 3h   |
 | P1-T02 | Database schema & Prisma setup              | ✅     | P1-T01           | 2h   |
-| P1-T03 | Express API server boilerplate              | ⬜     | P1-T01           | 2h   |
-| P1-T04 | Next.js app scaffolding & design system     | ⬜     | P1-T01           | 3h   |
+| P1-T03 | Express API server boilerplate              | ✅     | P1-T01           | 2h   |
+| P1-T04 | Next.js app scaffolding & design system     | ✅     | P1-T01           | 3h   |
 | P1-T05 | Authentication (NextAuth + Express JWT)     | ⬜     | P1-T02, T03, T04 | 4h   |
 | P1-T06 | Landing page                                | ⬜     | P1-T04           | 4h   |
 | P1-T07 | Listings API (CRUD + filters + search)      | ⬜     | P1-T02, T03      | 4h   |
@@ -72,6 +72,8 @@ After MVP launch, add features that drive user retention and interaction.
 | P2-T06 | Messaging system (buyer-seller)         | ⬜     | P1-T05         | 4h   |
 | P2-T07 | Email notifications (transactional)     | ⬜     | P1-T03         | 3h   |
 | P2-T08 | Newsletter signup                       | ⬜     | P2-T07         | 1h   |
+| P2-T09 | **Reviews system (Carvago-style)**      | ⬜     | P1-T05, P1-T07 | 4h   |
+| P2-T10 | **Vehicle inspection service**          | ⬜     | P1-T07         | 3h   |
 
 ### Phase 2 — Acceptance Criteria
 
@@ -81,6 +83,8 @@ After MVP launch, add features that drive user retention and interaction.
 - [ ] Users receive email notifications for key events
 - [ ] Users can message sellers through the platform
 - [ ] Dashboard shows listing stats and management tools
+- [ ] **Carvago-style reviews are functional (rating + comments)**
+- [ ] **Vehicle inspection service can be requested and reports generated**
 
 ---
 
@@ -109,19 +113,21 @@ Performance optimization, testing, monitoring, and internationalization.
 
 | ID     | Task                                | Status | Dependencies | Est. |
 | ------ | ----------------------------------- | ------ | ------------ | ---- |
-| P4-T01 | i18n setup (Estonian + English)     | ⬜     | P1-T06       | 4h   |
-| P4-T02 | Core Web Vitals optimization        | ⬜     | Phase 1      | 3h   |
-| P4-T03 | E2E test suite (Playwright)         | ⬜     | Phase 1      | 4h   |
-| P4-T04 | Error tracking (Sentry integration) | ⬜     | P1-T01       | 2h   |
-| P4-T05 | CI/CD pipeline (GitHub Actions)     | ⬜     | P1-T01       | 2h   |
+| P4-T01 | i18n setup (Estonian + Russian + English) | ⬜     | P1-T06       | 5h   |
+| P4-T02 | Core Web Vitals optimization              | ⬜     | Phase 1      | 3h   |
+| P4-T03 | E2E test suite (Playwright)               | ⬜     | Phase 1      | 4h   |
+| P4-T04 | Error tracking (Sentry integration)       | ⬜     | P1-T01       | 2h   |
+| P4-T05 | CI/CD pipeline (GitHub Actions)           | ⬜     | P1-T01       | 2h   |
+| P4-T06 | **Mobile app preparation (investor screens)** | ⬜     | Phase 1      | 3h   |
 
 ### Phase 4 — Acceptance Criteria
 
-- [ ] Application supports Estonian and English languages
+- [ ] Application supports **Estonian, Russian, and English** languages
 - [ ] Core Web Vitals pass (LCP < 2.5s, FID < 100ms, CLS < 0.1)
 - [ ] Critical user flows covered by E2E tests
 - [ ] Errors automatically reported to Sentry
 - [ ] PRs trigger automated tests and preview deployments
+- [ ] **API prepared for mobile app consumption with investor screens**
 
 ---
 

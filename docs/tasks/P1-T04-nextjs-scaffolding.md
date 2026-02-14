@@ -1,7 +1,7 @@
 # P1-T04: Next.js App Scaffolding & Design System
 
 > **Phase:** 1 — Core MVP
-> **Status:** ⬜ Not Started
+> **Status:** ✅ Complete
 > **Dependencies:** P1-T01
 > **Estimated Time:** 3 hours
 
@@ -26,6 +26,8 @@ In `apps/web`:
 - Set up CSS variables for Shadcn/ui theming
 - Define the color palette based on Figma design
 - Desktop-first breakpoints
+- **Design Priority:** Light mode (dark mode support planned for future)
+- **Default theme:** Light
 
 ### 3. Shadcn/ui Components
 
@@ -42,7 +44,13 @@ Install initial set of components:
 
 Create shared layout components in `components/layout/`:
 
-- `header.tsx` — main navigation (logo, search, auth buttons, category nav)
+- `header.tsx` — main navigation with:
+  - Logo
+  - Search bar
+  - **"Place your ad" CTA button** (prominent)
+  - **Language selector** (ET / RU / EN)
+  - Auth buttons (Login/Register)
+  - Category nav
 - `footer.tsx` — multi-column footer (links, social, newsletter)
 - `main-layout.tsx` — wraps header/footer around page content
 - `mobile-nav.tsx` — mobile hamburger menu
@@ -88,6 +96,7 @@ Create stub stores in `lib/stores/`:
 - `useFilterStore.ts`
 - `useFavoritesStore.ts`
 - `useCompareStore.ts`
+- `useLanguageStore.ts` — for EST/RU/EN switching
 
 ### 8. Font & SEO Defaults
 
@@ -136,6 +145,11 @@ apps/web/public/favicon.ico
 Reference the Figma file for:
 
 - Header layout (logo placement, navigation items, CTA buttons)
+  - **"Place your ad" button must be prominent**
+  - **Language selector in header (ET / RU / EN)**
+  - Login/Registration style similar to Auto24
 - Footer structure (column layout, link groups, social icons)
 - Color palette and typography
 - Spacing system
+- **Design Style:** NOT like Turbo.az or Auto24
+- **Theme:** Light mode priority (dark mode for future releases)

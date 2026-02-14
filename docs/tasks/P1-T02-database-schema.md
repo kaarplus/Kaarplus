@@ -33,6 +33,8 @@ Implement ALL models from `docs/DATABASE.md`:
 - `Payment` — Stripe payment records
 - `GdprConsent` — one-to-one with User
 
+**Note:** Review and Inspection models will be added in Phase 2/3 as per updated requirements.
+
 **Enums:**
 
 - `UserRole` (BUYER, INDIVIDUAL_SELLER, DEALERSHIP, ADMIN, SUPPORT)

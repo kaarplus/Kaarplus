@@ -4,8 +4,11 @@
 
 Kaarplus is a production-ready car sales marketplace for the Estonian market. Full-stack monorepo with Next.js frontend and Express backend, supporting B2C (dealership-to-customer) and C2C (peer-to-peer) vehicle sales with integrated Stripe payments.
 
-**Target Market:** Estonia (language: Estonian primary, English secondary)
+**Target Market:** Estonia
+**Languages:** Estonian (primary), Russian, English
 **Currency:** EUR only
+**Platform Strategy:** Web-first (mobile app to follow, with investor-specific screens)
+**Design Priority:** Light mode (dark mode planned for future)
 **Design Reference:** https://www.figma.com/design/l71M638BL3FCtWZCOvEh1F/Kaarplus
 
 ## Tech Stack
@@ -185,10 +188,10 @@ PORT=4000
 - Open Graph and Twitter Card tags
 - JSON-LD structured data (Vehicle, Organization, BreadcrumbList)
 - Proper heading hierarchy (single H1 per page)
-- Estonian language meta (`lang="et"`)
+- Language-specific meta tags (et/ru/en)
 - Alt text on all images
 - Canonical URLs
-- Estonian keywords: "autod Eestis", "auto ostmine", "kasutatud autod"
+- Estonian keywords: "autod Eestis", "auto ostmine", "kasutatud autod", "elektriautod", "hübriidautod"
 
 ## GDPR Requirements
 
@@ -213,12 +216,23 @@ When implementing features:
 
 ## Important Business Rules
 
-- Currency is EUR only — never show other currencies
-- Estonian market focus — use Estonian keywords for SEO
-- Photos require manual verification before listing goes live
-- Listings follow PENDING → ACTIVE workflow (admin approval)
-- Maximum 30 photos per listing, minimum 3
-- Price always shown with VAT status indicator
-- Individual sellers limited to 5 active listings
-- Dealerships get unlimited listings
-- Payment is full amount only (no deposits/installments)
+- **Currency:** EUR only — never show other currencies
+- **Languages:** Estonian (primary), Russian, English — all UI text must be translatable
+- **Platform:** Web-first approach; mobile app follows later
+- **Design:** Light mode is priority; dark mode planned for future releases
+- **Photos:** 
+  - Require manual verification before listing goes live
+  - Show instructional tips during upload (best practices for car photography)
+  - Maximum 30 photos per listing, minimum 3
+- **Listings:** Follow PENDING → ACTIVE workflow (admin approval required)
+- **Price:** Always shown with VAT status indicator
+- **User Limits:**
+  - Individual sellers limited to 5 active listings
+  - Dealerships get unlimited listings
+- **Payment:** Full amount only (no deposits/installments)
+- **Vehicle Categories:** Buy, Electric, Hybrid sections required
+- **Ads:** Dealership ads placed within Electric & Hybrid sections
+- **Reviews:** Carvago-style review system for buyers and sellers
+- **Inspection:** Vehicle inspection/check functionality included
+- **Header CTA:** "Place your ad" button prominently displayed in header
+- **Login/Registration:** Style similar to Auto24 platform

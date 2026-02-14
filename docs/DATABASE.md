@@ -13,7 +13,11 @@ User ──┬── Listing ──── ListingImage
        │       │
        │       ├── Message
        │       │
-       │       └── Payment
+       │       ├── Payment
+       │       │
+       │       ├── Review (as reviewer or subject)
+       │       │
+       │       └── Inspection
        │
        ├── GdprConsent
        │
@@ -67,6 +71,28 @@ User ──┬── Listing ──── ListingImage
 - Tracks marketing and analytics consent
 - Required for GDPR compliance
 
+### Review
+
+- User-generated reviews for listings/sellers (Carvago-style)
+- `reviewerId`: User who wrote the review
+- `subjectId`: User being reviewed (seller)
+- `listingId`: Associated car listing (optional)
+- `rating`: 1-5 stars
+- `comment`: Text review
+- `verifiedPurchase`: Boolean flag
+- Moderation workflow before publishing
+
+### Inspection
+
+- Vehicle inspection/check records
+- `listingId`: Associated car
+- `inspectorId`: Professional inspector (if applicable)
+- `inspectionDate`: When inspection occurred
+- `reportUrl`: S3 link to PDF report
+- `status`: PENDING, COMPLETED, FAILED
+- `findings`: JSONB for structured inspection data
+- `overallCondition`: EXCELLENT, GOOD, FAIR, POOR
+
 ## Enums
 
 ```prisma
@@ -93,6 +119,19 @@ enum PaymentStatus {
   FAILED
   REFUNDED
 }
+
+enum InspectionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum VehicleCondition {
+  EXCELLENT
+  GOOD
+  FAIR
+  POOR
+}
 ```
 
 ## Indexing Strategy
@@ -109,6 +148,9 @@ enum PaymentStatus {
 | Message      | `[recipientId, read]`                 | Unread inbox queries    |
 | Payment      | `[buyerId]`                           | Buyer payment history   |
 | Payment      | `[sellerId]`                          | Seller payment history  |
+| Review       | `[subjectId]`                         | User reviews lookup     |
+| Review       | `[listingId]`                         | Listing reviews         |
+| Inspection   | `[listingId]`                         | Listing inspection      |
 
 ## Migration Workflow
 

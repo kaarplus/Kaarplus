@@ -35,26 +35,38 @@
 
 ### Phase 4 - Polish
 
-23. i18n (Estonian + English + Russian)
+23. i18n (Estonian + Russian + English) — **Priority: EST + RUS + EN**
 24. Performance optimization (Core Web Vitals)
 25. E2E test suite
 26. Error tracking (Sentry)
 27. Monitoring and alerting
+28. **Reviews system** (Carvago-style)
+29. **Vehicle inspection** (check/verification service)
+30. **Mobile app preparation** (API readiness, investor screens)
 
 ## Page Specifications
 
 ### Landing Page (/)
 
-- Hero carousel with ratings
+**Note:** NOT styled like Turbo.az or Auto24
+
+- Hero section with modern design (no video for MVP)
 - Search bar: Make, Model, Year, Fuel, Price, Transmission
+- **Vehicle category sections:**
+  - **Buy** (general cars)
+  - **Electric** (with dealership ads placement)
+  - **Hybrid** (with dealership ads placement)
 - Category quick links: Micro, Sedan, Hatchback, Family, Sport, SUV, Truck, Van
 - 4 value proposition blocks
 - Popular brands grid (8+ logos with counts)
-- Customer testimonials carousel
+- **Customer reviews** carousel (Carvago-style)
 - Statistics section
 - FAQ accordion
 - Newsletter signup
+- **Language selector** (ET / RU / EN) in header
+- **"Place your ad" CTA button** in header (prominent)
 - Full footer
+- **Excluded for MVP:** Video, "Old for New", "Comprehensive services" features
 
 ### Listings (/cars)
 
@@ -80,7 +92,15 @@
 - 4-step wizard with progress indicator
 - Step 1: Vehicle type selection
 - Step 2: Vehicle data form (contact, specs, equipment checkboxes)
-- Step 3: Photo upload (drag-drop, 3-30 photos, 10MB max each)
+- Step 3: Photo upload
+  - Drag-drop interface
+  - 3-30 photos, 10MB max each
+  - **Instructional tips overlay:**
+    - "Take photos in daylight for best results"
+    - "Include exterior from all angles"
+    - "Capture interior dashboard and seats"
+    - "Show engine bay and wheels"
+    - "Avoid blurry or dark images"
 - Step 4: Success confirmation
 
 ### Comparison (/compare)
