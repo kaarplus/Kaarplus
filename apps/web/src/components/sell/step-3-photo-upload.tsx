@@ -66,11 +66,18 @@ export function Step3PhotoUpload({ files, onFilesChange }: Step3PhotoUploadProps
                 </div>
             </div>
 
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 flex items-start gap-3">
-                <AlertCircle className="text-amber-500 shrink-0 mt-0.5" size={18} />
-                <div className="text-sm text-amber-800">
-                    <p className="font-bold">Nõuanne: </p>
-                    <p>Tehke pilte valges ja vältige varjusid. Näidake autot erinevate nurkade alt (esi, taga, küljed, sisu).</p>
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 flex items-start gap-4">
+                <AlertCircle className="text-blue-500 shrink-0 mt-1" size={24} />
+                <div className="space-y-2">
+                    <p className="font-bold text-blue-900">Nõuanded parimate piltide saamiseks:</p>
+                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1 text-sm text-blue-800 list-disc pl-4">
+                        <li>Tehke pilte päevavalguses, vältige pimedust ja varje</li>
+                        <li>Pildistage autot kõigi nurkade alt (esi, taga, küljed)</li>
+                        <li>Lisage pildid salongist, näidikuplokist ja istmetest</li>
+                        <li>Näidake mootoriruumi ja velgi</li>
+                        <li>Vältige udused pilte, hoidke kaamerat kindlalt</li>
+                        <li>Tooge välja kõik kahjustused või erilised lisad</li>
+                    </ul>
                 </div>
             </div>
 

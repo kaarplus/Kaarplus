@@ -2,6 +2,10 @@ import { prisma, ListingStatus, Prisma } from "@kaarplus/database";
 
 import { ForbiddenError, NotFoundError } from "../utils/errors";
 
+import { UploadService } from "./uploadService";
+
+const uploadService = new UploadService();
+
 export interface ListingQuery {
     page: number;
     pageSize: number;
@@ -248,6 +252,60 @@ export class ListingService {
                 subject: `Päring kuulutuse kohta: ${listing.make} ${listing.model}`,
                 body: `Nimi: ${contactData.name}\nEmail: ${contactData.email}\nTelefon: ${contactData.phone || "Puudub"}\n\nSõnum:\n${contactData.message}`,
             },
+        });
+    }
+
+    async addImages(listingId: string, userId: string, isAdmin: boolean, images: { url: string; order: number }[]) {
+        const listing = await prisma.listing.findUnique({ where: { id: listingId } });
+        if (!listing) throw new NotFoundError("Listing not found");
+
+        if (!isAdmin && listing.userId !== userId) {
+            throw new ForbiddenError("You don't have permission to add images to this listing");
+        }
+
+        return prisma.listingImage.createMany({
+            data: images.map((img) => ({
+                listingId,
+                url: img.url,
+                order: img.order,
+            })),
+        });
+    }
+
+    async reorderImages(listingId: string, userId: string, isAdmin: boolean, imageOrders: { id: string; order: number }[]) {
+        const listing = await prisma.listing.findUnique({ where: { id: listingId } });
+        if (!listing) throw new NotFoundError("Listing not found");
+
+        if (!isAdmin && listing.userId !== userId) {
+            throw new ForbiddenError("You don't have permission to reorder images for this listing");
+        }
+
+        const updates = imageOrders.map((img) =>
+            prisma.listingImage.update({
+                where: { id: img.id },
+                data: { order: img.order },
+            })
+        );
+
+        return prisma.$transaction(updates);
+    }
+
+    async deleteImage(listingId: string, imageId: string, userId: string, isAdmin: boolean) {
+        const listing = await prisma.listing.findUnique({ where: { id: listingId } });
+        if (!listing) throw new NotFoundError("Listing not found");
+
+        if (!isAdmin && listing.userId !== userId) {
+            throw new ForbiddenError("You don't have permission to delete images from this listing");
+        }
+
+        const image = await prisma.listingImage.findUnique({ where: { id: imageId } });
+        if (!image) throw new NotFoundError("Image not found");
+
+        // Delete from S3
+        await uploadService.deleteFile(image.url);
+
+        return prisma.listingImage.delete({
+            where: { id: imageId },
         });
     }
 }

@@ -24,3 +24,9 @@ listingsRouter.post(
 // Protected routes (Owner/Admin)
 listingsRouter.patch("/:id", requireAuth, listingController.updateListing);
 listingsRouter.delete("/:id", requireAuth, listingController.deleteListing);
+
+// Image management (Owner/Admin)
+listingsRouter.post("/:id/images", requireAuth, writeLimiter, listingController.addImages);
+listingsRouter.patch("/:id/images/reorder", requireAuth, writeLimiter, listingController.reorderImages);
+listingsRouter.delete("/:id/images/:imageId", requireAuth, writeLimiter, listingController.deleteImage);
+

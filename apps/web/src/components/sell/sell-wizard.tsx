@@ -30,6 +30,7 @@ export function SellWizard() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [listingId, setListingId] = useState<string | null>(null);
     const [images, setImages] = useState<File[]>([]);
+    const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({});
 
     const form = useForm({
         resolver: zodResolver(sellFormSchema),
@@ -90,18 +91,42 @@ export function SellWizard() {
         window.scrollTo(0, 0);
     };
 
+    const uploadToS3 = async (file: File, listingId: string): Promise<string> => {
+        // 1. Get presigned URL
+        const presignRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/uploads/presign`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${session?.user?.apiToken}`,
+            },
+            body: JSON.stringify({
+                fileName: file.name,
+                fileType: file.type,
+                listingId: listingId,
+            }),
+        });
+
+        if (!presignRes.ok) throw new Error(`Presign failed for ${file.name}`);
+        const { uploadUrl, publicUrl } = await presignRes.json();
+
+        // 2. Upload to S3
+        const uploadRes = await fetch(uploadUrl, {
+            method: "PUT",
+            body: file,
+            headers: {
+                "Content-Type": file.type,
+            },
+        });
+
+        if (!uploadRes.ok) throw new Error(`Upload failed for ${file.name}`);
+
+        return publicUrl;
+    };
+
     const onSubmit = async () => {
         setIsSubmitting(true);
         try {
-            // 1. Mock image upload simulation
-            // In P1-T11, this will be replaced with actual S3 presigned URL uploads
-            const imageUrls = images.map((_, i) => ({
-                url: `https://placehold.co/800x600?text=Auto+Pilt+${i + 1}`,
-                order: i,
-                verified: false
-            }));
-
-            // 2. Prepare data for API
+            // 1. Prepare data for API (WITHOUT images first)
             const values = form.getValues();
             const listingData = {
                 make: values.make,
@@ -125,10 +150,9 @@ export function SellWizard() {
                 description: values.description,
                 features: values.features,
                 location: values.location,
-                images: imageUrls,
             };
 
-            // 3. Send to API
+            // 2. Create Listing
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/listings`, {
                 method: "POST",
                 headers: {
@@ -140,15 +164,41 @@ export function SellWizard() {
 
             if (!res.ok) {
                 const errorData = await res.json();
-                throw new Error(errorData.message || "Viga kuulutuse salvestamisel");
+                throw new Error(errorData.message || "Viga kuulutuse loomisel");
             }
 
             const result = await res.json();
-            setListingId(result.data.id);
+            const newListingId = result.data.id;
+            setListingId(newListingId);
+
+            // 3. Upload images to S3
+            toast({
+                title: "Piltide üleslaadimine...",
+                description: `Laadime üles ${images.length} pilti. Palun oodake.`,
+            });
+
+            const imageUrls = await Promise.all(
+                images.map((file, index) => uploadToS3(file, newListingId).then(url => ({ url, order: index })))
+            );
+
+            // 4. Attach images to Listing
+            const attachRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/listings/${newListingId}/images`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${session?.user?.apiToken}`,
+                },
+                body: JSON.stringify({ images: imageUrls }),
+            });
+
+            if (!attachRes.ok) {
+                throw new Error("Viga piltide sidumisel kuulutusega");
+            }
+
             setCurrentStep(4);
             toast({
                 title: "Edu!",
-                description: "Kuulutus on edukalt esitatud!",
+                description: "Kuulutus on edukalt esitatud koos piltidega!",
             });
         } catch (error: any) {
             console.error(error);

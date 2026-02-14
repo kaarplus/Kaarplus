@@ -50,3 +50,23 @@ export const contactSellerSchema = z.object({
     message: z.string().min(1, "Message is required"),
     phone: z.string().optional(),
 });
+
+export const addImagesSchema = z.object({
+    images: z.array(z.object({
+        url: z.string().url("Invalid image URL"),
+        order: z.number().int().min(0),
+    })),
+});
+
+export const reorderImagesSchema = z.object({
+    imageOrders: z.array(z.object({
+        id: z.string().min(1, "Image ID is required"),
+        order: z.number().int().min(0),
+    })),
+});
+
+export const presignedUrlSchema = z.object({
+    fileName: z.string().min(1, "File name is required"),
+    fileType: z.string().min(1, "File type is required"),
+    listingId: z.string().min(1, "Listing ID is required"),
+});

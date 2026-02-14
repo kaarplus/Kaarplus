@@ -5,6 +5,8 @@ import {
     updateListingSchema,
     listingQuerySchema,
     contactSellerSchema,
+    addImagesSchema,
+    reorderImagesSchema,
 } from "../schemas/listing";
 import { ListingService, ListingQuery } from "../services/listingService";
 import { BadRequestError } from "../utils/errors";
@@ -70,4 +72,35 @@ export const contactSeller = async (req: Request, res: Response) => {
 
     await listingService.contactSeller(req.params.id as string, result.data);
     res.status(200).json({ message: "Sõnum saadetud" });
+};
+
+export const addImages = async (req: Request, res: Response) => {
+    const result = addImagesSchema.safeParse(req.body);
+    if (!result.success) {
+        throw new BadRequestError(result.error.issues[0].message);
+    }
+
+    const userId = req.user!.id;
+    const isAdmin = req.user!.role === "ADMIN";
+    const images = await listingService.addImages(req.params.id as string, userId, isAdmin, result.data.images);
+    res.status(201).json({ data: images });
+};
+
+export const reorderImages = async (req: Request, res: Response) => {
+    const result = reorderImagesSchema.safeParse(req.body);
+    if (!result.success) {
+        throw new BadRequestError(result.error.issues[0].message);
+    }
+
+    const userId = req.user!.id;
+    const isAdmin = req.user!.role === "ADMIN";
+    await listingService.reorderImages(req.params.id as string, userId, isAdmin, result.data.imageOrders);
+    res.status(200).json({ message: "Pildid ümber järjestatud" });
+};
+
+export const deleteImage = async (req: Request, res: Response) => {
+    const userId = req.user!.id;
+    const isAdmin = req.user!.role === "ADMIN";
+    await listingService.deleteImage(req.params.id as string, req.params.imageId as string, userId, isAdmin);
+    res.status(204).send();
 };

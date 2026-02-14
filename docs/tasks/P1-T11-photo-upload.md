@@ -1,7 +1,7 @@
 # P1-T11: Photo Upload (S3 Presigned URLs)
 
 > **Phase:** 1 — Core MVP
-> **Status:** ⬜ Not Started
+> **Status:** ✅ Complete
 > **Dependencies:** P1-T03, P1-T10
 > **Estimated Time:** 3 hours
 

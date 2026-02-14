@@ -5,6 +5,7 @@ import { authRouter } from "./auth";
 import { listingsRouter } from "./listings";
 import { paymentsRouter } from "./payments";
 import { searchRouter } from "./search";
+import { uploadsRouter } from "./uploads";
 import { userRouter } from "./user";
 import { webhooksRouter } from "./webhooks";
 
@@ -27,3 +28,4 @@ apiRouter.use("/user", userRouter);
 apiRouter.use("/payments", paymentsRouter);
 apiRouter.use("/admin", adminRouter);
 apiRouter.use("/webhooks", webhooksRouter);
+apiRouter.use("/uploads", uploadsRouter);
