@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html lang="et"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#10b77f",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#10221c",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen font-display">
+<!-- Demo Background Content -->
+<div class="fixed inset-0 z-0 overflow-hidden opacity-20 pointer-events-none">
+<div class="absolute -top-24 -left-24 w-96 h-96 bg-primary rounded-full blur-3xl opacity-30"></div>
+<div class="absolute top-1/2 -right-24 w-80 h-80 bg-primary rounded-full blur-3xl opacity-20"></div>
+</div>
+<!-- Background Overlay for Modals -->
+<div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-10 flex flex-col items-center justify-start py-12 overflow-y-auto gap-12">
+<!-- LOGIN MODAL -->
+<div class="w-full max-w-[400px] bg-white dark:bg-slate-900 rounded-xl shadow-2xl p-8 border border-slate-200 dark:border-slate-800">
+<div class="flex flex-col items-center mb-8">
+<div class="w-12 h-12 bg-primary rounded-lg flex items-center justify-center mb-4">
+<span class="material-icons text-white text-3xl">bolt</span>
+</div>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">Logi sisse</h2>
+<p class="text-sm text-slate-500 mt-1">Tere tulemast tagasi Kaarplusi</p>
+</div>
+<form class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">E-post</label>
+<input class="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all dark:bg-slate-800 dark:text-white" placeholder="nimi@email.ee" type="email"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Parool</label>
+<input class="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all dark:bg-slate-800 dark:text-white" placeholder="••••••••" type="password"/>
+</div>
+<div class="flex items-center justify-between text-sm">
+<label class="flex items-center space-x-2 cursor-pointer">
+<input class="rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-slate-600 dark:text-slate-400">Mäleta mind</span>
+</label>
+<a class="text-primary hover:underline font-medium" href="#">Unustasid parooli?</a>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-2.5 rounded-lg transition-colors shadow-sm shadow-primary/20" type="button">
+                    Logi sisse
+                </button>
+</form>
+<div class="relative my-8">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-slate-200 dark:border-slate-800"></div>
+</div>
+<div class="relative flex justify-center text-xs uppercase">
+<span class="bg-white dark:bg-slate-900 px-2 text-slate-500">Või jätka</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<img alt="Google" class="w-5 h-5 mr-2" data-alt="Google logo icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDc0WCbvURbZNBJJ_RCi99q8juxmqLdCmypEmzmhVWqxAspzmoWhJPNfWyae07-OMWBn3-ZXi0CLXjwk8Zt-kmfA4FVM_JU8M1-rahb-iz7tdjYQQvphCBrVKk8TK10cUVwdwJPZ-uyUmWdhYXESsorWC3FixnVGErimrofSOJ4ex1x_M4QLRqxXWHr5l5MuKPzNTAWb5p82Ba4V29ah6_0Sf3bVvNpnk2iBaQfZuaj6FlM1cPYlVnZ9UElFHd2F1cfu1HyhVkKCl6h"/>
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300">Google</span>
+</button>
+<button class="flex items-center justify-center px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<span class="material-icons text-blue-600 text-xl mr-2">facebook</span>
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300">Facebook</span>
+</button>
+</div>
+<p class="text-center text-sm text-slate-600 dark:text-slate-400 mt-8">
+                Pole veel kontot? <a class="text-primary font-semibold hover:underline" href="#">Registreeru</a>
+</p>
+</div>
+<!-- REGISTRATION MODAL -->
+<div class="w-full max-w-[400px] bg-white dark:bg-slate-900 rounded-xl shadow-2xl p-8 border border-slate-200 dark:border-slate-800">
+<div class="mb-8">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">Loo konto</h2>
+<p class="text-sm text-slate-500 mt-1">Liitu Kaarplusi kogukonnaga juba täna</p>
+</div>
+<form class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Ees- ja perekonnanimi</label>
+<input class="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all dark:bg-slate-800 dark:text-white" placeholder="Jaan Tamm" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">E-post</label>
+<input class="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all dark:bg-slate-800 dark:text-white" placeholder="nimi@email.ee" type="email"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Telefon</label>
+<input class="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all dark:bg-slate-800 dark:text-white" placeholder="+372 5555 5555" type="tel"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Parool</label>
+<input class="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all dark:bg-slate-800 dark:text-white" placeholder="••••••••" type="password"/>
+</div>
+<div class="pt-2">
+<label class="flex items-start space-x-3 cursor-pointer">
+<input class="mt-1 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm text-slate-600 dark:text-slate-400">
+                            Nõustun Kaarplusi <a class="text-primary hover:underline" href="#">kasutustingimustega</a> ja <a class="text-primary hover:underline" href="#">privaatsuspoliitikaga</a>.
+                        </span>
+</label>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-2.5 rounded-lg mt-4 transition-colors shadow-sm shadow-primary/20" type="button">
+                    Loo konto
+                </button>
+</form>
+<p class="text-center text-sm text-slate-600 dark:text-slate-400 mt-8">
+                Sul on juba konto? <a class="text-primary font-semibold hover:underline" href="#">Logi sisse</a>
+</p>
+</div>
+<!-- PASSWORD RESET SUCCESS MODAL (Variant) -->
+<div class="w-full max-w-[400px] bg-white dark:bg-slate-900 rounded-xl shadow-2xl p-10 border border-slate-200 dark:border-slate-800 text-center">
+<div class="w-20 h-20 bg-primary/10 dark:bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6">
+<span class="material-icons text-primary text-5xl">check_circle</span>
+</div>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Kiri saadetud</h2>
+<p class="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
+                Saatsime juhised parooli taastamiseks teie e-posti aadressile. Palun kontrollige ka oma rämpsposti kausta.
+            </p>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center" type="button">
+<span class="material-icons text-lg mr-2">arrow_back</span>
+                Tagasi sisselogimise juurde
+            </button>
+<div class="mt-6">
+<p class="text-sm text-slate-500">
+                    Ei saanud kirja? <a class="text-primary font-medium hover:underline" href="#">Saada uuesti</a>
+</p>
+</div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vehicle Side-by-Side Comparison | Kaarplus</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#10b77f",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#10221c",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .tabular-nums { font-variant-numeric: tabular-nums; }
+        .sticky-col { position: sticky; left: 0; z-index: 20; }
+        .diff-highlight { background-color: #fef9c3 !important; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-800 dark:text-slate-100 min-h-screen">
+<!-- Navigation Bar -->
+<nav class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50">
+<div class="max-w-[1440px] mx-auto px-6 h-16 flex items-center justify-between">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center text-white">
+<span class="material-icons text-xl">directions_car</span>
+</div>
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white uppercase">Kaarplus</span>
+</div>
+<div class="hidden md:flex gap-6 text-sm font-medium text-slate-600 dark:text-slate-400">
+<a class="hover:text-primary" href="#">New Cars</a>
+<a class="hover:text-primary" href="#">Used Cars</a>
+<a class="text-primary border-b-2 border-primary pb-5" href="#">Compare</a>
+<a class="hover:text-primary" href="#">Reviews</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:text-primary transition-colors">
+<span class="material-icons">search</span>
+</button>
+<button class="bg-primary text-white px-4 py-2 rounded-lg font-medium text-sm hover:opacity-90 transition-opacity">
+                    Sign In
+                </button>
+</div>
+</div>
+</nav>
+<main class="max-w-[1440px] mx-auto px-6 py-8">
+<!-- Header Controls -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+<div>
+<nav class="flex text-xs text-slate-500 mb-2 gap-2">
+<a class="hover:underline" href="#">Home</a>
+<span>/</span>
+<a class="hover:underline" href="#">Research</a>
+<span>/</span>
+<span class="text-slate-900 dark:text-slate-300 font-medium">Compare Cars</span>
+</nav>
+<h1 class="text-3xl font-bold text-slate-900 dark:text-white">Vehicle Comparison</h1>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Compare up to 4 vehicles to find the best match for your needs.</p>
+</div>
+<div class="flex items-center gap-6 bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center gap-3">
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300">Show differences only</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="h-6 w-px bg-slate-200 dark:bg-slate-700"></div>
+<button class="flex items-center gap-2 text-sm font-medium text-primary hover:underline">
+<span class="material-icons text-sm">share</span>
+                    Share Results
+                </button>
+</div>
+</div>
+<!-- Sticky Header with Cars -->
+<div class="sticky top-16 z-40 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm pt-2 pb-4 -mx-6 px-6">
+<div class="grid grid-cols-[240px_1fr_1fr_1fr_1fr] gap-4">
+<div class="flex items-end pb-4">
+<div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Model Specifications</div>
+</div>
+<!-- Vehicle 1 -->
+<div class="relative group bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<button class="absolute -top-2 -right-2 w-6 h-6 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors shadow-sm">
+<span class="material-icons text-sm">close</span>
+</button>
+<img class="w-full h-24 object-cover rounded mb-3" data-alt="Front view of a modern electric luxury sedan" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIoKIA5veX5QOhrN6e5u9kS1tPGJtFOwWCS79CpuaBMh3g7mqG1bVFrP90BX-5DymQNoa0S2c1UoDYdrIZEXnUenwLzJbnmq16us1zqyeSFTMlMz-vvdFD_6_A32Zahbnpq5DesF_63mh-fwDnmwIQhlioK-U5d75AXPW2nUWrv5u9kfSckzRF6eRsj6V5NHDo8L7pxKjRVydfWVNQshP5uVWiNJ6BOJusbiYG9hw18GHE3Cp_nvAWaDT7E9Ne5NmoRK8dSunSgB5O"/>
+<h3 class="font-bold text-sm text-slate-900 dark:text-white line-clamp-1">2024 Tesla Model S</h3>
+<p class="text-primary font-semibold text-sm">From $74,990</p>
+</div>
+<!-- Vehicle 2 -->
+<div class="relative group bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<button class="absolute -top-2 -right-2 w-6 h-6 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors shadow-sm">
+<span class="material-icons text-sm">close</span>
+</button>
+<img class="w-full h-24 object-cover rounded mb-3" data-alt="Sleek luxury sedan profile in metallic silver" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA990Ek516xGg21T1kYHVy_EvHJo6xlEw3UEBD7ACZ8-kRUM9FNXa6j7i87ZDNd7f3KGvpIr2gPe_LSgZV97wH9RbN_yiJmh6CglbwrZk5Sq5QJ7hZPYdNJFp5ZP0iaAWmwtNIdHpCUexSq6UdrfqcEgFGWnEeUL9-_r5prk5Wd13A-yCT6pumf3dsCve7TJefpHXuoNbUoOBVcL9iVZ_4eeu1TCkRYtlRH0EnM4thP1A9Z262SJKmMMx9dRVV_JY_7ewm_G52I_2KJ"/>
+<h3 class="font-bold text-sm text-slate-900 dark:text-white line-clamp-1">2024 Porsche Taycan</h3>
+<p class="text-primary font-semibold text-sm">From $90,900</p>
+</div>
+<!-- Empty Slot 3 -->
+<div class="bg-white/50 dark:bg-slate-900/50 p-4 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 flex flex-col items-center justify-center gap-2 group cursor-pointer hover:border-primary/50 transition-colors">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
+<span class="material-icons">add</span>
+</div>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">Add Vehicle</span>
+</div>
+<!-- Empty Slot 4 -->
+<div class="bg-white/50 dark:bg-slate-900/50 p-4 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 flex flex-col items-center justify-center gap-2 group cursor-pointer hover:border-primary/50 transition-colors">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
+<span class="material-icons">add</span>
+</div>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">Add Vehicle</span>
+</div>
+</div>
+</div>
+<!-- Comparison Table Body -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+<table class="w-full border-collapse">
+<tbody>
+<!-- Basic Information Section -->
+<tr class="bg-slate-50 dark:bg-slate-800/50 border-y border-slate-200 dark:border-slate-700">
+<td class="py-3 px-6 text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider" colspan="5">Basic Information</td>
+</tr>
+<tr class="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50/50 transition-colors">
+<td class="sticky-col py-4 px-6 text-sm font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 w-[240px]">Body Style</td>
+<td class="py-4 px-6 text-sm text-slate-900 dark:text-slate-200">Sedan</td>
+<td class="py-4 px-6 text-sm text-slate-900 dark:text-slate-200">Sedan</td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+</tr>
+<tr class="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50/50 transition-colors diff-highlight">
+<td class="sticky-col py-4 px-6 text-sm font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900">Seating Capacity</td>
+<td class="py-4 px-6 text-sm text-slate-900 dark:text-slate-200 tabular-nums">5 adults</td>
+<td class="py-4 px-6 text-sm text-slate-900 dark:text-slate-200 tabular-nums">4 adults</td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+</tr>
+<tr class="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50/50 transition-colors">
+<td class="sticky-col py-4 px-6 text-sm font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900">Fuel Type</td>
+<td class="py-4 px-6 text-sm text-slate-900 dark:text-slate-200">Electric</td>
+<td class="py-4 px-6 text-sm text-slate-900 dark:text-slate-200">Electric</td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+</tr>
+<tr class="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50/50 transition-colors">
+<td class="sticky-col py-4 px-6 text-sm font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900">Drive Train</td>
+<td class="py-4 px-6 text-sm text-slate-900 dark:text-slate-200">AWD</td>
+<td class="py-4 px-6 text-sm text-slate-900 dark:text-slate-200">AWD</td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+</tr>
+<!-- Performance Section -->
+<tr class="bg-slate-50 dark:bg-slate-800/50 border-y border-slate-200 dark:border-slate-700">
+<td class="py-3 px-6 text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider" colspan="5">Performance &amp; Specs</td>
+</tr>
+<tr class="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50/50 transition-colors diff-highlight">
+<td class="sticky-col py-4 px-6 text-sm font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900">Horsepower</td>
+<td class="py-4 px-6 text-sm text-slate-900 dark:text-slate-200 tabular-nums font-semibold">670 hp</td>
+<td class="py-4 px-6 text-sm text-slate-900 dark:text-slate-200 tabular-nums font-semibold">402 hp</td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+</tr>
+<tr class="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50/50 transition-colors diff-highlight">
+<td class="sticky-col py-4 px-6 text-sm font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900">0-60 mph</td>
+<td class="py-4 px-6 text-sm text-slate-900 dark:text-slate-200 tabular-nums">3.1 s</td>
+<td class="py-4 px-6 text-sm text-slate-900 dark:text-slate-200 tabular-nums">4.5 s</td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+</tr>
+<tr class="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50/50 transition-colors diff-highlight">
+<td class="sticky-col py-4 px-6 text-sm font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900">EPA Range</td>
+<td class="py-4 px-6 text-sm text-slate-900 dark:text-slate-200 tabular-nums">405 miles</td>
+<td class="py-4 px-6 text-sm text-slate-900 dark:text-slate-200 tabular-nums">242 miles</td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+</tr>
+<!-- Features Section -->
+<tr class="bg-slate-50 dark:bg-slate-800/50 border-y border-slate-200 dark:border-slate-700">
+<td class="py-3 px-6 text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider" colspan="5">Features</td>
+</tr>
+<tr class="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50/50 transition-colors">
+<td class="sticky-col py-4 px-6 text-sm font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900">Panoramic Roof</td>
+<td class="py-4 px-6 text-primary"><span class="material-icons">check_circle</span></td>
+<td class="py-4 px-6 text-primary"><span class="material-icons">check_circle</span></td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+</tr>
+<tr class="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50/50 transition-colors diff-highlight">
+<td class="sticky-col py-4 px-6 text-sm font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900">Apple CarPlay</td>
+<td class="py-4 px-6 text-slate-300 dark:text-slate-700"><span class="material-icons">cancel</span></td>
+<td class="py-4 px-6 text-primary"><span class="material-icons">check_circle</span></td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+</tr>
+<tr class="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50/50 transition-colors">
+<td class="sticky-col py-4 px-6 text-sm font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900">Blind Spot Monitor</td>
+<td class="py-4 px-6 text-primary"><span class="material-icons">check_circle</span></td>
+<td class="py-4 px-6 text-primary"><span class="material-icons">check_circle</span></td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+</tr>
+<tr class="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50/50 transition-colors diff-highlight">
+<td class="sticky-col py-4 px-6 text-sm font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900">Heated Rear Seats</td>
+<td class="py-4 px-6 text-primary"><span class="material-icons">check_circle</span></td>
+<td class="py-4 px-6 text-slate-300 dark:text-slate-700"><span class="material-icons">cancel</span></td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+<td class="py-4 px-6 text-sm text-slate-400 italic">—</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Footer Recommendation -->
+<div class="mt-12 p-8 bg-primary/5 rounded-2xl border border-primary/20 flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="max-w-2xl">
+<h2 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Need more information?</h2>
+<p class="text-slate-600 dark:text-slate-400">Our experts have reviewed these models in depth. Read the full comparison review to see how they perform in real-world conditions.</p>
+</div>
+<button class="bg-primary text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 hover:shadow-lg transition-all whitespace-nowrap">
+                Read Full Expert Review
+                <span class="material-icons">arrow_forward</span>
+</button>
+</div>
+<!-- Sticky Mobile Bottom Bar (only mockup concept) -->
+<div class="mt-16 text-center text-sm text-slate-400 pb-12">
+<p>© 2024 Kaarplus Vehicle Comparison Tool. Prices and specs are subject to change based on manufacturer updates.</p>
+</div>
+</main>
+<!-- Side Search Panel (Overlay Concept) -->
+<div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[60] hidden" id="add-modal">
+<div class="absolute right-0 top-0 h-full w-full max-w-md bg-white dark:bg-slate-900 shadow-2xl p-6">
+<div class="flex items-center justify-between mb-8">
+<h2 class="text-xl font-bold">Add Vehicle to Compare</h2>
+<button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full">
+<span class="material-icons">close</span>
+</button>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-slate-600 mb-1">Make</label>
+<select class="w-full rounded-lg border-slate-200 dark:bg-slate-800 dark:border-slate-700 focus:ring-primary focus:border-primary">
+<option>Select Make</option>
+<option>Tesla</option>
+<option>Porsche</option>
+<option>Audi</option>
+<option>Lucid</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-600 mb-1">Model</label>
+<select class="w-full rounded-lg border-slate-200 dark:bg-slate-800 dark:border-slate-700 focus:ring-primary focus:border-primary" disabled="">
+<option>Select Model</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-600 mb-1">Year</label>
+<select class="w-full rounded-lg border-slate-200 dark:bg-slate-800 dark:border-slate-700 focus:ring-primary focus:border-primary" disabled="">
+<option>Select Year</option>
+</select>
+</div>
+<button class="w-full bg-primary text-white py-3 rounded-lg font-bold mt-4 opacity-50 cursor-not-allowed">
+                    Add Vehicle
+                </button>
+</div>
+</div>
+</div>
+</body></html>

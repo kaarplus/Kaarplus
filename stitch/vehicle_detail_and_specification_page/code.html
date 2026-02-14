@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vehicle Detail | Kaarplus</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#10b77f",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#10221c",
+                        "neutral-surface": "#ffffff",
+                        "neutral-border": "#e1e6e4",
+                        "neutral-text-main": "#1a2421",
+                        "neutral-text-muted": "#5a6e66",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-neutral-text-main font-display transition-colors duration-200">
+<!-- Header / Navigation -->
+<header class="bg-white dark:bg-background-dark border-b border-neutral-border dark:border-primary/20 sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center text-white">
+<span class="material-icons text-xl">directions_car</span>
+</div>
+<span class="text-xl font-bold tracking-tight dark:text-white">Kaar<span class="text-primary">plus</span></span>
+</div>
+<nav class="hidden md:flex items-center gap-6 text-sm font-medium text-neutral-text-muted dark:text-white/70">
+<a class="hover:text-primary transition-colors" href="#">Buy Cars</a>
+<a class="hover:text-primary transition-colors" href="#">Sell Car</a>
+<a class="hover:text-primary transition-colors" href="#">Financing</a>
+<a class="hover:text-primary transition-colors" href="#">Reviews</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-neutral-text-muted dark:text-white/70 hover:bg-background-light dark:hover:bg-primary/10 rounded-full">
+<span class="material-icons">search</span>
+</button>
+<button class="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-lg text-sm font-semibold transition-all">Sign In</button>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-4 py-8">
+<!-- Breadcrumbs & Header Actions -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+<div>
+<nav class="flex text-xs font-medium text-neutral-text-muted dark:text-white/50 mb-2 gap-2">
+<a class="hover:text-primary" href="#">Home</a>
+<span>/</span>
+<a class="hover:text-primary" href="#">Used Cars</a>
+<span>/</span>
+<a class="hover:text-primary text-primary" href="#">Porsche</a>
+</nav>
+<h1 class="text-3xl font-bold dark:text-white flex items-center gap-3">
+                    2022 Porsche 911 Carrera S
+                    <span class="bg-primary/10 text-primary text-xs px-2 py-1 rounded border border-primary/20 uppercase tracking-wider font-bold">Verified</span>
+</h1>
+<p class="text-neutral-text-muted dark:text-white/60 mt-1 flex items-center gap-1">
+<span class="material-icons text-sm">location_on</span> Los Angeles, CA • 12,400 miles
+                </p>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-4 py-2 border border-neutral-border dark:border-primary/20 rounded-lg text-sm font-medium hover:bg-white dark:hover:bg-primary/10 transition-colors dark:text-white">
+<span class="material-icons text-lg">share</span> Share
+                </button>
+<button class="flex items-center gap-2 px-4 py-2 border border-neutral-border dark:border-primary/20 rounded-lg text-sm font-medium hover:bg-white dark:hover:bg-primary/10 transition-colors dark:text-white">
+<span class="material-icons text-lg">favorite_border</span> Save
+                </button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left Column: Gallery and Details -->
+<div class="lg:col-span-2 space-y-8">
+<!-- Gallery -->
+<section class="space-y-4">
+<div class="relative group aspect-[4/3] rounded-xl overflow-hidden bg-neutral-200">
+<img alt="Vehicle Main Image" class="w-full h-full object-cover" data-alt="Modern dark gray Porsche 911 parked on urban street" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwyx4LmuWPV5gpIXgUummY28ppWe-8g0893WJz6JAkO-4XTnXyf8K9TuB211TiKT8ikLuAw118FpGN-o9SY6Wk7oulTLjxOfyj0Y2TKmiQB_VbOOdYkW5f3Ennj5gi4EhlixfGk0RjCzOrrPerTmuzoeXwtWKXLyzK3u9uDtcgkwkl9-jh0y783Ns5N3GrYj5HbPvseqSDqlcy3cdiZpcq_ABrf2kgw8rg85LfJ-SxcUgl5I0mq58OdZS42-lnmOiCMbSHet2Lm9Hb"/>
+<div class="absolute top-4 left-4 bg-black/60 text-white px-3 py-1 rounded-full text-xs font-medium backdrop-blur-sm">
+                            1 / 12 Photos
+                        </div>
+<div class="absolute inset-y-0 left-0 flex items-center px-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="bg-white/90 hover:bg-white text-neutral-text-main p-2 rounded-full shadow-lg">
+<span class="material-icons">chevron_left</span>
+</button>
+</div>
+<div class="absolute inset-y-0 right-0 flex items-center px-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="bg-white/90 hover:bg-white text-neutral-text-main p-2 rounded-full shadow-lg">
+<span class="material-icons">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Thumbnails -->
+<div class="flex gap-3 overflow-x-auto hide-scrollbar pb-2">
+<div class="min-w-[120px] h-20 rounded-lg ring-2 ring-primary overflow-hidden cursor-pointer bg-neutral-200">
+<img alt="Thumb 1" class="w-full h-full object-cover" data-alt="Front view of gray sports car" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8_5XYv8ry3GYqrOFxgE6uF6RKyQpyyEqDM_GICLJgGRRJKGJVE2JoriaG84U3HNyQS3dkXf5ZoeGvn40zYq6CtVAGskq-Ab7esnbSg9vKWojOvUKBCgVW_vII7nRnR8s6GX3o33HmkvFg8LdWwdd8di4MLBgwfO8kBhhub4X2QoF7rpCNRmMUdWEFEp2yI_NruqE_sKbTUyyAC8fwVA1x84hrzGxBIHRke496vt0WGY4rYtk-ZCExR_nSQqTugBeKonbnstXphtwt"/>
+</div>
+<div class="min-w-[120px] h-20 rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity bg-neutral-200">
+<img alt="Thumb 2" class="w-full h-full object-cover" data-alt="Rear 3/4 view of the vehicle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqnH6Q8P4qZJmv4ACqCOn4nkWt6rf4Ya7pC0g4sQyiC3iuqmhGfqNqmFuYGQNVsh37ooz3_RFy20ldBaL8gbpykvqhe5m6lq6tw0gU1iCC4-2ukxXVyzrMe3I7dnKza3PfWeJz6lQ7Zopspjv4Dmi6Kr3yzPy-HoZOWfasoC6fb9MVTNv8sAuhd2s01ngaDsrQ0VuB21DJY3guc2nDYLElL_SPtazszdL1p1bAS4_D2najaKt0Lnrsdgs-GWGic5O3tx_2ouqXog-D"/>
+</div>
+<div class="min-w-[120px] h-20 rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity bg-neutral-200">
+<img alt="Thumb 3" class="w-full h-full object-cover" data-alt="Interior driver side cockpit view" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4xg9-2GcwLz_JUeWvv1vlikqrMfJYEvy5rH_t_s05VwNN6gS-P4LiQUkfA2J4wnu6sRdi0cG1l0VtU5ymCuEOgBAfuYFXPUh0Cj7m7EWB3oiuMRpRcaCFb1ut7TKLEhuW6u-zRZzgsL5K0omcAtivjkTMumHdsI9kwNpW53eLZ7HF-p7hftiAiZk4BPz7kpvhKRutalg_ExciE0niABTdTzFWTJsPlmCnX73bTl4XOWaUtBwpreK5cKIBYfgyNwsnOhmV0GIQ40ly"/>
+</div>
+<div class="min-w-[120px] h-20 rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity bg-neutral-200">
+<img alt="Thumb 4" class="w-full h-full object-cover" data-alt="Close up of wheel and rim" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWMmNl-JzkxV4FNdzRzca5UXQ4GTVWAc8-N1zjzwKTdVkmhYocPyI9fUA4HGgTODb4eKCCPC-pczUd_DLLAbYX5Xj1XWMqln1i0ztGJZzcQ3Kt8XzFJJqJaRH-V8wVFJNafFgZQbBWqjgaHW7iKVurMyJcNNZOw9UfKfhj2MKPAAnp-qxVV3-A_XfZhDTpTgXY99W6rQsg7b55SNMDTKF85Q8wuzldkW9e82CEhTaKFqGxNzo26l57ZGOgulv8niuqasHq0eMqZ8vD"/>
+</div>
+<div class="min-w-[120px] h-20 rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity bg-neutral-200">
+<img alt="Thumb 5" class="w-full h-full object-cover" data-alt="Full side profile of the car" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYoZQfrm_BEgRSWeysrcq-bO3ixzWr8ACJcNxil0qUJrR-RhOcYtnuGE0x5xNdJFpf7-RDRQ1I1jQH096ZD2yl3lMpj4FaU5F605apijiOYOD-RMCpJNofddQtV1NNnScr97t0Qsj4oMemFWwwyzaK1rOJyjES9NnkF1cz4HIRWyFoV8qebfRHom5q10iswAvw12cgbY-CgYPl0MUkOhXSIeAmTtnSTTiz8RtNjDTJ2ijjznZkBHFvL4yt2H-uAAHREGazdv2denn4"/>
+</div>
+<div class="min-w-[120px] h-20 rounded-lg overflow-hidden cursor-pointer relative bg-neutral-200">
+<img alt="Thumb 6" class="w-full h-full object-cover blur-[2px]" data-alt="Abstract blurry car exterior" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8uUKdubPz5BAyG_ONOIVLC0umKYf6njiY3XLw_W2nuOVxOXbMS0XXdzqQlUzL_HTIw-0ukCi-HYfnogJJSQfI5_1_ZjB1exe1OYvRnbq5ss_c3ksy0J73327hO_TnyLnfVTvlZWu2nGgbF-2XGi9AgaKV30Xartw5IyLHKjWEf3M3fZG2RdsSuSnTXGn_qUXk2ZIh3YVgr7h8hxu3YWDvjmIjzH9pCzU2aE_CXzORb2qM_MMbE-pfm4ARvGatou_vQFHGryKC1J-L"/>
+<div class="absolute inset-0 bg-black/50 flex items-center justify-center text-white font-bold text-sm">+7 More</div>
+</div>
+</div>
+</section>
+<!-- Tabs Section -->
+<section class="bg-white dark:bg-background-dark/40 border border-neutral-border dark:border-primary/10 rounded-xl overflow-hidden shadow-sm">
+<div class="flex border-b border-neutral-border dark:border-primary/10 bg-background-light/50 dark:bg-background-dark/60">
+<button class="px-6 py-4 text-sm font-semibold border-b-2 border-primary text-primary">Basic Info</button>
+<button class="px-6 py-4 text-sm font-semibold text-neutral-text-muted dark:text-white/60 hover:text-primary transition-colors">Description</button>
+<button class="px-6 py-4 text-sm font-semibold text-neutral-text-muted dark:text-white/60 hover:text-primary transition-colors">Features</button>
+<button class="px-6 py-4 text-sm font-semibold text-neutral-text-muted dark:text-white/60 hover:text-primary transition-colors">Price History</button>
+</div>
+<div class="p-6">
+<!-- Spec Table (Grid) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+<div class="flex justify-between py-3 border-b border-neutral-border dark:border-primary/5">
+<span class="text-neutral-text-muted dark:text-white/40 text-sm">Condition</span>
+<span class="font-medium dark:text-white">Used (Certified)</span>
+</div>
+<div class="flex justify-between py-3 border-b border-neutral-border dark:border-primary/5">
+<span class="text-neutral-text-muted dark:text-white/40 text-sm">Engine</span>
+<span class="font-medium dark:text-white">3.0L Twin-Turbo H6</span>
+</div>
+<div class="flex justify-between py-3 border-b border-neutral-border dark:border-primary/5">
+<span class="text-neutral-text-muted dark:text-white/40 text-sm">Transmission</span>
+<span class="font-medium dark:text-white">8-Speed PDK</span>
+</div>
+<div class="flex justify-between py-3 border-b border-neutral-border dark:border-primary/5">
+<span class="text-neutral-text-muted dark:text-white/40 text-sm">Fuel Type</span>
+<span class="font-medium dark:text-white">Premium Gasoline</span>
+</div>
+<div class="flex justify-between py-3 border-b border-neutral-border dark:border-primary/5">
+<span class="text-neutral-text-muted dark:text-white/40 text-sm">Drivetrain</span>
+<span class="font-medium dark:text-white">Rear-Wheel Drive</span>
+</div>
+<div class="flex justify-between py-3 border-b border-neutral-border dark:border-primary/5">
+<span class="text-neutral-text-muted dark:text-white/40 text-sm">Exterior Color</span>
+<span class="font-medium dark:text-white">Agate Grey Metallic</span>
+</div>
+<div class="flex justify-between py-3 border-b border-neutral-border dark:border-primary/5">
+<span class="text-neutral-text-muted dark:text-white/40 text-sm">Interior Color</span>
+<span class="font-medium dark:text-white">Black / Slate Grey</span>
+</div>
+<div class="flex justify-between py-3 border-b border-neutral-border dark:border-primary/5">
+<span class="text-neutral-text-muted dark:text-white/40 text-sm">VIN</span>
+<span class="font-medium dark:text-white uppercase">WP0AB2A90NSXXXXXX</span>
+</div>
+</div>
+<!-- Description (Simple teaser) -->
+<div class="mt-10">
+<h3 class="text-lg font-bold mb-4 dark:text-white">Dealer Description</h3>
+<p class="text-neutral-text-muted dark:text-white/70 leading-relaxed">
+                                Pristine 2022 Porsche 911 Carrera S with only 12,400 miles. Meticulously maintained and stored in a climate-controlled garage. 
+                                Includes Sport Chrono Package, PASM Sport Suspension (lowered 10mm), and Bose Surround Sound System. Original factory warranty still active until May 2026.
+                            </p>
+<button class="mt-4 text-primary font-bold text-sm hover:underline">Read full description</button>
+</div>
+<!-- Features Checklist -->
+<div class="mt-10">
+<h3 class="text-lg font-bold mb-6 dark:text-white">Key Features</h3>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-y-4">
+<div class="flex items-center gap-3 text-sm dark:text-white">
+<span class="material-icons text-primary">check_circle</span> Sunroof / Moonroof
+                                </div>
+<div class="flex items-center gap-3 text-sm dark:text-white">
+<span class="material-icons text-primary">check_circle</span> Navigation System
+                                </div>
+<div class="flex items-center gap-3 text-sm dark:text-white">
+<span class="material-icons text-primary">check_circle</span> Heated Seats
+                                </div>
+<div class="flex items-center gap-3 text-sm dark:text-white">
+<span class="material-icons text-primary">check_circle</span> Backup Camera
+                                </div>
+<div class="flex items-center gap-3 text-sm dark:text-white">
+<span class="material-icons text-primary">check_circle</span> Apple CarPlay
+                                </div>
+<div class="flex items-center gap-3 text-sm dark:text-white">
+<span class="material-icons text-primary">check_circle</span> Blind Spot Monitor
+                                </div>
+</div>
+</div>
+<!-- Mini Chart Concept -->
+<div class="mt-10 p-6 bg-background-light dark:bg-primary/5 rounded-xl border border-neutral-border dark:border-primary/10">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-lg font-bold dark:text-white">Price History</h3>
+<div class="flex gap-4">
+<div class="flex items-center gap-1.5 text-xs font-medium text-neutral-text-muted dark:text-white/60">
+<div class="w-2.5 h-2.5 bg-primary rounded-full"></div> Market Avg
+                                    </div>
+<div class="flex items-center gap-1.5 text-xs font-medium text-neutral-text-muted dark:text-white/60">
+<div class="w-2.5 h-2.5 bg-neutral-text-main dark:bg-white rounded-full"></div> This Car
+                                    </div>
+</div>
+</div>
+<div class="h-40 w-full relative">
+<!-- Mock Chart Visualization -->
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 40">
+<path d="M0 35 Q 25 32, 50 25 T 100 15" fill="none" stroke="#10b77f" stroke-width="1"></path>
+<path d="M0 30 Q 25 28, 50 20 T 100 5" fill="none" stroke="#64748b" stroke-dasharray="2" stroke-width="0.5"></path>
+</svg>
+<div class="absolute bottom-0 w-full flex justify-between text-[10px] text-neutral-text-muted dark:text-white/40 pt-2">
+<span>May '23</span>
+<span>Aug '23</span>
+<span>Nov '23</span>
+<span>Feb '24</span>
+<span>May '24</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Sidebar -->
+<div class="lg:col-span-1">
+<div class="sticky top-24 space-y-6">
+<!-- Pricing Card -->
+<div class="bg-white dark:bg-background-dark/40 border border-neutral-border dark:border-primary/10 rounded-xl p-6 shadow-sm">
+<div class="flex items-start justify-between mb-2">
+<div>
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded border border-primary/20 uppercase">Great Deal</span>
+<div class="text-4xl font-bold mt-2 dark:text-white">$124,500</div>
+</div>
+<div class="text-right">
+<div class="text-neutral-text-muted dark:text-white/40 text-xs line-through">$129,900</div>
+<div class="text-primary text-xs font-bold">-$5,400</div>
+</div>
+</div>
+<p class="text-neutral-text-muted dark:text-white/60 text-sm mb-6 flex items-center gap-1">
+                            Est. <span class="font-semibold text-neutral-text-main dark:text-white">$1,845/mo</span> for 72 months
+                        </p>
+<div class="space-y-3">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-primary/20 transition-all">
+<span class="material-icons">chat_bubble</span> Contact Seller
+                            </button>
+<button class="w-full bg-white dark:bg-transparent border-2 border-primary text-primary font-bold py-4 rounded-xl hover:bg-primary/5 transition-all">
+                                Schedule Test Drive
+                            </button>
+</div>
+<div class="mt-6 pt-6 border-t border-neutral-border dark:border-primary/5 grid grid-cols-2 gap-4">
+<div class="text-center">
+<div class="text-xs text-neutral-text-muted dark:text-white/40">Market Price</div>
+<div class="font-bold dark:text-white">$128,200</div>
+</div>
+<div class="text-center">
+<div class="text-xs text-neutral-text-muted dark:text-white/40">Carplus Savings</div>
+<div class="font-bold text-primary">$3,700</div>
+</div>
+</div>
+</div>
+<!-- Seller Card -->
+<div class="bg-white dark:bg-background-dark/40 border border-neutral-border dark:border-primary/10 rounded-xl p-6 shadow-sm">
+<h3 class="text-sm font-bold mb-4 uppercase tracking-wider text-neutral-text-muted dark:text-white/40">Seller Information</h3>
+<div class="flex items-center gap-4 mb-4">
+<div class="w-14 h-14 rounded-full bg-neutral-200 overflow-hidden ring-2 ring-primary/20">
+<img alt="Seller Avatar" class="w-full h-full object-cover" data-alt="Professional male car dealer portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFM7CpEhL803mt9NkxN06TLz-sWZj3w1xzXgxRxcd9prwP2wovXJi0np5MU5GqNWomEYnsveClJr4bfv85LLziDOghWsKmsxX8hNfTNgI1le9o7LuGasIwi9w6OKoVmO3HwHke8LyDycV5iOw8fDzi6ic1KMjjX3jNdTSvC7upbGozXNIWrPjm6J1DZCjsVXoz9wmieyKyRh-oBXZrZJH6aSC-g0vdvLFIAsvcINTcTHHjODPeFMhpNIghm9Q8lohqDGjjoQszmmam"/>
+</div>
+<div>
+<div class="font-bold text-lg dark:text-white">Elite Motors CA</div>
+<div class="flex items-center gap-1">
+<div class="flex text-amber-400">
+<span class="material-icons text-sm">star</span>
+<span class="material-icons text-sm">star</span>
+<span class="material-icons text-sm">star</span>
+<span class="material-icons text-sm">star</span>
+<span class="material-icons text-sm">star_half</span>
+</div>
+<span class="text-xs font-medium text-neutral-text-muted dark:text-white/60">(4.8/5)</span>
+</div>
+</div>
+</div>
+<div class="space-y-3 mb-6">
+<div class="flex items-center gap-3 text-sm text-neutral-text-muted dark:text-white/60">
+<span class="material-icons text-sm text-primary">verified_user</span>
+<span>Verified Dealer since 2018</span>
+</div>
+<div class="flex items-center gap-3 text-sm text-neutral-text-muted dark:text-white/60">
+<span class="material-icons text-sm text-primary">place</span>
+<span>Santa Monica, Los Angeles</span>
+</div>
+</div>
+<button class="w-full bg-background-light dark:bg-primary/10 py-3 rounded-lg text-sm font-bold text-neutral-text-main dark:text-white hover:bg-neutral-border dark:hover:bg-primary/20 transition-colors">
+                            View All Listings (42)
+                        </button>
+</div>
+<!-- Trust Signals -->
+<div class="flex items-center justify-center gap-6 p-4">
+<div class="flex flex-col items-center opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer">
+<span class="material-icons text-3xl mb-1 dark:text-white">verified</span>
+<span class="text-[10px] font-bold dark:text-white">CARFAX FREE</span>
+</div>
+<div class="flex flex-col items-center opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer">
+<span class="material-icons text-3xl mb-1 dark:text-white">security</span>
+<span class="text-[10px] font-bold dark:text-white">7-DAY RETURN</span>
+</div>
+<div class="flex flex-col items-center opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer">
+<span class="material-icons text-3xl mb-1 dark:text-white">health_and_safety</span>
+<span class="text-[10px] font-bold dark:text-white">INSPECTED</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Similar Cars Section -->
+<section class="mt-20">
+<div class="flex items-center justify-between mb-8">
+<h2 class="text-2xl font-bold dark:text-white">Similar Luxury Listings</h2>
+<div class="flex gap-2">
+<button class="p-2 border border-neutral-border dark:border-primary/20 rounded-full dark:text-white hover:bg-white dark:hover:bg-primary/10 transition-colors">
+<span class="material-icons">chevron_left</span>
+</button>
+<button class="p-2 border border-neutral-border dark:border-primary/20 rounded-full dark:text-white hover:bg-white dark:hover:bg-primary/10 transition-colors">
+<span class="material-icons">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Card 1 -->
+<div class="bg-white dark:bg-background-dark/40 border border-neutral-border dark:border-primary/10 rounded-xl overflow-hidden shadow-sm group cursor-pointer hover:shadow-md transition-all">
+<div class="relative aspect-[16/10]">
+<img alt="Similar 1" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Red Audi sports car parked in driveway" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNElq1CNQUF9PMAtU915q54YG1ozPsetOPzgfSDer73zxi4F15WZg86QflG8S5B0QZC5Y5R5NdFuoDiHa_Gx1cYEqSdeLeG22edK-VY-iuUXLvkHjbG3SNSAdziyauAgUzIn6mmjBFjaHSr2ZP1xKNzm6xH83-AQ844C1piFR56JjnYWQEUYaJsrJ3E_NYqt8S9GI-pPRtscYU-F-UsyL0ZyafIUxAIto8a43MTbf7m_uP7OTo0EHJM89910HIl93rUEIEceIHKd9k"/>
+<div class="absolute top-2 right-2 p-1.5 bg-white/80 backdrop-blur rounded-full">
+<span class="material-icons text-sm">favorite_border</span>
+</div>
+</div>
+<div class="p-4">
+<div class="text-xs font-bold text-primary mb-1 uppercase">Recommended</div>
+<h4 class="font-bold dark:text-white mb-1">2021 Audi R8 V10</h4>
+<div class="text-xs text-neutral-text-muted dark:text-white/40 mb-3">18,500 mi • Miami, FL</div>
+<div class="flex items-end justify-between">
+<span class="text-lg font-bold dark:text-white">$158,900</span>
+<span class="text-[10px] bg-background-light dark:bg-primary/10 dark:text-primary px-2 py-1 rounded font-bold">Great Deal</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white dark:bg-background-dark/40 border border-neutral-border dark:border-primary/10 rounded-xl overflow-hidden shadow-sm group cursor-pointer hover:shadow-md transition-all">
+<div class="relative aspect-[16/10]">
+<img alt="Similar 2" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Silver BMW sedan in professional studio" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAG9ZXc1BUD5d1Y_E2m7E9VgaiZVQ0i5a0Qg-z0KRWkNorjqa7t4Fpt0wFOdoV4gioFySXOj7kLjmOY3346bkxqA6Xg9_Y-RPfuWfKN6SzeFk7_kr9RwvT4nOrDcvKMT36Pe3DMwXDxpLhA4x-e6pt6O582fgXAsXH1YxyQrmmOUV0dzvg4SoLA2f1xmWqSgQkju9WONFVvT-4eN33oKCEOW6yyKbIQdfCMqt2U5YewxUIhkdo6TbW1z3WhIKZkALDzbzRq6EFHsa6"/>
+<div class="absolute top-2 right-2 p-1.5 bg-white/80 backdrop-blur rounded-full">
+<span class="material-icons text-sm">favorite_border</span>
+</div>
+</div>
+<div class="p-4">
+<div class="text-xs font-bold text-neutral-text-muted dark:text-white/40 mb-1 uppercase">Near You</div>
+<h4 class="font-bold dark:text-white mb-1">2023 BMW M4 Comp</h4>
+<div class="text-xs text-neutral-text-muted dark:text-white/40 mb-3">2,100 mi • Burbank, CA</div>
+<div class="flex items-end justify-between">
+<span class="text-lg font-bold dark:text-white">$89,500</span>
+<span class="text-[10px] bg-background-light dark:bg-primary/10 dark:text-primary px-2 py-1 rounded font-bold">New Arrival</span>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white dark:bg-background-dark/40 border border-neutral-border dark:border-primary/10 rounded-xl overflow-hidden shadow-sm group cursor-pointer hover:shadow-md transition-all">
+<div class="relative aspect-[16/10]">
+<img alt="Similar 3" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Blue Mercedes Benz coupe on highway" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyeJXmeoQFxX-ymlJglMOqK-O8VtzzIQyUrLuoANNw_2_Bm6OFf3UzYmt9Ed01wCZm7m98T1WUgMVweUxRt9mds7d_TySQRAqNPJixOqANXgcpUtVaw9gO9IKC5ETvYWQdUy9tuk2rRDBgUa28peOsj8Y3Dnh1pQ6yx5bax_jja--nRawoVOO0bZcsH3w9mI0iK86YLsowdtnHW-EKKr3aEoT395O42p3cKCYSvbf_829ajrn8safbdh5hchZCdK_NuGE8FIPcsmv8"/>
+<div class="absolute top-2 right-2 p-1.5 bg-white/80 backdrop-blur rounded-full">
+<span class="material-icons text-sm">favorite_border</span>
+</div>
+</div>
+<div class="p-4">
+<div class="text-xs font-bold text-primary mb-1 uppercase">Top Rated</div>
+<h4 class="font-bold dark:text-white mb-1">2020 Mercedes-AMG GT</h4>
+<div class="text-xs text-neutral-text-muted dark:text-white/40 mb-3">22,000 mi • Irvine, CA</div>
+<div class="flex items-end justify-between">
+<span class="text-lg font-bold dark:text-white">$112,000</span>
+<span class="text-[10px] bg-background-light dark:bg-primary/10 dark:text-primary px-2 py-1 rounded font-bold">Good Price</span>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-white dark:bg-background-dark/40 border border-neutral-border dark:border-primary/10 rounded-xl overflow-hidden shadow-sm group cursor-pointer hover:shadow-md transition-all">
+<div class="relative aspect-[16/10]">
+<img alt="Similar 4" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="White Tesla Model S in modern garage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJKtnaH5_MwZzo5zvVNJqZtDw-KarsuG_dfvGHm9lvjKReIk-ODGzvkR5_atlC7oFSaWlFm5CDlrpUOj1PJAeeqmGn9gwpwy3at16A92BLnStk-l4C5JWXMncTSrSioYCAIUvEiX5v9PB1luzs6lYoKqiGeTi-kUuKS1a3msfG6LlzJJXFDm_pkkx0BT2Z8e-JWF38bH8Lq5DC5jvPqJVdpICrx7oUKQsVR3H8PQ13UfjxbNeznfIslAU4GIJL7PbLwO9eKpJPoYOk"/>
+<div class="absolute top-2 right-2 p-1.5 bg-white/80 backdrop-blur rounded-full">
+<span class="material-icons text-sm text-red-500">favorite</span>
+</div>
+</div>
+<div class="p-4">
+<div class="text-xs font-bold text-neutral-text-muted dark:text-white/40 mb-1 uppercase">Electric</div>
+<h4 class="font-bold dark:text-white mb-1">2022 Tesla Model S Plaid</h4>
+<div class="text-xs text-neutral-text-muted dark:text-white/40 mb-3">9,800 mi • Los Angeles, CA</div>
+<div class="flex items-end justify-between">
+<span class="text-lg font-bold dark:text-white">$94,900</span>
+<span class="text-[10px] bg-background-light dark:bg-primary/10 dark:text-primary px-2 py-1 rounded font-bold">Top Value</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="bg-white dark:bg-background-dark border-t border-neutral-border dark:border-primary/20 mt-24 py-12">
+<div class="max-w-7xl mx-auto px-4">
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
+<div class="col-span-2">
+<div class="flex items-center gap-2 mb-6">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center text-white">
+<span class="material-icons text-xl">directions_car</span>
+</div>
+<span class="text-xl font-bold tracking-tight dark:text-white">Kaar<span class="text-primary">plus</span></span>
+</div>
+<p class="text-sm text-neutral-text-muted dark:text-white/60 mb-6 max-w-sm">
+                        Providing the most transparent car buying and selling experience in the digital age. Trusted by thousands of drivers worldwide.
+                    </p>
+<div class="flex gap-4">
+<div class="w-10 h-10 rounded-full border border-neutral-border dark:border-primary/20 flex items-center justify-center text-neutral-text-muted dark:text-white/60 hover:text-primary hover:border-primary transition-colors cursor-pointer">
+<span class="material-icons text-lg">facebook</span>
+</div>
+<div class="w-10 h-10 rounded-full border border-neutral-border dark:border-primary/20 flex items-center justify-center text-neutral-text-muted dark:text-white/60 hover:text-primary hover:border-primary transition-colors cursor-pointer">
+<span class="material-icons text-lg">alternate_email</span>
+</div>
+</div>
+</div>
+<div>
+<h5 class="font-bold dark:text-white mb-4">Shop</h5>
+<ul class="text-sm text-neutral-text-muted dark:text-white/60 space-y-3">
+<li><a class="hover:text-primary transition-colors" href="#">Used Cars</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Electric Cars</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Classic Cars</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Financing</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold dark:text-white mb-4">Company</h5>
+<ul class="text-sm text-neutral-text-muted dark:text-white/60 space-y-3">
+<li><a class="hover:text-primary transition-colors" href="#">About Us</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Contact</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Careers</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Newsroom</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold dark:text-white mb-4">Support</h5>
+<ul class="text-sm text-neutral-text-muted dark:text-white/60 space-y-3">
+<li><a class="hover:text-primary transition-colors" href="#">Help Center</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Safety Center</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Fraud Awareness</a></li>
+</ul>
+</div>
+</div>
+<div class="pt-8 border-t border-neutral-border dark:border-primary/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-neutral-text-muted dark:text-white/40">
+<p>© 2024 Kaarplus Automotive Group. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="hover:text-primary" href="#">Privacy Policy</a>
+<a class="hover:text-primary" href="#">Terms of Service</a>
+<a class="hover:text-primary" href="#">Cookie Settings</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

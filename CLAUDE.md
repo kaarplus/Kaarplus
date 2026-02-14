@@ -214,6 +214,37 @@ When implementing features:
 6. **Follow the phase order** — don't skip ahead unless dependencies are met
 7. **Reference Figma** for all UI implementation decisions
 
+### UI Implementation Rules (MANDATORY)
+
+When implementing ANY frontend UI component or page:
+
+1. **Read `docs/DESIGN_SYSTEM.md`** — this is the single source of truth for all design tokens, component architecture, and Stitch-to-component mapping
+2. **Check the Stitch reference** — Read the corresponding `stitch/<folder>/code.html` for precise spacing, layout, colors, and component structure. View `stitch/<folder>/screen.png` for visual reference
+3. **Stitch is reference only** — NEVER import, copy-paste, or directly use code from `stitch/` files. Translate the HTML patterns into React + Shadcn/ui + Tailwind
+4. **Use Lucide React icons exclusively** — Stitch uses Material Icons; use the mapping table in `docs/DESIGN_SYSTEM.md` Section 8 to find the Lucide equivalent
+5. **Check shared components first** — Before creating any component, check if it already exists in `src/components/shared/`. The Design System Section 4 lists what goes where
+6. **Use Shadcn/ui primitives** — Never build custom Button, Card, Input, Badge, Dialog, Sheet, etc. Install missing ones via `npx shadcn@latest add <name>`
+7. **Use CSS variable tokens** — Never hardcode hex colors. Use `text-primary`, `bg-background`, `text-muted-foreground`, `border-border`, etc.
+8. **Named exports only** — No default exports in any component file
+9. **Server Components by default** — Only add `"use client"` when hooks, events, or browser APIs are needed
+10. **Run `/implement-ui` workflow** — Use `.agent/workflows/implement-ui.md` for the full step-by-step UI implementation process
+
+### Stitch Folder Reference
+
+```
+stitch/
+├── kaarplus_home_landing_page/           # Landing page sections
+├── navigation_and_cookie_consent_components/  # Header, Footer, Cookie banner
+├── login_and_registration_modals/        # Auth modals (Login, Register, Reset)
+├── vehicle_listings_grid_and_list_view/  # Listings page (filters, grid, list)
+├── vehicle_detail_and_specification_page/ # Car detail page
+├── sell_your_car_step-by-step_wizard/    # 4-step sell wizard
+├── user_dashboard_and_management/        # Dashboard, messages, settings
+└── vehicle_side-by-side_comparison/      # Comparison table
+```
+
+Each folder contains `code.html` (design reference) and `screen.png` (visual reference).
+
 ## Important Business Rules
 
 - **Currency:** EUR only — never show other currencies

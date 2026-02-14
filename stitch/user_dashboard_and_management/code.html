@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kaarplus | User Dashboard &amp; Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#10b77f",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#10221c",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #10b77f44; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-800 dark:text-slate-100 min-h-screen flex">
+<!-- Sidebar -->
+<aside class="w-[250px] fixed h-full bg-white dark:bg-slate-900 border-r border-primary/10 flex flex-col z-20">
+<div class="p-6">
+<div class="flex items-center gap-2 mb-8">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
+<span class="text-white font-bold">K</span>
+</div>
+<span class="text-xl font-bold tracking-tight text-primary">Kaarplus</span>
+</div>
+<!-- Profile Card Mini -->
+<div class="bg-primary/5 dark:bg-primary/10 p-4 rounded-xl mb-8">
+<div class="flex items-center gap-3">
+<img alt="User profile" class="w-10 h-10 rounded-full border-2 border-primary/20" data-alt="Professional male user profile photo portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbUWIDnFVqYmsi_mRxuC8RUJ2ordrAaCRKWdKzXzYCL0FDmU9xC3ouSXNejChYVpt9jXgNAwWLVxUTexxtbL4b1Sgp5OQZy4xP-GWx6kJMiaLddj88yo2FaTV1-Fno2o-ktn3kQIhDPsnjLGEdjzsp0Zfl-_mDBEzk-QE4Qfxw-kb4_7bmGz9sPVzunS8MR-o9gfRly7GKtQYV2sZ5mDS5hmFcst2slYMx2kzyCqwbpOVKtVXhHWSIbYpwycAZcaZTtRrRS3PGPbCX"/>
+<div class="overflow-hidden">
+<p class="text-sm font-semibold truncate">Alex Johnson</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 truncate">Pro Seller</p>
+</div>
+</div>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary text-white font-medium transition-all shadow-sm shadow-primary/20" href="#">
+<span class="material-icons text-[20px]">dashboard</span>
+<span>Overview</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary transition-all" href="#">
+<span class="material-icons text-[20px]">list_alt</span>
+<span>My Listings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary transition-all relative" href="#">
+<span class="material-icons text-[20px]">chat_bubble_outline</span>
+<span>Messages</span>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 bg-primary text-[10px] text-white flex items-center justify-center rounded-full">3</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary transition-all" href="#">
+<span class="material-icons text-[20px]">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-6">
+<button class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-slate-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all">
+<span class="material-icons text-[20px]">logout</span>
+<span class="font-medium">Logout</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[250px] flex-1 p-8">
+<!-- Top Bar -->
+<header class="flex justify-between items-center mb-10">
+<div>
+<h1 class="text-2xl font-bold">Welcome back, Alex</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Here's what's happening with your listings today.</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<input class="bg-white dark:bg-slate-900 border-none ring-1 ring-slate-200 dark:ring-slate-800 rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-primary w-64 transition-all" placeholder="Search anything..." type="text"/>
+<span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+</div>
+<button class="w-10 h-10 rounded-lg bg-white dark:bg-slate-900 flex items-center justify-center ring-1 ring-slate-200 dark:ring-slate-800 text-slate-600 dark:text-slate-300 relative">
+<span class="material-icons text-[20px]">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-white dark:border-slate-900"></span>
+</button>
+</div>
+</header>
+<!-- Stats Overview -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-primary/5 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-icons">visibility</span>
+</div>
+<span class="text-primary text-xs font-semibold bg-primary/10 px-2 py-1 rounded">+12%</span>
+</div>
+<h3 class="text-2xl font-bold">12,482</h3>
+<p class="text-slate-500 dark:text-slate-400 text-xs mt-1 uppercase tracking-wider font-semibold">Total Views</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-primary/5 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500">
+<span class="material-icons">forum</span>
+</div>
+<span class="text-blue-500 text-xs font-semibold bg-blue-500/10 px-2 py-1 rounded">+5%</span>
+</div>
+<h3 class="text-2xl font-bold">84</h3>
+<p class="text-slate-500 dark:text-slate-400 text-xs mt-1 uppercase tracking-wider font-semibold">New Messages</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-primary/5 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">
+<span class="material-icons">favorite</span>
+</div>
+<span class="text-amber-500 text-xs font-semibold bg-amber-500/10 px-2 py-1 rounded">+24%</span>
+</div>
+<h3 class="text-2xl font-bold">342</h3>
+<p class="text-slate-500 dark:text-slate-400 text-xs mt-1 uppercase tracking-wider font-semibold">Wishlist Adds</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-primary/5 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-lg bg-slate-500/10 flex items-center justify-center text-slate-500">
+<span class="material-icons">sell</span>
+</div>
+<span class="text-slate-400 text-xs font-semibold bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">Active</span>
+</div>
+<h3 class="text-2xl font-bold">18</h3>
+<p class="text-slate-500 dark:text-slate-400 text-xs mt-1 uppercase tracking-wider font-semibold">Live Listings</p>
+</div>
+</section>
+<!-- Main Grid Layout -->
+<div class="grid grid-cols-12 gap-8">
+<!-- My Listings Table (Left Column) -->
+<div class="col-span-12 lg:col-span-8 space-y-8">
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-primary/5 shadow-sm overflow-hidden">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<h2 class="font-bold text-lg">My Listings</h2>
+<button class="text-primary text-sm font-semibold hover:underline">View All</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider">
+<tr>
+<th class="px-6 py-4 font-semibold">Item</th>
+<th class="px-6 py-4 font-semibold">Status</th>
+<th class="px-6 py-4 font-semibold">Price</th>
+<th class="px-6 py-4 font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
+<tr>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded bg-slate-100 dark:bg-slate-800 flex-shrink-0 overflow-hidden">
+<img alt="Modern Smartphone" class="w-full h-full object-cover" data-alt="Modern smartphone with sleek glass design" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCRYj-cHCnj5hU6LbOOnKy3sFKDE4Bl3OFrD0QEG0GCkUoanJ8A7vRSN5jKFurSuKOn5Eu1JKP75dEVSL4I428o1X6hL1_J2Pyy4n6eJQaYUU1JSDIgowYbAr21QMXvlDPzyUw2_FI7NkSgNQV6oIIHhsSHd3iHeaIAZ22lw_P0t78a-ouiALPZ_FCWh5U_brdtgyJ60M_ia9JtbFbDvOhqxIXUP7vJzNr0mNIq8-6lsvTTIE2cuoXuYwh9IKWudUFe5bxVmUBOwVL"/>
+</div>
+<div>
+<p class="font-semibold text-slate-900 dark:text-slate-100">iPhone 15 Pro Max</p>
+<p class="text-xs text-slate-500">Listed 2 days ago</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">Active</span>
+</td>
+<td class="px-6 py-4 font-medium">$1,199.00</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded transition-colors" title="Edit">
+<span class="material-icons text-slate-400 text-lg">edit</span>
+</button>
+<button class="bg-primary text-white text-xs px-3 py-1.5 rounded-lg font-semibold hover:bg-primary/90 transition-colors">Promote</button>
+</div>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded bg-slate-100 dark:bg-slate-800 flex-shrink-0 overflow-hidden">
+<img alt="Red Sneakers" class="w-full h-full object-cover" data-alt="Stylish red athletic running shoes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkAkwDslJe6DkshVLqaL4xWLlZRHqew290hhLYq_VUatM83qvqjiRK8l-r-oyyZ8SBVRpCXdsRJYLQA4m6NxyzJ8VNtOazs-U89kZyFRAhU_DR2yaeYu9msGPKT0SUNVRhctNKtKKApWsslZjS6w7248JmkSzWt19FK6ueKCAvrPwRtEe0Ss7ZlAzz_AJdjeTFHD8rVqOTUoa7zQiKKFD9QK269PB1Jw9VGOhbk-PhQ7u8FmdUdj0UZWZRr_LB_MlG13a8mOxUmQCl"/>
+</div>
+<div>
+<p class="font-semibold text-slate-900 dark:text-slate-100">Nike Air Zoom</p>
+<p class="text-xs text-slate-500">Listed 5 days ago</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-500">Pending Review</span>
+</td>
+<td class="px-6 py-4 font-medium">$145.00</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded transition-colors" title="Edit">
+<span class="material-icons text-slate-400 text-lg">edit</span>
+</button>
+<button class="bg-primary text-white text-xs px-3 py-1.5 rounded-lg font-semibold hover:bg-primary/90 transition-colors">Promote</button>
+</div>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded bg-slate-100 dark:bg-slate-800 flex-shrink-0 overflow-hidden">
+<img alt="Leather Shoes" class="w-full h-full object-cover" data-alt="Premium brown leather formal shoes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5qt5Cg5zi6a1G40UoekpzT1JgL7fdFdVsXzw5GGg72C2B6dYcGahSTo9HjC8Y2ZuigOMtOMSqyM5--KdcSMbukJoF8pLihLR-GCyFCrV4wE_HySVZ9Td_oc3lfvWWVJ1175yyQbE3mfaHdowZ3J2W6l-gA0nwh6AN9vYzNhvt_is1cM7PrTL3S8OKUOaOaQEKv-jXiQZUlN1Yqm-nyK1oKvs9TsZ2ao0voVtn8GVbPXKd-VApsYhfkc16Gp4epZ4HgfhX5zsC2pN9"/>
+</div>
+<div>
+<p class="font-semibold text-slate-900 dark:text-slate-100">Handmade Leather Boots</p>
+<p class="text-xs text-slate-500">Listed 1 week ago</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">Active</span>
+</td>
+<td class="px-6 py-4 font-medium">$220.00</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded transition-colors" title="Edit">
+<span class="material-icons text-slate-400 text-lg">edit</span>
+</button>
+<button class="bg-primary text-white text-xs px-3 py-1.5 rounded-lg font-semibold hover:bg-primary/90 transition-colors">Promote</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Messages / Split Pane Mockup -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-primary/5 shadow-sm overflow-hidden h-[500px] flex">
+<!-- Conversations List -->
+<div class="w-1/3 border-r border-slate-100 dark:border-slate-800 flex flex-col">
+<div class="p-4 border-b border-slate-100 dark:border-slate-800">
+<h2 class="font-bold">Recent Messages</h2>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar">
+<div class="p-4 bg-primary/5 border-l-4 border-primary cursor-pointer hover:bg-primary/10 transition-colors">
+<div class="flex gap-3">
+<img alt="Sara Miller" class="w-10 h-10 rounded-full" data-alt="Portrait of a smiling woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXk_bJg07TyQx5G_t6Z6Lx1w_99lnY34iJDtIWPAmN5Dn7TVB0xXMf8qlwWg5wjjQ3jaz4IfDdm4ek9Ygaf_i2udWleboPE6jjJnsx1QIbjQvfTiKFnKtWz7dGUzrkwYQnWA7tVkNKvCEVxMXobVmK7yAR65FjWucxdU-VyS57V4SIZWp13e4glEGnEuD5mCh7uAujIAVJZxOmJK4peNYJJxVWuB6qpTUEWVUFnXxy8w7kBYGzjMDKaKIcplLHCxW1zD6297nfMyCC"/>
+<div class="flex-1 overflow-hidden">
+<div class="flex justify-between items-start">
+<p class="text-sm font-bold truncate">Sara Miller</p>
+<span class="text-[10px] text-primary font-semibold">12:45 PM</span>
+</div>
+<p class="text-xs text-slate-600 dark:text-slate-400 truncate">Is the iPhone still available for pick up?</p>
+</div>
+</div>
+</div>
+<div class="p-4 border-b border-slate-100 dark:border-slate-800 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="flex gap-3">
+<img alt="Michael Chen" class="w-10 h-10 rounded-full" data-alt="Portrait of a middle aged man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUoc16vWNINA1LKbasOWG2iPzk9OQ5F1tlOXVcHw-LfpSVe06y_QVlLIo1ixffuczTBgVo5ITyQUX8NYP6473MuGHsuK-iqLRu_1fhA8apaJ7lm11uL67L2irsfu5Sf9q3ZBkEXJZkuSoaaONX8plCqffBk6YN043qqTuDcx2ASyzb2TTmUxtp5ocYwjZbw8dMftjcjMZW9KbZsfPk6FFLSNM8b_3LTJgAHwRHZT-4CIo0eNmYh8oIstqILhOI5ctom_bXGar9UUsS"/>
+<div class="flex-1 overflow-hidden">
+<div class="flex justify-between items-start">
+<p class="text-sm font-bold truncate">Michael Chen</p>
+<span class="text-[10px] text-slate-400">Yesterday</span>
+</div>
+<p class="text-xs text-slate-500 truncate">I'm interested in the Nike shoes. Price firm?</p>
+</div>
+</div>
+</div>
+<div class="p-4 border-b border-slate-100 dark:border-slate-800 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="flex gap-3">
+<img alt="John Doe" class="w-10 h-10 rounded-full" data-alt="Portrait of a young man with beard" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmkBSmu7lrVIErrjnzhgli_1E_x12kl0yAUAATjQQzyDwdzjEJwxGR85y6UYfXTY29KGZDywYQFLXsMx5co-vrWhrAhtq_PO6bbG5rNTGM7zdf0F3Hj9M_G3__SfEFOGhdLxIRW9t_sra4TqmWjoTfCcxU9MNwMXGq93tB1TKOH6WZp532fGqwu2Skk6L65gdg47SQ2GddwSLyFCtBvNaZDW8vtZbRJjqVEytmE0PW6nmqyBArnNh6gVSpotnYH_EY1h7VtUHD1Ngd"/>
+<div class="flex-1 overflow-hidden">
+<div class="flex justify-between items-start">
+<p class="text-sm font-bold truncate">John Doe</p>
+<span class="text-[10px] text-slate-400">2 days ago</span>
+</div>
+<p class="text-xs text-slate-500 truncate">Thanks for the smooth transaction!</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Chat Window -->
+<div class="flex-1 flex flex-col">
+<div class="p-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-white dark:bg-slate-900">
+<div class="flex items-center gap-3">
+<img alt="Sara Miller" class="w-8 h-8 rounded-full" data-alt="Portrait of a smiling woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbvNjCPsJZ8m1tbcWI9CGx0RS7si7r5Kvl7fRNBeS1O5418IioZ56hI7HkBTWrm5Ra3CGY8drtSzVl1u9JW1o2UgN9NkmaPpYyVB9K1bYOLFkIiMxNuHjn89ze0jN1XE4-z621OcioOJiCLH9yKO9ilTG_-kmvdVubOJNYVnZiEfDKALwrUVRmtrgzIvHFG90acSZzd84RYEam5Fi_43yihoVioHUPo-oXLRf6T0Nml_Y4NeT2ep83hI9swwW9Eh-ZNtJ089IioQlw"/>
+<div>
+<p class="text-sm font-bold">Sara Miller</p>
+<p class="text-[10px] text-primary flex items-center gap-1"><span class="w-1.5 h-1.5 bg-primary rounded-full"></span> Online</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400"><span class="material-icons text-xl">call</span></button>
+<button class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400"><span class="material-icons text-xl">more_vert</span></button>
+</div>
+</div>
+<div class="flex-1 p-6 overflow-y-auto custom-scrollbar space-y-4 bg-slate-50 dark:bg-slate-900/50">
+<div class="flex justify-start">
+<div class="bg-white dark:bg-slate-800 p-3 rounded-2xl rounded-tl-none max-w-[80%] shadow-sm border border-slate-100 dark:border-slate-800">
+<p class="text-sm">Hi Alex, I saw your iPhone 15 Pro Max listing. Is it still available?</p>
+<p class="text-[10px] text-slate-400 mt-1 text-right">12:30 PM</p>
+</div>
+</div>
+<div class="flex justify-end">
+<div class="bg-primary text-white p-3 rounded-2xl rounded-tr-none max-w-[80%] shadow-sm">
+<p class="text-sm">Hey Sara! Yes, it's still available. I have one other person interested, but no deposit yet.</p>
+<p class="text-[10px] text-white/70 mt-1 text-right">12:35 PM</p>
+</div>
+</div>
+<div class="flex justify-start">
+<div class="bg-white dark:bg-slate-800 p-3 rounded-2xl rounded-tl-none max-w-[80%] shadow-sm border border-slate-100 dark:border-slate-800">
+<p class="text-sm">Great! Is the price negotiable? And can I pick it up today?</p>
+<p class="text-[10px] text-slate-400 mt-1 text-right">12:45 PM</p>
+</div>
+</div>
+</div>
+<div class="p-4 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-2">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors"><span class="material-icons">attach_file</span></button>
+<input class="flex-1 bg-slate-50 dark:bg-slate-800 border-none rounded-xl px-4 py-2 text-sm focus:ring-1 focus:ring-primary" placeholder="Type your message..." type="text"/>
+<button class="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center hover:scale-105 transition-all"><span class="material-icons">send</span></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Profile & Settings (Right Column) -->
+<div class="col-span-12 lg:col-span-4 space-y-8">
+<!-- Profile Settings Card -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-primary/5 shadow-sm p-6">
+<h2 class="font-bold text-lg mb-6">Profile Settings</h2>
+<div class="space-y-6">
+<div class="flex items-center gap-4">
+<div class="relative group">
+<img alt="Profile Large" class="w-20 h-20 rounded-xl object-cover ring-4 ring-primary/10" data-alt="Close up portrait of a male professional user" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqXXtNJBLDyviGh5iVCEVostdzwM7_UVJM1PwvFRBA1QLQ8tfFi1ArrMNo0WQ_lHyIhvwRldOarA_uZ1PrXnQXHFGAKS7QRDe7AyjGC7WEcHWZNODyg3w9WLmyu7KkSQMUf-5wEYonJgb3pLjHR_qvCpyDcFplZRev8m4-64wVEV3OhZK5u51Mnlbiddzl34wq4ezWHJi7C3PvSThGb0wvABjiwC7q5FhihbKZUFuoqMTtvg9r6iPzglV4onUk3orYjfCHT6t1jf4x"/>
+<button class="absolute -bottom-2 -right-2 w-8 h-8 bg-white dark:bg-slate-800 rounded-full shadow-lg flex items-center justify-center border border-slate-100 dark:border-slate-700 text-primary">
+<span class="material-icons text-sm">photo_camera</span>
+</button>
+</div>
+<div>
+<h4 class="font-bold">Alex Johnson</h4>
+<p class="text-xs text-slate-500">Member since Oct 2023</p>
+</div>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Display Name</label>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-lg text-sm px-4 py-2.5 focus:ring-primary" type="text" value="Alex Johnson"/>
+</div>
+<div>
+<label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Email Address</label>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-lg text-sm px-4 py-2.5 focus:ring-primary" type="email" value="alex.j@example.com"/>
+</div>
+<div>
+<label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Bio</label>
+<textarea class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-lg text-sm px-4 py-2.5 focus:ring-primary resize-none" rows="3">Passionate about tech and photography. Selling my well-maintained gear.</textarea>
+</div>
+</div>
+<button class="w-full bg-primary text-white font-bold py-3 rounded-xl shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all">Save Profile Changes</button>
+</div>
+</div>
+<!-- GDPR & Privacy -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-primary/5 shadow-sm p-6">
+<h2 class="font-bold text-lg mb-6">Privacy &amp; Data</h2>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50">
+<div>
+<p class="text-sm font-semibold">Public Profile</p>
+<p class="text-xs text-slate-500">Allow others to see your store</p>
+</div>
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</div>
+</div>
+<div class="pt-2">
+<h4 class="text-xs font-bold text-slate-500 uppercase mb-3">GDPR Compliance</h4>
+<div class="space-y-2">
+<button class="w-full flex justify-between items-center p-3 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg border border-slate-100 dark:border-slate-800 transition-all">
+<span>Download my data (JSON)</span>
+<span class="material-icons text-lg">download</span>
+</button>
+<button class="w-full flex justify-between items-center p-3 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg border border-red-100 dark:border-red-950/40 transition-all">
+<span>Delete all listing history</span>
+<span class="material-icons text-lg">delete_forever</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

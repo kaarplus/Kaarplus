@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kaarplus Global UI Components</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#10b77f",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#10221c",
+                        "footer-dark": "#1F2937",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200">
+<!-- Global Header -->
+<header class="h-[70px] bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
+<div class="max-w-7xl mx-auto h-full px-4 sm:px-6 flex items-center justify-between">
+<!-- Logo -->
+<div class="flex items-center">
+<div class="flex items-center gap-2">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-icons text-2xl">directions_car</span>
+</div>
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Kaar<span class="text-primary">plus</span></span>
+</div>
+</div>
+<!-- Center Navigation -->
+<nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+<a class="text-primary border-b-2 border-primary py-6" href="#">Home</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors py-6" href="#">Categories</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors py-6" href="#">Pricing</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors py-6" href="#">Contact</a>
+</nav>
+<!-- Right Actions -->
+<div class="flex items-center gap-6">
+<!-- Language Switcher -->
+<div class="flex items-center text-sm font-semibold text-slate-500 dark:text-slate-400">
+<button class="hover:text-primary px-1">ET</button>
+<span class="mx-1 text-slate-300">|</span>
+<button class="text-primary px-1">EN</button>
+<span class="mx-1 text-slate-300">|</span>
+<button class="hover:text-primary px-1">RU</button>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all shadow-lg shadow-primary/20">
+<span class="material-icons text-lg">add_circle</span>
+                    Place your ad
+                </button>
+</div>
+</div>
+</header>
+<!-- Content Placeholder for context -->
+<main class="min-h-screen flex flex-col items-center justify-center p-8">
+<div class="text-center max-w-2xl">
+<h1 class="text-4xl font-extrabold mb-4 text-slate-900 dark:text-white">The platform is ready.</h1>
+<p class="text-lg text-slate-600 dark:text-slate-400 mb-8">This page demonstrates the global navigation, footer, and GDPR consent management system for Kaarplus.</p>
+<div class="w-full h-64 bg-slate-200 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-400">
+<span class="material-icons text-6xl">space_dashboard</span>
+</div>
+</div>
+</main>
+<!-- Global Footer -->
+<footer class="bg-footer-dark text-slate-300 pt-16 pb-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+<!-- About -->
+<div>
+<h4 class="text-white font-bold mb-6 text-lg">About Kaarplus</h4>
+<p class="text-slate-400 text-sm leading-relaxed mb-6">
+                        The leading automotive marketplace in the region, connecting thousands of buyers and sellers daily with trust and transparency.
+                    </p>
+<div class="flex gap-4">
+<a class="w-8 h-8 rounded-full bg-slate-700 hover:bg-primary flex items-center justify-center transition-colors" href="#">
+<img alt="" class="w-4 h-4" data-alt="Facebook social media icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6mSrT5lmiliOhmciCH81-srHnDhcNFrj-EkCqZR8PIMA7n1qo7r7zY_gVGe0PM-j8IQASEsxR9cSthnwJOfoT5YZIUKKbegzn1YbGLiUTutwxMJ49wUVsUqQDSHWoZq9eOq00weyezLZ1U6W5TNbW8RW1xAVHJVfIwDQJpFgqVZ6B3CEQUUYcPbuG_0cBKIGccwF5Lud6uvLxnSe-sTg6tXMwOR8Ju3KPuCMjRFk6ZpDftJSTDEp3fj4JVO2j066qfIi8Iegk-DLW"/>
+</a>
+<a class="w-8 h-8 rounded-full bg-slate-700 hover:bg-primary flex items-center justify-center transition-colors" href="#">
+<img alt="" class="w-4 h-4" data-alt="X or Twitter social media icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNUvbZRqOXN1OO8gDiKCTQ5jx61-_bDVCiO8f0yWBIgfAIUjqJmwAdaFEJ5ehI4cRG10V3j0hyyrecrITd7nmLWeQI9HmrVoKf-9UCxAsloMcF9penbHG_g_THpSqlvBcJvjRl_G2hUkzmXxQwaHRjqKraHtobBmrSycA2IIyh-ryOW_nIM0SuZE2iBVuxeuw1ACJdeCf09Z9w9pHcYn8ZcEQg31d6oBYfixRITw_023XCAxc1AfB7ErFx7U-yhyykcHyFF7zklis_"/>
+</a>
+<a class="w-8 h-8 rounded-full bg-slate-700 hover:bg-primary flex items-center justify-center transition-colors" href="#">
+<img alt="" class="w-4 h-4" data-alt="Instagram social media icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtvQ-obPn6nFiYCtHF6roIVQyPI_a1wAy1ksWbNXzwFFrKi54BZSKqMOymVY4duRpOyOTJIzMdrUq9f_u9YdKYrm17MpGYGhWNbbS4NOX0g9var5LluUFfdTz6MvxTDUEoHGDCvmi77Ti3sZrVXkk7TNHW6OAZ7GaS39ZN3wQGP5FMDDrFKAVIBRHBYHoGDFXfrt852i7q5RPL3-0Li72efYWcbTFr-PDZMmVzxaOJMmc9v2-IQpnlpxifPfOAvec3vB82atZsDyme"/>
+</a>
+</div>
+</div>
+<!-- Explore -->
+<div>
+<h4 class="text-white font-bold mb-6 text-lg">Explore</h4>
+<ul class="space-y-4 text-sm">
+<li><a class="hover:text-primary transition-colors" href="#">Popular Categories</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Featured Listings</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Newly Added</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Price Guides</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Careers</a></li>
+</ul>
+</div>
+<!-- Support -->
+<div>
+<h4 class="text-white font-bold mb-6 text-lg">Support</h4>
+<ul class="space-y-4 text-sm">
+<li><a class="hover:text-primary transition-colors" href="#">Help Center</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Safety Tips</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Terms of Service</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">FAQ</a></li>
+</ul>
+</div>
+<!-- Newsletter -->
+<div>
+<h4 class="text-white font-bold mb-6 text-lg">Newsletter</h4>
+<p class="text-sm text-slate-400 mb-4">Subscribe to get the latest automotive deals and platform updates.</p>
+<form class="space-y-3">
+<input class="w-full bg-slate-800 border-slate-700 rounded-lg text-sm focus:ring-primary focus:border-primary text-white" placeholder="Your email address" type="email"/>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-2 rounded-lg transition-colors">Subscribe</button>
+</form>
+</div>
+</div>
+<!-- Footer Bottom -->
+<div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
+<p class="text-xs text-slate-500">© 2024 Kaarplus. All rights reserved. Built with trust for the automotive community.</p>
+<!-- Payment Logos -->
+<div class="flex items-center gap-4 opacity-50 grayscale hover:grayscale-0 transition-all">
+<img alt="" class="h-4" data-alt="Visa payment provider logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAU8lIYR_L7TfkuYJaD6f9_uz6dGk6ErfjZwWDE0SE2aqP9ugl9cVKTsg24M-wxx7LEQZ3G6gg52CRIkubQKszR0419hkNkKy20-OkQiOOpQZq3rLrbl-TdwXfLg1xIT9QgUA4ni0q6LjGDMFIBRq-6g8xULQsu-_XYvSKVdk94tcTd6IcumKPE-0jCfjfwTx0MKHg7TtghLKwXnxPssvMQF75kvSh7Dsgay0WOyR-0BbhC58eOIYiiTQcJR-bbSBgq4a-15Q-z3d0o"/>
+<img alt="" class="h-6" data-alt="Mastercard payment provider logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnVFffkii0PDZ60PsaJH_g39ZnH4G7Zo7PdTSGR6WfVC_D7BZIecfhD4IIH6H7xW5G-FpfhbQNFytek45HXXYSGL0pDtOpm4X9FZyIdvQx3tqkPH12NRMEIV6iRk0lxoZVMNgX2IMtfH8ZM34NwGbTpfboFAzOAvL9JKqwGrPeBfmQnNTS7o_QiyN3FC4bfChPdN0Bh27Ik7pd88TeJqGZ1Yk8zGNTz_wv6oFLgq4M-1xIxIVTc3R-Yd310m6F0KTmNkmd6qIEzgCE"/>
+<img alt="" class="h-5" data-alt="Paypal payment provider logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtPEFFNAGYIr07ORvLQkQN51IIGLE4NJsHsnSHUo4eaqGzzWjyuUvOUEIhvsJFFgY9JjIBQQ77_HqS6sk0o1fw2WcnBSHZXeCfcIwTEPINP8nluayhfrRlH0QNS-Dd6Cpb-7jcXQBLNjkuP_RDa_Rn_BGROUOQ5JgidmKyKRqeOJwpipqLeUqG4kal56Um4ZlDSsXfAAh6qQyRXdgkEWG60AA6Zwt_IcXpqQn39v29MDOFDJwhME6yioi3VPYvq2QItpX-q8uV69TE"/>
+<img alt="" class="h-6" data-alt="Stripe payment provider logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3b6lxCfUUW_x3EvouymZLd29z7eY2MMewYVOB6gORpn0iqi4XrjRBf8OM5mvp30MuAAdx9Q7X42NuY-00DBbtx-9OXMeRlC_6qGSJIpW0G07P3eEbQgV7p4phgKsIZ6lWhXYJnbGbuqZt_DE90Z_R2ALMpPlpHeRn7foALga0_VpzARrHBKnVJUF9VHso1Tj2mqbDHL4hQqJ_Fzcj3Q5SO6QUnSjecAxCMhGUyBhNTihUdhBcpCuyPIAXQ93jMQSSjJfYqiGH1i0f"/>
+</div>
+</div>
+</div>
+</footer>
+<!-- GDPR Cookie Banner (Fixed Bottom) -->
+<div class="fixed bottom-0 left-0 right-0 z-[60] p-4 pointer-events-none">
+<div class="max-w-4xl mx-auto bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl p-5 pointer-events-auto flex flex-col md:flex-row items-center gap-6">
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-icons text-primary">cookie</span>
+<h5 class="font-bold text-slate-900 dark:text-white">Cookies &amp; Privacy</h5>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400">
+                    We use cookies to improve your browsing experience, serve personalized ads or content, and analyze our traffic. By clicking "Accept All", you consent to our use of cookies.
+                </p>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<button class="px-5 py-2 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors border border-transparent">
+                    Customize
+                </button>
+<button class="px-6 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-semibold rounded-lg transition-colors shadow-lg shadow-primary/20">
+                    Accept All
+                </button>
+</div>
+</div>
+</div>
+<!-- Cookie Settings Modal (Simulated Overlay) -->
+<!-- Note: Using absolute/fixed positioning and high z-index to show how it looks -->
+<div class="fixed inset-0 z-[100] bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+<div class="bg-white dark:bg-slate-900 w-full max-w-lg rounded-xl shadow-2xl overflow-hidden">
+<div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Cookie Preferences</h3>
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+<span class="material-icons">close</span>
+</button>
+</div>
+<div class="p-6 space-y-6">
+<!-- Essential -->
+<div class="flex items-start justify-between gap-4">
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Essential Cookies</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] uppercase font-bold text-slate-500 rounded">Required</span>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400">Necessary for the website to function properly. They cannot be disabled.</p>
+</div>
+<div class="relative inline-flex items-center cursor-not-allowed">
+<div class="w-11 h-6 bg-primary/40 rounded-full"></div>
+<div class="absolute left-6 w-4 h-4 bg-white rounded-full transition-transform"></div>
+</div>
+</div>
+<!-- Analytics -->
+<div class="flex items-start justify-between gap-4">
+<div class="flex-1">
+<span class="text-sm font-bold text-slate-900 dark:text-white block mb-1">Analytics Cookies</span>
+<p class="text-xs text-slate-500 dark:text-slate-400">Help us understand how visitors interact with our website by collecting anonymous data.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Marketing -->
+<div class="flex items-start justify-between gap-4">
+<div class="flex-1">
+<span class="text-sm font-bold text-slate-900 dark:text-white block mb-1">Marketing Cookies</span>
+<p class="text-xs text-slate-500 dark:text-slate-400">Used to track visitors across websites to display relevant and engaging ads.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+<div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/50 flex justify-end gap-3 border-t border-slate-100 dark:border-slate-800">
+<button class="px-4 py-2 text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                    Reject All
+                </button>
+<button class="px-6 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-semibold rounded-lg transition-colors">
+                    Save Preferences
+                </button>
+</div>
+</div>
+</div>
+</body></html>
