@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Kaarplus brand — teal/green primary (#10b77f) */
+    --background: 150 13% 97%;
+    --foreground: 155 18% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 155 18% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 155 18% 12%;
+    --primary: 158 84% 39%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 150 20% 95%;
+    --secondary-foreground: 155 18% 12%;
+    --muted: 150 20% 95%;
+    --muted-foreground: 155 10% 39%;
+    --accent: 155 53% 96%;
+    --accent-foreground: 155 18% 12%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 150 8% 89%;
+    --input: 150 8% 89%;
+    --ring: 158 84% 39%;
+    --radius: 0.5rem;
+
+    /* Semantic status colors */
+    --success: 158 84% 39%;
+    --warning: 38 92% 50%;
+    --info: 217 91% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

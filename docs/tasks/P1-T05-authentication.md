@@ -1,7 +1,7 @@
 # P1-T05: Authentication (NextAuth + Express JWT)
 
 > **Phase:** 1 — Core MVP
-> **Status:** ⬜ Not Started
+> **Status:** ✅ Complete
 > **Dependencies:** P1-T02, P1-T03, P1-T04
 > **Estimated Time:** 4 hours
 
