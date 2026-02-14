@@ -1,31 +1,49 @@
 import type { Metadata } from "next";
+import { HeroSection } from "@/components/landing/hero-section";
+import { VehicleCategories } from "@/components/landing/vehicle-categories";
+import { CategoryGrid } from "@/components/landing/category-grid";
+import { ValuePropositions } from "@/components/landing/value-propositions";
+import { PopularBrands } from "@/components/landing/popular-brands";
+import { ReviewsCarousel } from "@/components/landing/reviews-carousel";
+import { StatisticsSection } from "@/components/landing/statistics-section";
+import { FaqSection } from "@/components/landing/faq-section";
+import { NewsletterSignup } from "@/components/landing/newsletter-signup";
 
 export const metadata: Metadata = {
-  title: "Kaarplus — Autode ost ja müük Eestis",
+  title: "Kaarplus | Autode ost ja müük Eestis - Elektri- ja hübriidautod",
   description:
-    "Eesti suurim autode ost-müügi platvorm. Leia oma unistuste auto! Kasutatud ja uued autod müügis.",
+    "Eesti kaasaegseim autode ost-müügi platvorm. Kontrollitud elektriautod, hübriidid ja sisepõlemismootoriga sõidukid. Turvalised tehingud ja usaldusväärsed müüjad.",
 };
 
 export default function HomePage() {
   return (
-    <div className="container py-12">
-      {/* Hero section — P1-T06 */}
-      <section className="py-16 text-center">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-          Leia oma unistuste{" "}
-          <span className="text-primary">auto</span>
-        </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-          Eesti suurim autode ost-müügi platvorm. Tuhandeid autosid igapäevaselt.
-        </p>
-      </section>
+    <main className="flex min-h-screen flex-col">
+      {/* 1. Hero Section + Search Bar (integrated) */}
+      <HeroSection />
 
-      {/* Search bar placeholder — P1-T06 */}
-      <section className="mx-auto max-w-4xl rounded-lg border bg-card p-6 shadow-sm">
-        <p className="text-center text-muted-foreground">
-          Otsinguriba — implementeeritakse P1-T06 ülesandes
-        </p>
-      </section>
-    </div>
+      {/* 2. Vehicle Categories (Buy / Electric / Hybrid tabs) */}
+      <VehicleCategories />
+
+      {/* 3. Category Grid (8 body types with icons) */}
+      <CategoryGrid />
+
+      {/* 4. Value Propositions (4 cards) */}
+      <ValuePropositions />
+
+      {/* 5. Popular Brands (8 brands) */}
+      <PopularBrands />
+
+      {/* 6. Customer Reviews (Carvago-style) */}
+      <ReviewsCarousel />
+
+      {/* 7. Statistics (Animated counters) */}
+      <StatisticsSection />
+
+      {/* 8. FAQ Accordion */}
+      <FaqSection />
+
+      {/* 9. Newsletter Signup */}
+      <NewsletterSignup />
+    </main>
   );
 }
