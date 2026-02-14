@@ -1,7 +1,7 @@
 # P1-T08: Car Listings Page (List/Grid + Filters)
 
 > **Phase:** 1 — Core MVP
-> **Status:** ⬜ Not Started
+> **Status:** ✅ Complete
 > **Dependencies:** P1-T04, P1-T07
 > **Estimated Time:** 5 hours
 

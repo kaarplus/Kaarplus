@@ -1,0 +1,22 @@
+"use client";
+
+interface ResultsCountProps {
+    count: number;
+    total: number;
+    isLoading?: boolean;
+}
+
+export function ResultsCount({ count, total, isLoading }: ResultsCountProps) {
+    if (isLoading) {
+        return <div className="h-4 w-32 bg-muted animate-pulse rounded" />;
+    }
+
+    return (
+        <div>
+            <h1 className="text-2xl font-bold tracking-tight">Kasutatud autod</h1>
+            <p className="text-sm text-muted-foreground mt-1">
+                {total.toLocaleString()} sõidukit vastab teie otsingule
+            </p>
+        </div>
+    );
+}

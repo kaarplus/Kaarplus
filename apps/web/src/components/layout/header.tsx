@@ -13,7 +13,7 @@ export function Header() {
 
         {/* Navigation */}
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-          <Link href="/cars" className="transition-colors hover:text-primary">
+          <Link href="/listings" className="transition-colors hover:text-primary">
             Autod
           </Link>
           <Link href="/sell" className="transition-colors hover:text-primary">

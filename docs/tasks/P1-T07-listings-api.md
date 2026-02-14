@@ -1,7 +1,7 @@
 # P1-T07: Listings API (CRUD + Filters + Search)
 
 > **Phase:** 1 — Core MVP
-> **Status:** ⬜ Not Started
+> **Status:** ✅ Complete
 > **Dependencies:** P1-T02, P1-T03
 > **Estimated Time:** 4 hours
 

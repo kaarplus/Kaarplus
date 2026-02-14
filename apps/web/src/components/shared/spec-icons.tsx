@@ -20,39 +20,65 @@ export function SpecIcons({
     compact = false,
     className,
 }: SpecIconsProps) {
-    // Use formatNumber or locale string for mileage
     const formattedMileage = mileage ? new Intl.NumberFormat("et-EE").format(mileage) + " km" : null;
 
+    if (compact) {
+        return (
+            <div className={cn("flex items-center justify-between w-full text-center", className)}>
+                {mileage && (
+                    <div className="flex flex-col items-center gap-1">
+                        <Gauge size={14} className="text-slate-400" />
+                        <span className="text-[10px] font-bold text-slate-700 leading-none">{formattedMileage}</span>
+                    </div>
+                )}
+                {fuelType && (
+                    <div className="flex flex-col items-center gap-1">
+                        <Fuel size={14} className="text-slate-400" />
+                        <span className="text-[10px] font-bold text-slate-700 leading-none">{fuelType}</span>
+                    </div>
+                )}
+                {transmission && (
+                    <div className="flex flex-col items-center gap-1">
+                        <Settings2 size={14} className="text-slate-400" />
+                        <span className="text-[10px] font-bold text-slate-700 leading-none">
+                            {transmission.toLowerCase().includes("aut") ? "Auto" : "Käsits"}
+                        </span>
+                    </div>
+                )}
+            </div>
+        );
+    }
+
     return (
-        <div className={cn("flex flex-wrap gap-x-4 gap-y-2 text-sm text-foreground", className)}>
+        <div className={cn("flex flex-wrap gap-x-6 gap-y-2 text-sm text-foreground", className)}>
             {year && (
-                <div className="flex items-center gap-1.5" title="Year">
-                    <Calendar size={16} className="text-muted-foreground" />
-                    <span>{year}</span>
+                <div className="flex items-center gap-2" title="Year">
+                    <Calendar size={16} className="text-slate-400" />
+                    <span className="font-semibold">{year}</span>
                 </div>
             )}
             {mileage && (
-                <div className="flex items-center gap-1.5" title="Mileage">
-                    <Gauge size={16} className="text-muted-foreground" />
-                    <span>{formattedMileage}</span>
+                <div className="flex items-center gap-2" title="Mileage">
+                    <Gauge size={16} className="text-slate-400" />
+                    <span className="font-semibold">{formattedMileage}</span>
                 </div>
             )}
             {fuelType && (
-                <div className="flex items-center gap-1.5" title="Fuel Type">
-                    <Fuel size={16} className="text-muted-foreground" />
-                    <span>{fuelType}</span>
+                <div className="flex items-center gap-2" title="Fuel Type">
+                    <Fuel size={16} className="text-slate-400" />
+                    <span className="font-semibold">{fuelType}</span>
                 </div>
             )}
             {transmission && (
-                <div className="flex items-center gap-1.5" title="Transmission">
-                    <Settings2 size={16} className="text-muted-foreground" />
-                    <span>{transmission}</span>
+                <div className="flex items-center gap-2" title="Transmission">
+                    <Settings2 size={16} className="text-slate-400" />
+                    <span className="font-semibold">{transmission}</span>
                 </div>
             )}
-            {power && !compact && (
-                <div className="flex items-center gap-1.5" title="Power">
-                    <Zap size={16} className="text-muted-foreground" />
-                    <span>{power}</span>
+            {power && (
+                <div className="flex items-center gap-2" title="Power">
+                    <Zap size={16} className="text-slate-400" />
+                    <span className="font-semibold">{power}</span>
                 </div>
             )}
         </div>

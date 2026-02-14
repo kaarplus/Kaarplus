@@ -5,11 +5,11 @@ export interface VehicleSummary {
     variant?: string;
     year: number;
     price: number;
-    includeVat: boolean;
+    priceVatIncluded: boolean;
     mileage: number;
     fuelType: string;
     transmission: string;
-    power?: string;
+    powerKw?: number;
     bodyType: string;
     thumbnailUrl: string;
     status: "ACTIVE" | "PENDING" | "SOLD" | "REJECTED" | "EXPIRED";
