@@ -1,7 +1,7 @@
 # P1-T14: GDPR Compliance
 
 > **Phase:** 1 — Core MVP
-> **Status:** ⬜ Not Started
+> **Status:** ✅ Complete
 > **Dependencies:** P1-T05
 > **Estimated Time:** 3 hours
 

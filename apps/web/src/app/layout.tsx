@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AuthProvider } from "@/components/auth/auth-provider";
+import { CookieBanner } from "@/components/gdpr/cookie-banner";
 import { JsonLd } from "@/components/shared/json-ld";
 import { Toaster } from "@/components/ui/toaster";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/constants";
@@ -52,6 +53,7 @@ export default function RootLayout({
           <JsonLd data={organizationJsonLd} />
           {children}
           <Toaster />
+          <CookieBanner />
         </AuthProvider>
       </body>
     </html>

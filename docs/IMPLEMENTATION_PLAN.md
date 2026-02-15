@@ -1,7 +1,7 @@
 # Kaarplus — Implementation Plan
 
-> **Last Updated:** 2026-02-13
-> **Status:** Phase 1 — In Progress
+> **Last Updated:** 2026-02-15
+> **Status:** Phase 1 — Complete ✅ | Phase 2 — Ready
 > **Total Tasks:** 27 across 4 phases
 
 ---
@@ -44,7 +44,7 @@ The goal of Phase 1 is a working, deployable application with core listing brows
 | P1-T11 | Photo upload (S3 presigned URLs)            | ✅     | P1-T03, T10      | 3h   |
 | P1-T12 | Admin listing verification queue            | ✅     | P1-T05, T07      | 3h   |
 | P1-T13 | SEO implementation (meta, sitemap, JSON-LD) | ✅     | P1-T06, T08, T09 | 3h   |
-| P1-T14 | GDPR compliance (consent, privacy, export)  | ⬜     | P1-T05           | 3h   |
+| P1-T14 | GDPR compliance (consent, privacy, export)  | ✅     | P1-T05           | 3h   |
 
 ### Phase 1 — Acceptance Criteria
 
