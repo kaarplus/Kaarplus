@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
+import { ComparePageClient } from "@/components/comparison/compare-page-client";
 
 export const metadata: Metadata = {
-  title: "Võrdle autosid",
-  description: "Võrdle kuni 4 autot kõrvuti. Vaata spetsifikatsioone ja varustust.",
+    title: "Võrdle autosid | Kaarplus",
+    description:
+        "Võrdle kuni 4 autot kõrvuti. Vaata spetsifikatsioone, varustust ja hindu.",
+    openGraph: {
+        title: "Võrdle autosid | Kaarplus",
+        description:
+            "Võrdle kuni 4 autot kõrvuti. Vaata spetsifikatsioone, varustust ja hindu.",
+    },
 };
 
 export default function ComparePage() {
-  return (
-    <div className="container py-8">
-      <h1 className="text-3xl font-bold">Võrdle autosid</h1>
-      <p className="mt-2 text-muted-foreground">
-        Võrdlustabel — implementeeritakse P2-T02 ülesandes
-      </p>
-    </div>
-  );
+    return <ComparePageClient />;
 }
