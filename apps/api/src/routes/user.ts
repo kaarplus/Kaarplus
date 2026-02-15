@@ -1,6 +1,12 @@
 import { Router } from "express";
 
 import {
+    getDashboardStats,
+    getMyListings,
+    getProfile,
+    patchProfile,
+} from "../controllers/dashboardController";
+import {
     getUserFavorites,
     addFavorite,
     removeFavorite,
@@ -28,8 +34,11 @@ userRouter.get("/favorites/:listingId", readLimiter, checkFavorite);
 userRouter.post("/favorites/:listingId", writeLimiter, addFavorite);
 userRouter.delete("/favorites/:listingId", writeLimiter, removeFavorite);
 
-// GET    /api/user/profile — P1-T05
-// PATCH  /api/user/profile — P1-T05
-// GET    /api/user/listings — P2-T05
+// Dashboard & Profile endpoints
+userRouter.get("/dashboard/stats", readLimiter, getDashboardStats);
+userRouter.get("/listings", readLimiter, getMyListings);
+userRouter.get("/profile", readLimiter, getProfile);
+userRouter.patch("/profile", writeLimiter, patchProfile);
+
 // GET    /api/user/messages — P2-T06
 // POST   /api/user/messages — P2-T06

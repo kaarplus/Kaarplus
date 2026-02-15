@@ -64,8 +64,8 @@ After MVP launch, add features that drive user retention and interaction.
 
 | ID     | Task                                    | Status | Dependencies   | Est. |
 | ------ | --------------------------------------- | ------ | -------------- | ---- |
-| P2-T01 | Favorites system (API + UI)             | ⬜     | P1-T05, P1-T07 | 3h   |
-| P2-T02 | Car comparison page                     | ⬜     | P1-T08         | 3h   |
+| P2-T01 | Favorites system (API + UI)             | ✅     | P1-T05, P1-T07 | 3h   |
+| P2-T02 | Car comparison page                     | ✅     | P1-T08         | 3h   |
 | P2-T03 | Advanced search page                    | ⬜     | P1-T08         | 4h   |
 | P2-T04 | Saved searches with email alerts        | ⬜     | P2-T03, P1-T05 | 3h   |
 | P2-T05 | User dashboard (overview + my listings) | ⬜     | P1-T05, P1-T10 | 4h   |

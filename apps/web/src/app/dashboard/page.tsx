@@ -1,16 +1,11 @@
 import type { Metadata } from "next";
+import { DashboardOverview } from "@/components/dashboard/dashboard-overview";
 
 export const metadata: Metadata = {
-  title: "Töölaud",
+  title: "Töölaud | Kaarplus",
+  description: "Halda oma kuulutusi, vaata statistikat ja seadeid",
 };
 
 export default function DashboardPage() {
-  return (
-    <div>
-      <h1 className="text-3xl font-bold">Töölaud</h1>
-      <p className="mt-2 text-muted-foreground">
-        Dashboard — implementeeritakse P2-T05 ülesandes
-      </p>
-    </div>
-  );
+  return <DashboardOverview />;
 }
