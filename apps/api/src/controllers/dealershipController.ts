@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+
 import { DealershipService } from "../services/dealershipService";
 
 const dealershipService = new DealershipService();

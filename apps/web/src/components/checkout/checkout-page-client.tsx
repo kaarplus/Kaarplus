@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { CheckoutForm } from "./checkout-form";
@@ -116,10 +117,12 @@ export function CheckoutPageClient({ listing }: CheckoutPageClientProps) {
                             <div className="flex gap-3">
                                 <div className="relative h-16 w-16 rounded-md overflow-hidden bg-muted">
                                     {listing.images[0] && (
-                                        <img
+                                        <Image
                                             src={listing.images[0].url}
                                             alt={listing.make}
-                                            className="object-cover h-full w-full"
+                                            fill
+                                            className="object-cover"
+                                            unoptimized
                                         />
                                     )}
                                 </div>

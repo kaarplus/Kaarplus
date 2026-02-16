@@ -2,13 +2,13 @@ import { Router, Request, Response } from "express";
 
 import { adminRouter } from "./admin";
 import { authRouter } from "./auth";
+import { dealershipRouter } from "./dealerships";
 import { listingsRouter } from "./listings";
 import { paymentsRouter } from "./payments";
 import { searchRouter } from "./search";
 import { uploadsRouter } from "./uploads";
 import { userRouter } from "./user";
 import { webhooksRouter } from "./webhooks";
-import { dealershipRouter } from "./dealerships";
 
 export const apiRouter = Router();
 

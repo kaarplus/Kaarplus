@@ -1,4 +1,5 @@
 import { prisma } from "@kaarplus/database";
+
 import { NotFoundError } from "../utils/errors";
 
 export class DealershipService {

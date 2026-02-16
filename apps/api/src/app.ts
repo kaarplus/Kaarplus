@@ -20,6 +20,7 @@ export function createApp() {
   app.use(
     express.json({
       limit: "10mb",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       verify: (req: any, res, buf) => {
         req.rawBody = buf;
       },

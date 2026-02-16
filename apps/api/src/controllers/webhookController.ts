@@ -1,8 +1,10 @@
-import { Request, Response } from "express";
-import { stripe } from "../utils/stripe";
 import { prisma } from "@kaarplus/database";
-import { emailService } from "../services/emailService";
+import { Request, Response } from "express";
 import Stripe from "stripe";
+
+import { emailService } from "../services/emailService";
+import { stripe } from "../utils/stripe";
+
 
 /**
  * POST /api/webhooks/stripe
@@ -21,17 +23,19 @@ export async function handleStripeWebhook(req: Request, res: Response) {
         }
 
         event = stripe.webhooks.constructEvent(req.rawBody!, sig, webhookSecret);
-    } catch (err: any) {
-        console.error(`[Stripe Webhook] Error: ${err.message}`);
-        return res.status(400).send(`Webhook Error: ${err.message}`);
+    } catch (err) {
+        const message = err instanceof Error ? err.message : "Unknown error";
+        console.error(`[Stripe Webhook] Error: ${message}`);
+        return res.status(400).send(`Webhook Error: ${message}`);
     }
 
     // Handle the event
     switch (event.type) {
-        case "payment_intent.succeeded":
+        case "payment_intent.succeeded": {
             const paymentIntent = event.data.object as Stripe.PaymentIntent;
             await handlePaymentSuccess(paymentIntent);
             break;
+        }
         default:
             console.log(`[Stripe Webhook] Unhandled event type ${event.type}`);
     }
