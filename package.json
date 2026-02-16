@@ -20,6 +20,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
+    "test:e2e": "playwright test",
     "db:generate": "npm run generate --workspace=packages/database",
     "db:migrate": "npm run migrate:dev --workspace=packages/database",
     "db:studio": "npm run studio --workspace=packages/database",
@@ -28,13 +29,14 @@
     "prepare": "husky install"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
     "concurrently": "^8.2.2",
     "eslint": "^8.57.0",
-    "@typescript-eslint/parser": "^7.0.0",
-    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
-    "eslint-config-prettier": "^9.1.0",
     "husky": "^9.0.11",
     "prettier": "^3.2.5",
     "typescript": "^5.4.5"
