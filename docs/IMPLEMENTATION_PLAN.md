@@ -96,14 +96,14 @@ Introduce payment processing and premium features.
 | ------ | ------------------------------ | ------ | -------------- | ---- |
 | P3-T01 | Stripe payment integration     | ✅     | P1-T05, P1-T07 | 5h   |
 | P3-T02 | Dealership accounts & profiles | ✅     | P1-T05         | 3h   |
-| P3-T03 | Admin analytics dashboard      | ⬜     | P1-T12         | 3h   |
+| P3-T03 | Admin analytics dashboard      | ✅     | P1-T12         | 3h   |
 
 ### Phase 3 — Acceptance Criteria
 
-- [ ] Buyers can purchase vehicles via Stripe (card, Apple Pay, Google Pay)
-- [ ] Payment webhooks correctly update listing status
-- [ ] Dealerships have enhanced profiles with unlimited listings
-- [ ] Admin dashboard shows platform analytics
+- [x] Buyers can purchase vehicles via Stripe (card, Apple Pay, Google Pay)
+- [x] Payment webhooks correctly update listing status
+- [x] Dealerships have enhanced profiles with unlimited listings
+- [x] Admin dashboard shows platform analytics
 
 ---
 
