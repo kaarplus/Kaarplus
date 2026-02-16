@@ -27,18 +27,15 @@ export async function subscribe(req: Request, res: Response, next: NextFunction)
         });
 
         if (existing) {
-            if (existing.active) {
-                res.json({ data: { message: "Already subscribed", subscribed: true } });
-                return;
+            if (!existing.active) {
+                // Reactivate
+                await prisma.newsletter.update({
+                    where: { id: existing.id },
+                    data: { active: true, language: lang },
+                });
             }
-
-            // Reactivate
-            await prisma.newsletter.update({
-                where: { id: existing.id },
-                data: { active: true, language: lang },
-            });
-
-            res.json({ data: { message: "Subscription reactivated", subscribed: true } });
+            // Return same response regardless of state to prevent email enumeration
+            res.json({ data: { message: "Subscribed", subscribed: true } });
             return;
         }
 
@@ -52,7 +49,7 @@ export async function subscribe(req: Request, res: Response, next: NextFunction)
         // Send welcome email (non-blocking)
         emailService.sendNewsletterWelcome(subscription.email, subscription.token, lang).catch(() => {});
 
-        res.status(201).json({ data: { message: "Successfully subscribed", subscribed: true } });
+        res.json({ data: { message: "Subscribed", subscribed: true } });
     } catch (error) {
         next(error);
     }

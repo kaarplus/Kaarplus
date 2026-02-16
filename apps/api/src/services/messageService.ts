@@ -31,6 +31,7 @@ export const messageService = {
                 },
             },
             orderBy: { createdAt: "desc" },
+            take: 5000,
         });
 
         // Group by conversation (unique pair of users + listing)
@@ -97,6 +98,15 @@ export const messageService = {
     ) {
         if (senderId === data.recipientId) {
             throw new Error("CANNOT_MESSAGE_SELF");
+        }
+
+        // Verify recipient exists
+        const recipient = await prisma.user.findUnique({
+            where: { id: data.recipientId },
+            select: { id: true },
+        });
+        if (!recipient) {
+            throw new Error("RECIPIENT_NOT_FOUND");
         }
 
         return prisma.message.create({

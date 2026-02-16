@@ -18,14 +18,14 @@ export function ConversationList({
   currentUserId,
   onSelect,
 }: ConversationListProps) {
-  const { conversations, selectedConversation, isLoading, loadConversations } =
+  const { conversations, selectedConversation, isLoadingConversations, loadConversations } =
     useMessageStore();
 
   useEffect(() => {
     loadConversations();
   }, [loadConversations]);
 
-  if (isLoading && conversations.length === 0) {
+  if (isLoadingConversations && conversations.length === 0) {
     return (
       <div className="space-y-3 p-4">
         {Array.from({ length: 5 }).map((_, i) => (

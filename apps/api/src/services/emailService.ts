@@ -3,16 +3,31 @@ const FROM_EMAIL = process.env.FROM_EMAIL || "noreply@kaarplus.ee";
 const FRONTEND_URL = process.env.CORS_ORIGIN || "http://localhost:3000";
 
 /**
+ * Escape HTML special characters to prevent XSS in email templates.
+ */
+function escapeHtml(str: string): string {
+    return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+/**
  * Email service for sending transactional emails.
  * Uses SendGrid in production; logs to console in development.
  */
 export class EmailService {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private sgMail: any = null;
+    private ready: Promise<void>;
 
     constructor() {
         if (SENDGRID_API_KEY) {
-            this.initSendGrid();
+            this.ready = this.initSendGrid();
+        } else {
+            this.ready = Promise.resolve();
         }
     }
 
@@ -27,6 +42,8 @@ export class EmailService {
     }
 
     async sendEmail(to: string, subject: string, html: string): Promise<void> {
+        await this.ready;
+
         if (!SENDGRID_API_KEY || !this.sgMail) {
             console.log("[Email] To:", to, "Subject:", subject);
             return;
@@ -45,43 +62,48 @@ export class EmailService {
     }
 
     async sendListingApprovedEmail(email: string, listingTitle: string, listingId: string): Promise<void> {
+        const safeTitle = escapeHtml(listingTitle);
         const subject = "Teie kuulutus on kinnitatud! | Your listing has been approved!";
         const html = `
             <h2>Teie kuulutus on kinnitatud!</h2>
-            <p>Teie kuulutus "<strong>${listingTitle}</strong>" on nüüd aktiivne ja nähtav ostjatele.</p>
-            <p><a href="${FRONTEND_URL}/listings/${listingId}">Vaata kuulutust</a></p>
+            <p>Teie kuulutus "<strong>${safeTitle}</strong>" on nüüd aktiivne ja nähtav ostjatele.</p>
+            <p><a href="${FRONTEND_URL}/listings/${encodeURIComponent(listingId)}">Vaata kuulutust</a></p>
             <hr />
-            <p><em>Your listing "${listingTitle}" has been approved and is now visible to buyers.</em></p>
+            <p><em>Your listing "${safeTitle}" has been approved and is now visible to buyers.</em></p>
         `;
         await this.sendEmail(email, subject, html);
     }
 
     async sendNewMessageEmail(email: string, senderName: string, listingTitle: string): Promise<void> {
+        const safeSender = escapeHtml(senderName);
+        const safeTitle = escapeHtml(listingTitle);
         const subject = "Uus sõnum | New message";
         const html = `
             <h2>Teil on uus sõnum</h2>
-            <p><strong>${senderName}</strong> saatis teile sõnumi kuulutuse "<strong>${listingTitle}</strong>" kohta.</p>
+            <p><strong>${safeSender}</strong> saatis teile sõnumi kuulutuse "<strong>${safeTitle}</strong>" kohta.</p>
             <p><a href="${FRONTEND_URL}/dashboard/messages">Vaata sõnumeid</a></p>
             <hr />
-            <p><em>${senderName} sent you a message about "${listingTitle}".</em></p>
+            <p><em>${safeSender} sent you a message about "${safeTitle}".</em></p>
         `;
         await this.sendEmail(email, subject, html);
     }
 
     async sendReviewNotificationEmail(email: string, reviewerName: string, rating: number): Promise<void> {
+        const safeReviewer = escapeHtml(reviewerName);
         const stars = "\u2605".repeat(rating) + "\u2606".repeat(5 - rating);
         const subject = "Uus arvustus | New review";
         const html = `
             <h2>Teile on jäetud uus arvustus</h2>
-            <p><strong>${reviewerName}</strong> andis teile hinnangu: ${stars} (${rating}/5)</p>
+            <p><strong>${safeReviewer}</strong> andis teile hinnangu: ${stars} (${rating}/5)</p>
             <p><a href="${FRONTEND_URL}/dashboard">Vaata arvustusi</a></p>
             <hr />
-            <p><em>${reviewerName} left you a review: ${rating}/5 stars.</em></p>
+            <p><em>${safeReviewer} left you a review: ${rating}/5 stars.</em></p>
         `;
         await this.sendEmail(email, subject, html);
     }
 
     async sendInspectionStatusEmail(email: string, listingTitle: string, status: string): Promise<void> {
+        const safeTitle = escapeHtml(listingTitle);
         const statusLabels: Record<string, string> = {
             PENDING: "Ootel / Pending",
             SCHEDULED: "Planeeritud / Scheduled",
@@ -89,20 +111,20 @@ export class EmailService {
             COMPLETED: "Lõpetatud / Completed",
             CANCELLED: "Tühistatud / Cancelled",
         };
-        const label = statusLabels[status] || status;
+        const label = statusLabels[status] || escapeHtml(status);
         const subject = `Ülevaatuse staatus muutus | Inspection status update`;
         const html = `
             <h2>Ülevaatuse staatus uuendatud</h2>
-            <p>Kuulutuse "<strong>${listingTitle}</strong>" ülevaatuse staatus: <strong>${label}</strong></p>
+            <p>Kuulutuse "<strong>${safeTitle}</strong>" ülevaatuse staatus: <strong>${label}</strong></p>
             <p><a href="${FRONTEND_URL}/dashboard">Vaata ülevaatust</a></p>
             <hr />
-            <p><em>Inspection status for "${listingTitle}" updated to: ${label}</em></p>
+            <p><em>Inspection status for "${safeTitle}" updated to: ${label}</em></p>
         `;
         await this.sendEmail(email, subject, html);
     }
 
     async sendNewsletterWelcome(email: string, token: string, language: string): Promise<void> {
-        const unsubUrl = `${FRONTEND_URL}/api/newsletter/unsubscribe?token=${token}`;
+        const unsubUrl = `${FRONTEND_URL}/newsletter/unsubscribe?token=${encodeURIComponent(token)}`;
 
         const subjects: Record<string, string> = {
             et: "Tere tulemast Kaarplusi uudiskirja!",
@@ -135,28 +157,31 @@ export class EmailService {
     }
 
     async sendPurchaseConfirmationEmail(email: string, listingTitle: string, listingId: string): Promise<void> {
+        const safeTitle = escapeHtml(listingTitle);
         const subject = "Ostukinnitus | Purchase confirmation";
         const html = `
             <h2>Täname ostu eest!</h2>
-            <p>Olete edukalt ostnud sõiduki: <strong>${listingTitle}</strong>.</p>
+            <p>Olete edukalt ostnud sõiduki: <strong>${safeTitle}</strong>.</p>
             <p>Müüja võtab teiega peagi ühendust, et kokku leppida üleandmine.</p>
-            <p><a href="${FRONTEND_URL}/listings/${listingId}">Vaata kuulutust</a></p>
+            <p><a href="${FRONTEND_URL}/listings/${encodeURIComponent(listingId)}">Vaata kuulutust</a></p>
             <hr />
-            <p><em>Thank you for your purchase of "${listingTitle}". The seller will contact you soon.</em></p>
+            <p><em>Thank you for your purchase of "${safeTitle}". The seller will contact you soon.</em></p>
         `;
         await this.sendEmail(email, subject, html);
     }
 
     async sendSaleNotificationEmail(email: string, listingTitle: string, listingId: string): Promise<void> {
+        const safeTitle = escapeHtml(listingTitle);
+        const encodedId = encodeURIComponent(listingId);
         const subject = "Teie sõiduk on müüdud! | Your vehicle has been sold!";
         const html = `
             <h2>Õnnitleme! Teie auto on müüdud</h2>
-            <p>Sõiduk "<strong>${listingTitle}</strong>" on edukalt müüdud Kaarplus platvormil.</p>
+            <p>Sõiduk "<strong>${safeTitle}</strong>" on edukalt müüdud Kaarplus platvormil.</p>
             <p>Palun võtke ostjaga ühendust ja leppige kokku vormistamine.</p>
-            <p><a href="${FRONTEND_URL}/listings/${listingId}">Vaata müüdud kuulutust</a></p>
+            <p><a href="${FRONTEND_URL}/listings/${encodedId}">Vaata müüdud kuulutust</a></p>
             <p><a href="${FRONTEND_URL}/dashboard/listings">Halda oma kuulutusi</a></p>
             <hr />
-            <p><em>Congratulations! Your vehicle "${listingTitle}" has been sold on Kaarplus. <a href="${FRONTEND_URL}/listings/${listingId}">View listing</a></em></p>
+            <p><em>Congratulations! Your vehicle "${safeTitle}" has been sold on Kaarplus. <a href="${FRONTEND_URL}/listings/${encodedId}">View listing</a></em></p>
         `;
         await this.sendEmail(email, subject, html);
     }

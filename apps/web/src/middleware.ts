@@ -33,6 +33,10 @@ export default auth((req) => {
     }
 
     if (isAuthRoute && isLoggedIn) {
+        const role = (req.auth?.user as any)?.role;
+        if (role === "ADMIN" || role === "SUPPORT") {
+            return NextResponse.redirect(new URL("/admin", req.nextUrl));
+        }
         return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
     }
 

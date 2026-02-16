@@ -162,7 +162,7 @@ export function InspectionStatusCard({ inspection }: InspectionStatusCardProps) 
           </div>
         )}
 
-        {inspection.reportUrl && status === "COMPLETED" && (
+        {inspection.reportUrl && status === "COMPLETED" && /^https?:\/\//i.test(inspection.reportUrl) && (
           <Button variant="outline" size="sm" className="gap-2" asChild>
             <a
               href={inspection.reportUrl}

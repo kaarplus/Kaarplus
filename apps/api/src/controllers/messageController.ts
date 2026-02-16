@@ -59,6 +59,11 @@ export async function sendMessage(req: Request, res: Response, next: NextFunctio
             return;
         }
 
+        if (body.length > 10000) {
+            res.status(400).json({ error: "Message body cannot exceed 10000 characters" });
+            return;
+        }
+
         const message = await messageService.sendMessage(senderId, {
             recipientId,
             listingId,
@@ -69,7 +74,11 @@ export async function sendMessage(req: Request, res: Response, next: NextFunctio
         res.status(201).json({ data: message });
     } catch (error) {
         if (error instanceof Error && error.message === "CANNOT_MESSAGE_SELF") {
-            res.status(400).json({ error: "Ei saa saata s\u00F5numit iseendale" });
+            res.status(400).json({ error: "Ei saa saata sõnumit iseendale" });
+            return;
+        }
+        if (error instanceof Error && error.message === "RECIPIENT_NOT_FOUND") {
+            res.status(404).json({ error: "Saaja ei leitud" });
             return;
         }
         next(error);

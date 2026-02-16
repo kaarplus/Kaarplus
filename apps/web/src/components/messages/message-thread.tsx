@@ -22,7 +22,7 @@ export function MessageThread({
   currentUserId,
   onBack,
 }: MessageThreadProps) {
-  const { currentThread, isLoading, isSending, loadThread, sendMessage } =
+  const { currentThread, isLoadingThread, isSending, loadThread, sendMessage } =
     useMessageStore();
   const [messageBody, setMessageBody] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -34,6 +34,7 @@ export function MessageThread({
 
   const otherUserInitials = (otherUser.name ?? "K")
     .split(" ")
+    .filter(Boolean)
     .map((n) => n[0])
     .join("")
     .slice(0, 2)
@@ -51,13 +52,15 @@ export function MessageThread({
     const trimmed = messageBody.trim();
     if (!trimmed) return;
 
-    await sendMessage({
+    const success = await sendMessage({
       recipientId: otherUser.id,
       listingId: conversation.listing?.id,
       body: trimmed,
     });
 
-    setMessageBody("");
+    if (success) {
+      setMessageBody("");
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -109,7 +112,7 @@ export function MessageThread({
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-4">
-        {isLoading ? (
+        {isLoadingThread ? (
           <div className="space-y-4">
             {Array.from({ length: 4 }).map((_, i) => (
               <div

@@ -112,6 +112,7 @@ export class InspectionService {
         status: InspectionStatus,
         notes?: string,
         reportUrl?: string,
+        scheduledAt?: string,
     ) {
         const inspection = await prisma.vehicleInspection.findUnique({
             where: { id },
@@ -123,6 +124,22 @@ export class InspectionService {
 
         if (!inspection) {
             throw new NotFoundError("Inspection not found");
+        }
+
+        // Validate state transitions
+        const validTransitions: Record<string, InspectionStatus[]> = {
+            PENDING: [InspectionStatus.SCHEDULED, InspectionStatus.CANCELLED],
+            SCHEDULED: [InspectionStatus.IN_PROGRESS, InspectionStatus.CANCELLED],
+            IN_PROGRESS: [InspectionStatus.COMPLETED, InspectionStatus.CANCELLED],
+            COMPLETED: [],
+            CANCELLED: [],
+        };
+
+        const allowed = validTransitions[inspection.status] || [];
+        if (!allowed.includes(status)) {
+            throw new BadRequestError(
+                `Cannot transition from ${inspection.status} to ${status}`
+            );
         }
 
         const updateData: {
@@ -140,7 +157,7 @@ export class InspectionService {
             updateData.reportUrl = reportUrl;
         }
         if (status === InspectionStatus.SCHEDULED) {
-            updateData.scheduledAt = new Date();
+            updateData.scheduledAt = scheduledAt ? new Date(scheduledAt) : new Date();
         }
         if (status === InspectionStatus.COMPLETED) {
             updateData.completedAt = new Date();

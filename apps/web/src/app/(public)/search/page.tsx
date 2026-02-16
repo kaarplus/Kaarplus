@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useFilterStore } from "@/store/use-filter-store";
 import { AdvancedFilters } from "@/components/search/advanced-filters";
 import { VehicleCard } from "@/components/shared/vehicle-card";
@@ -11,20 +11,30 @@ import { FilterBadges } from "@/components/listings/filter-badges";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { SlidersHorizontal, Search, Bookmark } from "lucide-react";
+import { SlidersHorizontal, Search, Bookmark, AlertCircle } from "lucide-react";
 import { VehicleSummary } from "@/types/vehicle";
 import { API_URL } from "@/lib/constants";
 import { SaveSearchModal } from "@/components/search/save-search-modal";
+
+const PAGE_SIZE = 20;
 
 export default function SearchPage() {
     const [listings, setListings] = useState<VehicleSummary[]>([]);
     const [total, setTotal] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const abortControllerRef = useRef<AbortController | null>(null);
     const filters = useFilterStore();
 
     useEffect(() => {
+        // Abort previous in-flight request
+        abortControllerRef.current?.abort();
+        const controller = new AbortController();
+        abortControllerRef.current = controller;
+
         const fetchListings = async () => {
             setIsLoading(true);
+            setError(null);
             try {
                 const params = new URLSearchParams();
                 if (filters.make && filters.make !== "none") params.set("make", filters.make);
@@ -49,21 +59,38 @@ export default function SearchPage() {
                 if (filters.sort) params.set("sort", filters.sort);
                 if (filters.q) params.set("q", filters.q);
                 params.set("page", filters.page.toString());
-                params.set("pageSize", "20");
+                params.set("pageSize", PAGE_SIZE.toString());
 
-                const response = await fetch(`${API_URL}/api/search?${params.toString()}`);
+                const response = await fetch(`${API_URL}/api/search?${params.toString()}`, {
+                    signal: controller.signal,
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Search failed with status ${response.status}`);
+                }
+
                 const json = await response.json();
 
                 setListings(json.data || []);
                 setTotal(json.meta?.total || 0);
-            } catch (error) {
-                console.error("Failed to fetch listings:", error);
+            } catch (err) {
+                if (err instanceof DOMException && err.name === "AbortError") {
+                    return; // Ignore aborted requests
+                }
+                console.error("Failed to fetch listings:", err);
+                setError("Otsing ebaõnnestus. Palun proovige uuesti.");
             } finally {
-                setIsLoading(false);
+                if (!controller.signal.aborted) {
+                    setIsLoading(false);
+                }
             }
         };
 
         fetchListings();
+
+        return () => {
+            controller.abort();
+        };
     }, [
         filters.make, filters.model, filters.priceMin, filters.priceMax,
         filters.yearMin, filters.yearMax, filters.fuelType, filters.bodyType,
@@ -139,6 +166,22 @@ export default function SearchPage() {
 
                         <FilterBadges />
 
+                        {/* Error State */}
+                        {error && !isLoading && (
+                            <div className="flex items-center gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
+                                <AlertCircle className="size-5 text-red-500 shrink-0" />
+                                <p className="text-sm text-red-700">{error}</p>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="ml-auto shrink-0"
+                                    onClick={() => setError(null)}
+                                >
+                                    Proovi uuesti
+                                </Button>
+                            </div>
+                        )}
+
                         {/* Results */}
                         {isLoading ? (
                             <div className={`grid gap-6 ${filters.view === "grid" ? "grid-cols-1 md:grid-cols-2 xl:grid-cols-3" : "grid-cols-1"}`}>
@@ -152,7 +195,7 @@ export default function SearchPage() {
                                     <VehicleCard key={vehicle.id} vehicle={vehicle} variant={filters.view} />
                                 ))}
                             </div>
-                        ) : (
+                        ) : !error ? (
                             <div className="py-20 text-center border rounded-xl bg-card border-dashed">
                                 <Search size={48} className="mx-auto text-muted-foreground/30 mb-4" />
                                 <h3 className="text-lg font-semibold">Tulemusi ei leitud</h3>
@@ -161,17 +204,17 @@ export default function SearchPage() {
                                     Puhasta kõik filtrid
                                 </Button>
                             </div>
-                        )}
+                        ) : null}
 
                         {/* Pagination */}
-                        {!isLoading && total > 20 && (
+                        {!isLoading && total > PAGE_SIZE && (
                             <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-border pt-8">
                                 <p className="text-sm text-muted-foreground">
-                                    Näitan {((filters.page - 1) * 20) + 1} kuni {Math.min(filters.page * 20, total)} sõidukit {total}-st
+                                    Näitan {((filters.page - 1) * PAGE_SIZE) + 1} kuni {Math.min(filters.page * PAGE_SIZE, total)} sõidukit {total}-st
                                 </p>
                                 <Pagination
                                     currentPage={filters.page}
-                                    totalPages={Math.ceil(total / 20)}
+                                    totalPages={Math.ceil(total / PAGE_SIZE)}
                                     onPageChange={filters.setPage}
                                     isLoading={isLoading}
                                 />

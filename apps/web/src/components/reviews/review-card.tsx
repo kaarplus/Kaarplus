@@ -28,6 +28,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
   const initials = reviewer.name
     ? reviewer.name
         .split(" ")
+        .filter(Boolean)
         .map((n) => n[0])
         .join("")
         .toUpperCase()

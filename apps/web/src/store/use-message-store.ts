@@ -42,15 +42,17 @@ interface MessageStore {
   currentThread: ThreadMessage[];
   selectedConversation: Conversation | null;
   unreadCount: number;
-  isLoading: boolean;
+  isLoadingConversations: boolean;
+  isLoadingThread: boolean;
   isSending: boolean;
+  error: string | null;
   loadConversations: () => Promise<void>;
   loadThread: (otherUserId: string, listingId?: string) => Promise<void>;
   sendMessage: (data: {
     recipientId: string;
     listingId?: string;
     body: string;
-  }) => Promise<void>;
+  }) => Promise<boolean>;
   selectConversation: (conv: Conversation) => void;
   loadUnreadCount: () => Promise<void>;
 }
@@ -60,11 +62,13 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
   currentThread: [],
   selectedConversation: null,
   unreadCount: 0,
-  isLoading: false,
+  isLoadingConversations: false,
+  isLoadingThread: false,
   isSending: false,
+  error: null,
 
   loadConversations: async () => {
-    set({ isLoading: true });
+    set({ isLoadingConversations: true, error: null });
     try {
       const response = await fetch(`${API_URL}/api/user/messages`, {
         credentials: "include",
@@ -77,15 +81,15 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
       const json = await response.json();
       const conversations: Conversation[] = json.data ?? [];
 
-      set({ conversations, isLoading: false });
+      set({ conversations, isLoadingConversations: false });
     } catch (error) {
       console.error("Failed to load conversations:", error);
-      set({ isLoading: false });
+      set({ isLoadingConversations: false, error: "Vestluste laadimine ebaõnnestus" });
     }
   },
 
   loadThread: async (otherUserId: string, listingId?: string) => {
-    set({ isLoading: true });
+    set({ isLoadingThread: true, error: null });
     try {
       const params = new URLSearchParams({ userId: otherUserId });
       if (listingId) {
@@ -104,15 +108,15 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
       const json = await response.json();
       const currentThread: ThreadMessage[] = json.data ?? [];
 
-      set({ currentThread, isLoading: false });
+      set({ currentThread, isLoadingThread: false });
     } catch (error) {
       console.error("Failed to load thread:", error);
-      set({ isLoading: false });
+      set({ isLoadingThread: false, error: "Sõnumite laadimine ebaõnnestus" });
     }
   },
 
   sendMessage: async (data) => {
-    set({ isSending: true });
+    set({ isSending: true, error: null });
     try {
       const response = await fetch(`${API_URL}/api/user/messages`, {
         method: "POST",
@@ -135,9 +139,11 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
 
       // Reload conversations to update last message preview
       get().loadConversations();
+      return true;
     } catch (error) {
       console.error("Failed to send message:", error);
-      set({ isSending: false });
+      set({ isSending: false, error: "Sõnumi saatmine ebaõnnestus" });
+      return false;
     }
   },
 

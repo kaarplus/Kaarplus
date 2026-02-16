@@ -1,3 +1,4 @@
+import { prisma } from "@kaarplus/database";
 import { Request, Response, NextFunction } from "express";
 
 import { emailService } from "../services/emailService";
@@ -66,7 +67,6 @@ export async function createReview(req: Request, res: Response, next: NextFuncti
         });
 
         // Send email notification to the reviewed user (non-blocking)
-        const { prisma } = await import("@kaarplus/database");
         const targetUser = await prisma.user.findUnique({
             where: { id: targetId },
             select: { email: true },

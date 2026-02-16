@@ -1,40 +1,64 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 
 import { SearchService } from "../services/searchService";
 
 const searchService = new SearchService();
 
-export const getMakes = async (_req: Request, res: Response) => {
-    const makes = await searchService.getMakes();
-    res.json({ data: makes });
-};
-
-export const getModels = async (req: Request, res: Response) => {
-    const { make } = req.query;
-    if (!make || typeof make !== "string") {
-        res.json({ data: [] });
-        return;
+export const getMakes = async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+        const makes = await searchService.getMakes();
+        res.json({ data: makes });
+    } catch (error) {
+        next(error);
     }
-    const models = await searchService.getModels(make);
-    res.json({ data: models });
 };
 
-export const getFilterOptions = async (_req: Request, res: Response) => {
-    const options = await searchService.getFilterOptions();
-    res.json({ data: options });
+export const getModels = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { make } = req.query;
+        if (!make || typeof make !== "string") {
+            res.json({ data: [] });
+            return;
+        }
+        const models = await searchService.getModels(make);
+        res.json({ data: models });
+    } catch (error) {
+        next(error);
+    }
 };
 
-export const getLocations = async (_req: Request, res: Response) => {
-    const locations = await searchService.getLocations();
-    res.json({ data: locations });
+export const getFilterOptions = async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+        const options = await searchService.getFilterOptions();
+        res.json({ data: options });
+    } catch (error) {
+        next(error);
+    }
 };
 
-export const getColors = async (_req: Request, res: Response) => {
-    const colors = await searchService.getColors();
-    res.json({ data: colors });
+export const getLocations = async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+        const locations = await searchService.getLocations();
+        res.json({ data: locations });
+    } catch (error) {
+        next(error);
+    }
 };
 
-export const getDriveTypes = async (_req: Request, res: Response) => {
-    const driveTypes = await searchService.getDriveTypes();
-    res.json({ data: driveTypes });
+export const getColors = async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+        const colors = await searchService.getColors();
+        res.json({ data: colors });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getDriveTypes = async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+        const driveTypes = await searchService.getDriveTypes();
+        res.json({ data: driveTypes });
+    } catch (error) {
+        next(error);
+    }
 };

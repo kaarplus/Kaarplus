@@ -93,7 +93,7 @@ export function AdvancedFilters() {
         }
 
         let cancelled = false;
-        fetch(`${API_URL}/api/search/models?make=${currentMake}`)
+        fetch(`${API_URL}/api/search/models?make=${encodeURIComponent(currentMake)}`)
             .then((res) => res.json())
             .then((json) => {
                 if (!cancelled) setModels(json.data || []);

@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { signIn } from "next-auth/react"
+import { signIn, getSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -63,11 +63,20 @@ export function LoginForm() {
                 return
             }
 
+            // Fetch session to check role
+            const session = await getSession();
+            const role = (session?.user as any)?.role;
+
             toast({
                 title: t('success.loggedIn'),
                 description: t('success.loggedIn'),
             })
-            router.push("/dashboard")
+
+            if (role === "ADMIN" || role === "SUPPORT") {
+                router.push("/admin");
+            } else {
+                router.push("/dashboard");
+            }
             router.refresh()
         } catch (error) {
             toast({

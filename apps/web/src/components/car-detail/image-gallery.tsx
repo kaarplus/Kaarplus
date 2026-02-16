@@ -34,6 +34,7 @@ export function ImageGallery({ images }: ImageGalleryProps) {
                     fill
                     className="object-cover transition-transform duration-500"
                     priority
+                    sizes="(max-width: 1024px) 100vw, 66vw"
                 />
 
                 {/* Overlays */}
@@ -89,6 +90,7 @@ export function ImageGallery({ images }: ImageGalleryProps) {
                             alt={`Thumbnail ${index + 1}`}
                             fill
                             className="object-cover"
+                            sizes="120px"
                         />
                     </button>
                 ))}

@@ -41,13 +41,18 @@ export function ReviewList({ targetId }: ReviewListProps) {
       );
       if (!res.ok) throw new Error("Failed to fetch reviews");
       const json = await res.json();
-      setReviews(json.data);
-      setTotal(json.meta.total);
+      setReviews(json.data ?? []);
+      setTotal(json.meta?.total ?? 0);
     } catch {
       setReviews([]);
     } finally {
       setLoading(false);
     }
+  }, [targetId]);
+
+  // Reset page when targetId changes
+  useEffect(() => {
+    setPage(1);
   }, [targetId]);
 
   useEffect(() => {

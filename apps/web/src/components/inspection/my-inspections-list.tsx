@@ -34,7 +34,7 @@ export function MyInspectionsList() {
         }
 
         const result = await response.json();
-        setInspections(result.data);
+        setInspections(result.data ?? []);
       } catch (err) {
         setError(
           err instanceof Error

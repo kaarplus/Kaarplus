@@ -87,6 +87,14 @@ export class ReviewService {
             throw new BadRequestError("You cannot review yourself");
         }
 
+        if (data.body.length > 5000) {
+            throw new BadRequestError("Review body cannot exceed 5000 characters");
+        }
+
+        if (data.title && data.title.length > 200) {
+            throw new BadRequestError("Review title cannot exceed 200 characters");
+        }
+
         // Verify target user exists
         const targetUser = await prisma.user.findUnique({
             where: { id: data.targetId },
@@ -95,7 +103,7 @@ export class ReviewService {
             throw new NotFoundError("Target user not found");
         }
 
-        // Check for duplicate review on same listing
+        // Check for duplicate review
         if (data.listingId) {
             const existing = await prisma.review.findUnique({
                 where: {
@@ -107,6 +115,18 @@ export class ReviewService {
             });
             if (existing) {
                 throw new BadRequestError("You have already reviewed this listing");
+            }
+        } else {
+            // When no listingId, limit to one general review per reviewer-target pair
+            const existingGeneral = await prisma.review.findFirst({
+                where: {
+                    reviewerId,
+                    targetId: data.targetId,
+                    listingId: null,
+                },
+            });
+            if (existingGeneral) {
+                throw new BadRequestError("You have already reviewed this seller");
             }
         }
 
