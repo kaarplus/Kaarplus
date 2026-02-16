@@ -5,38 +5,42 @@ const prisma = new PrismaClient();
 async function main() {
     console.log('Seed started...');
 
+    const passwordHash = '$2b$10$Rci8sWp2x5wYiUr9Nt94Se6NsHYx52ToZJCXWzlfXnylu06vw8ca.'; // password123
+
     // Create Admin
     const admin = await prisma.user.upsert({
         where: { email: 'admin@kaarplus.ee' },
-        update: {},
+        update: { passwordHash },
         create: {
             email: 'admin@kaarplus.ee',
             name: 'Admin User',
             role: UserRole.ADMIN,
-            passwordHash: 'hashed_password_here', // In real app, use bcrypt
+            passwordHash,
         },
     });
 
     // Create Dealer
     const dealer = await prisma.user.upsert({
         where: { email: 'dealer@example.ee' },
-        update: {},
+        update: { passwordHash },
         create: {
             email: 'dealer@example.ee',
             name: 'Tallinn Autos',
             role: UserRole.DEALERSHIP,
             dealershipId: 'tallinn-autos-1',
+            passwordHash,
         },
     });
 
     // Create Individual Seller
     const seller = await prisma.user.upsert({
         where: { email: 'seller@example.ee' },
-        update: {},
+        update: { passwordHash },
         create: {
             email: 'seller@example.ee',
             name: 'Jaan Tamm',
             role: UserRole.INDIVIDUAL_SELLER,
+            passwordHash,
         },
     });
 
