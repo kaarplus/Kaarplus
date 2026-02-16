@@ -209,7 +209,7 @@ export class ListingService {
             });
 
             if (activeCount >= 5) {
-                throw new ForbiddenError("Erakasutajana on Teil lubatud maksimaalselt 5 aktiivset kuulutust.");
+                throw new ForbiddenError("Erakasutajana on Teil lubatud maksimaalselt 5 aktiivset kuulutust. Vormistage end automüügiks ümber, et lisada rohkem kuulutusi.");
             }
         }
 

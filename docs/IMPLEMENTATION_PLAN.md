@@ -95,7 +95,7 @@ Introduce payment processing and premium features.
 | ID     | Task                           | Status | Dependencies   | Est. |
 | ------ | ------------------------------ | ------ | -------------- | ---- |
 | P3-T01 | Stripe payment integration     | ✅     | P1-T05, P1-T07 | 5h   |
-| P3-T02 | Dealership accounts & profiles | ⬜     | P1-T05         | 3h   |
+| P3-T02 | Dealership accounts & profiles | ✅     | P1-T05         | 3h   |
 | P3-T03 | Admin analytics dashboard      | ⬜     | P1-T12         | 3h   |
 
 ### Phase 3 — Acceptance Criteria

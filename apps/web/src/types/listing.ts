@@ -6,7 +6,7 @@ export interface ListingImage {
     order: number;
 }
 
-export interface ListingDetailed extends Omit<VehicleSummary, 'thumbnailUrl'> {
+export interface ListingDetailed extends Omit<VehicleSummary, 'thumbnailUrl' | 'user'> {
     vin?: string;
     description?: string;
     features: Record<string, boolean>;
@@ -29,7 +29,13 @@ export interface ListingDetailed extends Omit<VehicleSummary, 'thumbnailUrl'> {
         name: string | null;
         email: string;
         phone: string | null;
-        role: string;
+        role: "BUYER" | "INDIVIDUAL_SELLER" | "DEALERSHIP" | "ADMIN" | "SUPPORT" | string;
         dealershipId: string | null;
+        image?: string | null;
+        coverImage?: string | null;
+        bio?: string | null;
+        website?: string | null;
+        address?: string | null;
+        openingHours?: string | null;
     };
 }

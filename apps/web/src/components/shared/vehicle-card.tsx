@@ -48,6 +48,12 @@ export function VehicleCard({ vehicle, variant = "grid", showFavorite = true }: 
                         {badge.replace("_", " ")}
                     </Badge>
                 ))}
+
+                {vehicle.user?.role === "DEALERSHIP" && (
+                    <Badge className="bg-blue-600 hover:bg-blue-700 text-white uppercase text-[10px] font-bold tracking-wider px-2 py-0.5 shadow-sm">
+                        Pro Seller
+                    </Badge>
+                )}
             </div>
 
             {/* Image Container */}

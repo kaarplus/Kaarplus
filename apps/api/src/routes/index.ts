@@ -8,6 +8,7 @@ import { searchRouter } from "./search";
 import { uploadsRouter } from "./uploads";
 import { userRouter } from "./user";
 import { webhooksRouter } from "./webhooks";
+import { dealershipRouter } from "./dealerships";
 
 export const apiRouter = Router();
 
@@ -29,3 +30,4 @@ apiRouter.use("/payments", paymentsRouter);
 apiRouter.use("/admin", adminRouter);
 apiRouter.use("/webhooks", webhooksRouter);
 apiRouter.use("/uploads", uploadsRouter);
+apiRouter.use("/dealerships", dealershipRouter);

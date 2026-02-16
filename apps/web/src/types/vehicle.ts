@@ -16,4 +16,9 @@ export interface VehicleSummary {
     badges?: Array<"new" | "hot_deal" | "certified" | "verified">;
     isFavorited?: boolean;
     createdAt: string;
+    user?: {
+        name: string | null;
+        role: "BUYER" | "INDIVIDUAL_SELLER" | "DEALERSHIP" | "ADMIN" | "SUPPORT";
+        dealershipId: string | null;
+    };
 }

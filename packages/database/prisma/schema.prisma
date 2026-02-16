@@ -38,7 +38,12 @@ model User {
   passwordHash    String?
   name            String?
   phone           String?
-  image           String?
+  image           String?       // Profile photo or Dealership Logo
+  coverImage      String?       // Dealership profile background
+  bio             String?       @db.Text
+  website         String?
+  address         String?
+  openingHours    String?
   role            UserRole      @default(BUYER)
   dealershipId    String?
   emailVerified   DateTime?
