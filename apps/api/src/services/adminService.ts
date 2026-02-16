@@ -1,5 +1,6 @@
 import { prisma } from "@kaarplus/database";
 
+import { emailService } from "../services/emailService";
 import { NotFoundError, BadRequestError } from "../utils/errors";
 
 export class AdminService {
@@ -55,13 +56,12 @@ export class AdminService {
         }
 
         if (action === "approve") {
-            return prisma.listing.update({
+            const updated = await prisma.listing.update({
                 where: { id },
                 data: {
                     status: "ACTIVE",
                     verifiedAt: new Date(),
                     publishedAt: new Date(),
-                    // Automatically verify all images when listing is approved
                     images: {
                         updateMany: {
                             where: { listingId: id },
@@ -70,14 +70,23 @@ export class AdminService {
                     },
                 },
             });
+
+            // Send notification email (non-blocking)
+            if (listing.user.email) {
+                emailService.sendListingApprovedEmail(
+                    listing.user.email,
+                    `${listing.year} ${listing.make} ${listing.model}`,
+                    listing.id
+                ).catch(() => { });
+            }
+
+            return updated;
         } else {
             // rejection logic
             return prisma.listing.update({
                 where: { id },
                 data: {
                     status: "REJECTED",
-                    // In a real app, we would store the reason in the database or send an email
-                    // For now, we just update the status
                 },
             });
         }
@@ -111,6 +120,95 @@ export class AdminService {
                 total,
                 totalPages: Math.ceil(total / pageSize),
             },
+        };
+    }
+
+    async getAnalytics() {
+        const [
+            usersCount,
+            listingsCount,
+            activeListingsCount,
+            soldListingsCount,
+            pendingListingsCount,
+            revenueAggregate,
+            recentUsers,
+            recentPayments,
+            dailyRegistrations,
+            dailyListings
+        ] = await Promise.all([
+            prisma.user.count(),
+            prisma.listing.count(),
+            prisma.listing.count({ where: { status: "ACTIVE" } }),
+            prisma.listing.count({ where: { status: "SOLD" } }),
+            prisma.listing.count({ where: { status: "PENDING" } }),
+            prisma.payment.aggregate({
+                where: { status: "COMPLETED" },
+                _sum: { amount: true }
+            }),
+            prisma.user.findMany({
+                take: 5,
+                orderBy: { createdAt: "desc" },
+                select: { id: true, name: true, email: true, role: true, createdAt: true }
+            }),
+            prisma.payment.findMany({
+                take: 5,
+                where: { status: "COMPLETED" },
+                orderBy: { createdAt: "desc" },
+                select: {
+                    id: true,
+                    amount: true,
+                    currency: true,
+                    status: true,
+                    createdAt: true
+                }
+            }),
+            // Last 30 days registrations
+            prisma.$queryRaw`
+                SELECT DATE("createdAt") as date, COUNT(*) as count 
+                FROM "User" 
+                WHERE "createdAt" > NOW() - INTERVAL '30 days' 
+                GROUP BY DATE("createdAt") 
+                ORDER BY DATE("createdAt") ASC
+            `,
+            // Last 30 days listings
+            prisma.$queryRaw`
+                SELECT DATE("createdAt") as date, COUNT(*) as count 
+                FROM "Listing" 
+                WHERE "createdAt" > NOW() - INTERVAL '30 days' 
+                GROUP BY DATE("createdAt") 
+                ORDER BY DATE("createdAt") ASC
+            `
+        ]);
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const safeDailyRegistrations = (dailyRegistrations as any[]).map(r => ({
+            date: r.date,
+            count: Number(r.count)
+        }));
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const safeDailyListings = (dailyListings as any[]).map(r => ({
+            date: r.date,
+            count: Number(r.count)
+        }));
+
+        return {
+            summary: {
+                totalUsers: usersCount,
+                totalListings: listingsCount,
+                activeListings: activeListingsCount,
+                soldListings: soldListingsCount,
+                pendingListings: pendingListingsCount,
+                totalRevenue: Number(revenueAggregate._sum.amount || 0),
+            },
+            recent: {
+                users: recentUsers,
+                payments: recentPayments,
+            },
+            charts: {
+                registrations: safeDailyRegistrations,
+                listings: safeDailyListings
+            }
         };
     }
 }

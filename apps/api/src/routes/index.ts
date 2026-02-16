@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 
 import { adminRouter } from "./admin";
 import { authRouter } from "./auth";
+import { dealershipRouter } from "./dealerships";
 import { listingsRouter } from "./listings";
 import { paymentsRouter } from "./payments";
 import { searchRouter } from "./search";
@@ -29,3 +30,4 @@ apiRouter.use("/payments", paymentsRouter);
 apiRouter.use("/admin", adminRouter);
 apiRouter.use("/webhooks", webhooksRouter);
 apiRouter.use("/uploads", uploadsRouter);
+apiRouter.use("/dealerships", dealershipRouter);

@@ -1,13 +1,26 @@
+"use client";
+
+import { useTranslation } from "react-i18next";
 import { SearchBar } from "@/components/shared/search-bar";
 import { StarRating } from "@/components/shared/star-rating";
 
+import Image from "next/image";
+
 export function HeroSection() {
+    const { t } = useTranslation('home');
+
     return (
         <section className="relative w-full py-20 md:py-32 lg:py-40 bg-gradient-to-b from-[#10221c] to-[#0d1a16] text-white overflow-hidden">
-            {/* Background Image Placeholder or actual image */}
+            {/* Background Image Optimized for LCP */}
             <div className="absolute inset-0 z-0 opacity-40">
-                {/* Ideally an Image component here, using a gradient for now */}
-                <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2560&auto=format&fit=crop')] bg-cover bg-center" />
+                <Image
+                    src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2560&auto=format&fit=crop"
+                    alt="Luxury car background"
+                    fill
+                    priority
+                    className="object-cover"
+                    sizes="100vw"
+                />
             </div>
 
             <div className="container relative z-10 px-4 md:px-6 flex flex-col items-center text-center space-y-8">
@@ -18,11 +31,11 @@ export function HeroSection() {
                     </div>
 
                     <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-white/90 to-white/70">
-                        Leia oma unistuste auto
+                        {t('hero.title')}
                     </h1>
 
                     <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
-                        Eesti kõige usaldusväärsem autode ostu- ja müügikeskkond. Kontrollitud sõidukid ja turvalised tehingud.
+                        {t('hero.subtitle')}
                     </p>
                 </div>
 
@@ -32,13 +45,13 @@ export function HeroSection() {
 
                 <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm text-gray-400 pt-4">
                     <span className="flex items-center gap-2">
-                        ✅ Kontrollitud ajalugu
+                        ✅ {t('features.verified.title')}
                     </span>
                     <span className="flex items-center gap-2">
-                        ✅ 14-päevane tagastusõigus
+                        ✅ {t('features.secure.title')}
                     </span>
                     <span className="flex items-center gap-2">
-                        ✅ Garantii kuni 2 aastat
+                        ✅ {t('features.support.title')}
                     </span>
                 </div>
             </div>

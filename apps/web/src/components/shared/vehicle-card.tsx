@@ -48,6 +48,12 @@ export function VehicleCard({ vehicle, variant = "grid", showFavorite = true }: 
                         {badge.replace("_", " ")}
                     </Badge>
                 ))}
+
+                {vehicle.user?.role === "DEALERSHIP" && (
+                    <Badge className="bg-blue-600 hover:bg-blue-700 text-white uppercase text-[10px] font-bold tracking-wider px-2 py-0.5 shadow-sm">
+                        Pro Seller
+                    </Badge>
+                )}
             </div>
 
             {/* Image Container */}
@@ -60,6 +66,10 @@ export function VehicleCard({ vehicle, variant = "grid", showFavorite = true }: 
                     alt={`${vehicle.make} ${vehicle.model}`}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes={isGrid
+                        ? "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        : "(max-width: 768px) 100vw, 320px"
+                    }
                 />
 
                 {showFavorite && (

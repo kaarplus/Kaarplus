@@ -29,3 +29,8 @@ export const getUsers = async (req: Request, res: Response) => {
     const result = await adminService.getUsers(query.page, query.pageSize);
     res.json(result);
 };
+
+export const getAnalytics = async (req: Request, res: Response) => {
+    const result = await adminService.getAnalytics();
+    res.json({ data: result });
+};

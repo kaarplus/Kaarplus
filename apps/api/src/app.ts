@@ -16,10 +16,14 @@ export function createApp() {
   app.use(defaultLimiter);
   app.use(cookieParser());
 
-  // JSON body parser (skip for webhook routes that need raw body)
+  // JSON body parser with raw body capturing for webhooks
   app.use(
     express.json({
       limit: "10mb",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      verify: (req: any, res, buf) => {
+        req.rawBody = buf;
+      },
     })
   );
   app.use(express.urlencoded({ extended: true }));
