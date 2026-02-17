@@ -16,6 +16,7 @@ export interface VehicleSummary {
     badges?: Array<"new" | "hot_deal" | "certified" | "verified">;
     isFavorited?: boolean;
     createdAt: string;
+    location?: string;
     user?: {
         name: string | null;
         role: "BUYER" | "INDIVIDUAL_SELLER" | "DEALERSHIP" | "ADMIN" | "SUPPORT";

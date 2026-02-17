@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 
 const PAGE_SIZE = 12;
 
-export function FavoritesPage() {
+export default function FavoritesPage() {
     const { t } = useTranslation('favorites');
     const [favorites, setFavorites] = useState<VehicleSummary[]>([]);
     const [total, setTotal] = useState(0);
@@ -148,5 +148,3 @@ function FavoriteSkeleton() {
         </div>
     );
 }
-
-export default FavoritesPage;

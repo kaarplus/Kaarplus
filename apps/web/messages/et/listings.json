@@ -1,32 +1,36 @@
 {
-    "title": "Autode kuulutused",
-    "searchPlaceholder": "Otsi margi, mudeli või linnapiirkonna järgi...",
+    "title": "Autokuulutused",
+    "searchPlaceholder": "Otsi margi, mudeli või asukoha järgi...",
     "filters": {
         "title": "Filtrid",
-        "clear": "Tühjenda filtrid",
+        "clear": "Puhasta filtrid",
         "price": "Hind",
         "year": "Aasta",
         "mileage": "Läbisõit",
-        "fuelType": "Kütuseliik",
+        "fuelType": "Kütus",
         "transmission": "Käigukast",
         "bodyType": "Keretüüp",
         "location": "Asukoht",
         "make": "Mark",
-        "model": "Mudel"
+        "model": "Mudel",
+        "from": "Alates",
+        "to": "Kuni"
     },
     "sort": {
         "label": "Sorteeri",
-        "newest": "Uusimad",
-        "oldest": "Vanimad",
-        "priceLow": "Odavaimad",
-        "priceHigh": "Kallimad",
+        "newest": "Uuemad",
+        "oldest": "Vanemad",
+        "priceLow": "Hind: madalam",
+        "priceHigh": "Hind: kõrgem",
         "mileageLow": "Väiksem läbisõit",
-        "yearNew": "Uuemad autod"
+        "yearNew": "Uuem aasta"
     },
     "results": {
-        "found": "Leiti {count} autot",
+        "found": "Leitud {count} autot",
         "noResults": "Tulemusi ei leitud",
-        "noResultsDesc": "Proovi muuta filtri tingimusi"
+        "noResultsDesc": "Proovige muuta filtreid",
+        "showing": "Näitan {start} kuni {end} sõidukit {total}-st",
+        "clearAll": "Puhasta kõik filtrid"
     },
     "card": {
         "year": "Aasta",
@@ -41,14 +45,36 @@
     "detail": {
         "overview": "Ülevaade",
         "specifications": "Spetsifikatsioonid",
-        "features": "Varustus",
+        "features": "Lisad",
         "description": "Kirjeldus",
         "seller": "Müüja",
-        "contact": "Võta ühendust",
+        "contact": "Kontakt",
         "price": "Hind",
-        "negotiable": "Kokkuleppel",
+        "negotiable": "Allkirjastatav",
         "location": "Asukoht",
         "published": "Avaldatud",
-        "views": "Vaatamised"
-    }
+        "views": "Vaatamisi"
+    },
+    "favorites": {
+        "add": "Lisa lemmikutesse",
+        "remove": "Eemalda lemmikutest",
+        "added": "Lisatud lemmikutesse",
+        "removed": "Eemaldatud lemmikutest",
+        "addedDesc": "Sõiduk on lisatud teie lemmikutesse",
+        "removedDesc": "Sõiduk on eemaldatud teie lemmikutest",
+        "error": "Lemmikute uuendamine ebaõnnestus",
+        "loginRequired": "Sisselogimine nõutud",
+        "loginRequiredDesc": "Sõidukite lemmikutesse lisamiseks logige palun sisse"
+    },
+    "badges": {
+        "hotDeal": "TASUV DIIL",
+        "new": "UUS",
+        "certified": "KONTROLLITUD"
+    },
+    "status": {
+        "sold": "MÜÜDUD",
+        "active": "Aktiivne",
+        "pending": "Ootel"
+    },
+    "noDescription": "Suurepärases tehnilises ja visuaalses seisukorras sõiduk. Hooldusajalugu kontrollitud."
 }

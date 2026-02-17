@@ -53,7 +53,7 @@ export async function deleteAccount(req: Request, res: Response, next: NextFunct
 
         res.json({
             data: {
-                message: "Konto kustutamine algatatud. Teie andmed eemaldatakse 30 päeva jooksul.",
+                message: "Account deletion initiated. Your data will be removed within 30 days.",
                 deletionScheduledAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
             },
         });

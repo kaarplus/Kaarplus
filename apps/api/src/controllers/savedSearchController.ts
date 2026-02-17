@@ -1,7 +1,8 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@kaarplus/database";
 import { Request, Response, NextFunction } from "express";
 
 import { savedSearchService } from "../services/savedSearchService";
+import { BadRequestError, NotFoundError } from "../utils/errors";
 
 /**
  * GET /api/user/saved-searches
@@ -27,13 +28,11 @@ export async function createSavedSearch(req: Request, res: Response, next: NextF
         const { name, filters, emailAlerts } = req.body;
 
         if (!name || typeof name !== "string") {
-            res.status(400).json({ error: "Name is required" });
-            return;
+            throw new BadRequestError("Name is required");
         }
 
         if (!filters || typeof filters !== "object") {
-            res.status(400).json({ error: "Filters object is required" });
-            return;
+            throw new BadRequestError("Filters object is required");
         }
 
         const search = await savedSearchService.createSavedSearch(userId, {
@@ -45,7 +44,7 @@ export async function createSavedSearch(req: Request, res: Response, next: NextF
         res.status(201).json({ data: search });
     } catch (error) {
         if (error instanceof Error && error.message === "Maximum 20 saved searches allowed") {
-            res.status(400).json({ error: error.message });
+            next(new BadRequestError(error.message));
             return;
         }
         next(error);
@@ -70,7 +69,7 @@ export async function updateSavedSearch(req: Request, res: Response, next: NextF
         res.json({ data: search });
     } catch (error) {
         if (error instanceof Error && error.message === "Saved search not found") {
-            res.status(404).json({ error: error.message });
+            next(new NotFoundError(error.message));
             return;
         }
         next(error);
@@ -91,7 +90,7 @@ export async function deleteSavedSearch(req: Request, res: Response, next: NextF
         res.json({ data: { message: "Saved search deleted" } });
     } catch (error) {
         if (error instanceof Error && error.message === "Saved search not found") {
-            res.status(404).json({ error: error.message });
+            next(new NotFoundError(error.message));
             return;
         }
         next(error);

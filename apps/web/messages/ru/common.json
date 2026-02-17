@@ -73,5 +73,11 @@
         "daysAgo": "{{count}} дн. назад",
         "weeksAgo": "{{count}} нед. назад",
         "monthsAgo": "{{count}} мес. назад"
+    },
+    "details": "Подробнее",
+    "saved": "Сохранено",
+    "buttons": {
+        "save": "Сохранить",
+        "contact": "Связаться"
     }
 }

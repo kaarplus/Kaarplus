@@ -1,8 +1,11 @@
 import { Router } from "express";
 
+import { readLimiter } from "../middleware/rateLimiter";
+
 const router = Router();
 
-router.get("/version", (req, res) => {
+// Mobile version endpoint - apply read limiter
+router.get("/version", readLimiter, (req, res) => {
     res.json({
         platform: "ios",
         minVersion: "1.0.0",

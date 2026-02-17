@@ -38,6 +38,7 @@ export function CheckoutPageClient({ listing }: CheckoutPageClientProps) {
         if (status === "authenticated") {
             fetch(`${API_URL}/api/payments/create-intent`, {
                 method: "POST",
+                credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
                 },

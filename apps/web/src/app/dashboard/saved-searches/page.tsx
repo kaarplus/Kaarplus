@@ -52,6 +52,7 @@ export default function SavedSearchesPage() {
         setIsLoading(true);
         try {
             const response = await fetch(`${API_URL}/api/user/saved-searches`, {
+                credentials: "include",
                 headers: {
                     "Cache-Control": "no-cache"
                 }
@@ -79,6 +80,7 @@ export default function SavedSearchesPage() {
         try {
             const response = await fetch(`${API_URL}/api/user/saved-searches/${id}`, {
                 method: "DELETE",
+                credentials: "include",
             });
             if (!response.ok) throw new Error("Failed to delete");
 
@@ -100,6 +102,7 @@ export default function SavedSearchesPage() {
         try {
             const response = await fetch(`${API_URL}/api/user/saved-searches/${id}`, {
                 method: "PATCH",
+                credentials: "include",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ emailAlerts: !currentStatus }),
             });

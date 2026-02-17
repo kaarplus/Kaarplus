@@ -6,6 +6,7 @@ import {
     getUserProfile,
     updateUserProfile,
 } from "../services/dashboardService";
+import { NotFoundError, ErrorCode } from "../utils/errors";
 
 export const getDashboardStats = async (
     req: Request,
@@ -55,8 +56,7 @@ export const getProfile = async (
         const user = await getUserProfile(userId);
 
         if (!user) {
-            res.status(404).json({ error: "Kasutajat ei leitud" });
-            return;
+            throw new NotFoundError("User not found", ErrorCode.USER_NOT_FOUND);
         }
 
         res.json({ data: user });

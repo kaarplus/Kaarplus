@@ -70,8 +70,10 @@ export const contactSeller = async (req: Request, res: Response) => {
         throw new BadRequestError(result.error.issues[0].message);
     }
 
-    await listingService.contactSeller(req.params.id as string, result.data);
-    res.status(200).json({ message: "Sõnum saadetud" });
+    // Pass sender ID if user is authenticated
+    const senderId = req.user?.id;
+    await listingService.contactSeller(req.params.id as string, result.data, senderId);
+    res.status(200).json({ message: "Message sent successfully" });
 };
 
 export const addImages = async (req: Request, res: Response) => {
@@ -95,7 +97,7 @@ export const reorderImages = async (req: Request, res: Response) => {
     const userId = req.user!.id;
     const isAdmin = req.user!.role === "ADMIN";
     await listingService.reorderImages(req.params.id as string, userId, isAdmin, result.data.imageOrders);
-    res.status(200).json({ message: "Pildid ümber järjestatud" });
+    res.status(200).json({ message: "Images reordered successfully" });
 };
 
 export const deleteImage = async (req: Request, res: Response) => {

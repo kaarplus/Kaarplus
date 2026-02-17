@@ -1,5 +1,6 @@
 import { prisma } from "@kaarplus/database";
 
+import { emailService } from "./emailService";
 import { BadRequestError, NotFoundError, ForbiddenError } from "../utils/errors";
 
 interface CreateReviewInput {
@@ -107,8 +108,9 @@ export class ReviewService {
         if (data.listingId) {
             const existing = await prisma.review.findUnique({
                 where: {
-                    reviewerId_listingId: {
+                    reviewerId_targetId_listingId: {
                         reviewerId,
+                        targetId: data.targetId,
                         listingId: data.listingId,
                     },
                 },
@@ -150,10 +152,18 @@ export class ReviewService {
             },
         });
 
+        // Send email notification to the reviewed user (non-blocking)
+        if (targetUser.email) {
+            const reviewerName = review.reviewer?.name || "A user";
+            emailService
+                .sendReviewNotificationEmail(targetUser.email, reviewerName, data.rating)
+                .catch(() => {});
+        }
+
         return review;
     }
 
-    async deleteReview(id: string, reviewerId: string) {
+    async deleteReview(id: string, reviewerId: string, isAdmin: boolean = false) {
         const review = await prisma.review.findUnique({
             where: { id },
         });
@@ -162,7 +172,8 @@ export class ReviewService {
             throw new NotFoundError("Review not found");
         }
 
-        if (review.reviewerId !== reviewerId) {
+        // Allow admins to delete any review, otherwise only the reviewer can delete
+        if (!isAdmin && review.reviewerId !== reviewerId) {
             throw new ForbiddenError("You can only delete your own reviews");
         }
 
