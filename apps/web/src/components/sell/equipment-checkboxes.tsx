@@ -2,17 +2,14 @@
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { UseFormReturn } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { SellFormValues } from "@/schemas/sell-form";
 
 import { useTranslation } from "react-i18next";
 
-interface EquipmentCheckboxesProps {
-    form: UseFormReturn<SellFormValues>;
-}
-
-export function EquipmentCheckboxes({ form }: EquipmentCheckboxesProps) {
+export function EquipmentCheckboxes() {
     const { t } = useTranslation('sell');
+    const { watch, setValue } = useFormContext<SellFormValues>();
 
     const featureGroups = [
         {
@@ -76,9 +73,9 @@ export function EquipmentCheckboxes({ form }: EquipmentCheckboxesProps) {
                             <div key={feature} className="flex items-center space-x-3 group">
                                 <Checkbox
                                     id={`feature-${feature}`}
-                                    checked={form.watch(`features.${feature}`) || false}
+                                    checked={watch(`features.${feature}`) || false}
                                     onCheckedChange={(checked) => {
-                                        form.setValue(`features.${feature}`, !!checked, { shouldValidate: true });
+                                        setValue(`features.${feature}`, !!checked, { shouldValidate: true });
                                     }}
                                     className="size-5 border-slate-300 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                                 />
@@ -96,4 +93,3 @@ export function EquipmentCheckboxes({ form }: EquipmentCheckboxesProps) {
         </div>
     );
 }
-

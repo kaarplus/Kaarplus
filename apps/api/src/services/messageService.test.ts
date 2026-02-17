@@ -18,6 +18,7 @@ vi.mock('@kaarplus/database', () => ({
             findUnique: vi.fn(),
         },
         $queryRaw: vi.fn(),
+        $transaction: vi.fn((callback) => callback(prisma)),
     },
 }));
 
@@ -121,6 +122,34 @@ describe('MessageService', () => {
             await expect(messageService.sendMessage('u1', messageData))
                 .rejects.toThrow('RECIPIENT_NOT_FOUND');
         });
+
+        it('should include sender info in returned message', async () => {
+            const messageData = {
+                recipientId: 'u2',
+                body: 'Hello!',
+            };
+
+            const mockSender = { id: 'u1', name: 'User 1', image: null };
+            
+            vi.mocked(prisma.user.findUnique).mockResolvedValue({ id: 'u2' } as any);
+            vi.mocked(prisma.message.create).mockResolvedValue({
+                id: 'm1',
+                senderId: 'u1',
+                recipientId: 'u2',
+                listingId: null,
+                subject: null,
+                body: 'Hello!',
+                read: false,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                sender: mockSender,
+            } as any);
+
+            const result = await messageService.sendMessage('u1', messageData);
+            
+            expect(result).toBeDefined();
+            expect(result.sender).toBeDefined();
+        });
     });
 
     describe('getUnreadCount', () => {
@@ -132,6 +161,13 @@ describe('MessageService', () => {
             expect(prisma.message.count).toHaveBeenCalledWith({
                 where: { recipientId: 'u1', read: false },
             });
+        });
+
+        it('should return 0 when no unread messages', async () => {
+            vi.mocked(prisma.message.count).mockResolvedValue(0);
+
+            const result = await messageService.getUnreadCount('u1');
+            expect(result).toBe(0);
         });
     });
 });

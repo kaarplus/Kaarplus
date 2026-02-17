@@ -52,10 +52,10 @@ describe('SearchService', () => {
     describe('getFilterOptions', () => {
         it('should return all filter options', async () => {
             vi.mocked(prisma.listing.findMany)
-                .mockResolvedValueOnce([{ make: 'BMW' }, { make: 'Audi' }])
-                .mockResolvedValueOnce([{ fuelType: 'Petrol' }, { fuelType: 'Diesel' }])
-                .mockResolvedValueOnce([{ bodyType: 'Sedan' }, { bodyType: 'SUV' }])
-                .mockResolvedValueOnce([{ transmission: 'Automatic' }, { transmission: 'Manual' }]);
+                .mockResolvedValueOnce([{ make: 'BMW' }, { make: 'Audi' }] as any)
+                .mockResolvedValueOnce([{ fuelType: 'Petrol' }, { fuelType: 'Diesel' }] as any)
+                .mockResolvedValueOnce([{ bodyType: 'Sedan' }, { bodyType: 'SUV' }] as any)
+                .mockResolvedValueOnce([{ transmission: 'Automatic' }, { transmission: 'Manual' }] as any);
             
             vi.mocked(prisma.listing.aggregate).mockResolvedValue({
                 _min: { year: 2000, price: 1000 },

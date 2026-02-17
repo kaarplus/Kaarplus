@@ -58,6 +58,7 @@ export class EmailService {
             });
         } catch (error) {
             console.error("[Email] Failed to send email:", error);
+            throw new Error(`Failed to send email: ${error instanceof Error ? error.message : "Unknown error"}`);
         }
     }
 

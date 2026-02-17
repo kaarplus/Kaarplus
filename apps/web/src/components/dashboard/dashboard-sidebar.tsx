@@ -23,7 +23,7 @@ export function DashboardSidebar() {
   const navItems = [
     { label: t('sidebar.nav.overview'), href: "/dashboard", icon: LayoutDashboard },
     { label: t('sidebar.nav.myListings'), href: "/dashboard/listings", icon: List },
-    { label: t('sidebar.nav.favorites'), href: "/favorites", icon: Heart },
+    { label: t('sidebar.nav.favorites'), href: "/dashboard/favorites", icon: Heart },
     { label: t('sidebar.nav.savedSearches'), href: "/dashboard/saved-searches", icon: Bookmark },
     { label: t('sidebar.nav.settings'), href: "/dashboard/settings", icon: Settings },
   ];

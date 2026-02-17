@@ -21,12 +21,16 @@
     },
     "step2": {
         "sections": {
+            "contact": "Contact Information",
             "main": "Basic Information",
             "specs": "Technical Data",
             "features": "Equipment",
             "description": "Description"
         },
         "labels": {
+            "contactName": "Name *",
+            "contactEmail": "Email *",
+            "contactPhone": "Phone *",
             "make": "Make *",
             "model": "Model *",
             "variant": "Variant / Additional Name",
@@ -48,6 +52,9 @@
             "description": "History, maintenance, etc."
         },
         "placeholders": {
+            "contactName": "Enter your name",
+            "contactEmail": "Enter your email",
+            "contactPhone": "Enter your phone",
             "make": "Select make",
             "model": "e.g. 520d",
             "variant": "e.g. xDrive Luxury Line",
@@ -110,6 +117,7 @@
         "errorTitle": "Error",
         "selectType": "Please select a vehicle type",
         "fillRequired": "Please fill all required fields correctly",
+        "fieldsError": "fields have errors",
         "minPhotos": "Please add at least 3 photos",
         "createError": "Error creating listing",
         "uploadingTitle": "Uploading images...",

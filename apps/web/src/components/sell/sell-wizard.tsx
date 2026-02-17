@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useState, useEffect } from "react";
+import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { sellFormSchema, SellFormValues } from "@/schemas/sell-form";
 import { StepIndicator } from "./step-indicator";
@@ -18,15 +18,39 @@ import { useRouter } from "next/navigation";
 
 import { useTranslation } from "react-i18next";
 
+// Step 2 required fields for validation
+const STEP_2_REQUIRED_FIELDS: (keyof SellFormValues)[] = [
+  "contactName",
+  "contactEmail",
+  "contactPhone",
+  "make",
+  "model",
+  "year",
+  "mileage",
+  "price",
+  "location",
+  "bodyType",
+  "fuelType",
+  "transmission",
+  "powerKw",
+  "driveType",
+  "doors",
+  "seats",
+  "colorExterior",
+  "condition",
+];
+
 export function SellWizard() {
     const { t } = useTranslation('sell');
     const { data: session } = useSession();
     const { toast } = useToast();
+    const router = useRouter();
     const [currentStep, setCurrentStep] = useState(1);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [listingId, setListingId] = useState<string | null>(null);
     const [images, setImages] = useState<File[]>([]);
     const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({});
+    const [validationAttempted, setValidationAttempted] = useState(false);
 
     const steps = [
         { id: 1, name: t('steps.type') },
@@ -37,6 +61,7 @@ export function SellWizard() {
 
     const form = useForm({
         resolver: zodResolver(sellFormSchema),
+        mode: "onChange",
         defaultValues: {
             contactName: session?.user?.name || "",
             contactEmail: session?.user?.email || "",
@@ -48,11 +73,52 @@ export function SellWizard() {
             features: {},
             bodyType: "",
             mileage: 0,
-        },
+            price: 0,
+            location: "",
+            fuelType: "",
+            transmission: "",
+            powerKw: 0,
+            driveType: "",
+            doors: 4,
+            seats: 5,
+            colorExterior: "",
+            condition: "",
+            vin: "",
+            variant: "",
+            colorInterior: "",
+            description: "",
+        } as SellFormValues,
     });
+
+    // Update form values when session loads
+    useEffect(() => {
+        if (session?.user) {
+            if (session.user.name) {
+                form.setValue("contactName", session.user.name);
+            }
+            if (session.user.email) {
+                form.setValue("contactEmail", session.user.email);
+            }
+        }
+    }, [session, form]);
+
+    const scrollToFirstError = () => {
+        setTimeout(() => {
+            const firstErrorElement = document.querySelector('[data-error="true"]');
+            if (firstErrorElement) {
+                firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Add a highlight effect
+                firstErrorElement.classList.add('ring-2', 'ring-destructive', 'ring-offset-2');
+                setTimeout(() => {
+                    firstErrorElement.classList.remove('ring-2', 'ring-destructive', 'ring-offset-2');
+                }, 2000);
+            }
+        }, 100);
+    };
 
     const nextStep = async () => {
         let isValid = false;
+        setValidationAttempted(true);
 
         if (currentStep === 1) {
             isValid = !!form.getValues("bodyType");
@@ -64,13 +130,23 @@ export function SellWizard() {
                 });
             }
         } else if (currentStep === 2) {
-            isValid = await form.trigger();
+            // Trigger validation for required fields only
+            const result = await form.trigger(STEP_2_REQUIRED_FIELDS);
+            isValid = result;
+            
             if (!isValid) {
+                const errors = form.formState.errors;
+                const errorFields = Object.keys(errors);
+                
                 toast({
                     variant: "destructive",
                     title: t('toasts.errorTitle'),
-                    description: t('toasts.fillRequired'),
+                    description: errorFields.length > 0 
+                        ? `${t('toasts.fillRequired')} (${errorFields.length} ${t('toasts.fieldsError')})`
+                        : t('toasts.fillRequired'),
                 });
+                
+                scrollToFirstError();
             }
         } else if (currentStep === 3) {
             isValid = images.length >= 3;
@@ -85,13 +161,15 @@ export function SellWizard() {
 
         if (isValid) {
             setCurrentStep((prev) => prev + 1);
-            window.scrollTo(0, 0);
+            setValidationAttempted(false);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     };
 
     const prevStep = () => {
         setCurrentStep((prev) => prev - 1);
-        window.scrollTo(0, 0);
+        setValidationAttempted(false);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const uploadToS3 = async (file: File, listingId: string): Promise<string> => {
@@ -224,67 +302,74 @@ export function SellWizard() {
     }
 
     return (
-        <div className="space-y-8">
-            <StepIndicator currentStep={currentStep} steps={steps} />
+        <FormProvider {...form}>
+            <div className="space-y-8">
+                <StepIndicator currentStep={currentStep} steps={steps} />
 
-            <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-200 dark:border-slate-800 overflow-hidden transition-all duration-300">
-                <div className="p-8 md:p-12">
-                    {currentStep === 1 && (
-                        <Step1VehicleType
-                            selectedType={form.watch("bodyType")}
-                            onSelect={(type) => form.setValue("bodyType", type, { shouldValidate: true })}
-                        />
-                    )}
+                <div className={cn(
+                    "bg-white dark:bg-slate-900 rounded-xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-200 dark:border-slate-800 overflow-hidden transition-all duration-300",
+                    validationAttempted && "ring-1 ring-destructive/20"
+                )}>
+                    <div className="p-8 md:p-12">
+                        {currentStep === 1 && (
+                            <Step1VehicleType
+                                selectedType={form.watch("bodyType")}
+                                onSelect={(type) => form.setValue("bodyType", type, { shouldValidate: true })}
+                            />
+                        )}
 
-                    {currentStep === 2 && (
-                        <Step2VehicleData form={form as any} />
-                    )}
+                        {currentStep === 2 && (
+                            <Step2VehicleData validationAttempted={validationAttempted} />
+                        )}
 
-                    {currentStep === 3 && (
-                        <Step3PhotoUpload files={images} onFilesChange={setImages} />
-                    )}
-                </div>
-
-                <div className="p-6 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                    <Button
-                        variant="ghost"
-                        onClick={prevStep}
-                        disabled={currentStep === 1 || isSubmitting}
-                        className={cn("gap-2 font-bold", currentStep === 1 && "invisible")}
-                    >
-                        <ArrowLeft size={18} /> {t('buttons.back')}
-                    </Button>
-
-                    <div className="flex gap-4">
-                        {currentStep < 3 ? (
-                            <Button onClick={nextStep} className="px-8 font-bold gap-2 bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20">
-                                {t('buttons.next')} <ArrowRight size={18} />
-                            </Button>
-                        ) : (
-                            <Button
-                                onClick={onSubmit}
-                                disabled={isSubmitting || images.length < 3}
-                                className="px-10 font-bold gap-2 bg-primary hover:bg-primary/90 text-white shadow-xl shadow-primary/30"
-                            >
-                                {isSubmitting ? (
-                                    <>
-                                        <Loader2 size={18} className="animate-spin" /> {t('buttons.saving')}
-                                    </>
-                                ) : (
-                                    <>
-                                        <Sparkles size={18} /> {t('buttons.publish')}
-                                    </>
-                                )}
-                            </Button>
+                        {currentStep === 3 && (
+                            <Step3PhotoUpload files={images} onFilesChange={setImages} />
                         )}
                     </div>
-                </div>
-            </div>
 
-            <p className="text-center text-xs text-muted-foreground pt-4">
-                {t('footer.termsText')}
-            </p>
-        </div>
+                    <div className="p-6 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                        <Button
+                            variant="ghost"
+                            onClick={prevStep}
+                            disabled={currentStep === 1 || isSubmitting}
+                            className={cn("gap-2 font-bold", currentStep === 1 && "invisible")}
+                        >
+                            <ArrowLeft size={18} /> {t('buttons.back')}
+                        </Button>
+
+                        <div className="flex gap-4">
+                            {currentStep < 3 ? (
+                                <Button 
+                                    onClick={nextStep} 
+                                    className="px-8 font-bold gap-2 bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20"
+                                >
+                                    {t('buttons.next')} <ArrowRight size={18} />
+                                </Button>
+                            ) : (
+                                <Button
+                                    onClick={onSubmit}
+                                    disabled={isSubmitting || images.length < 3}
+                                    className="px-10 font-bold gap-2 bg-primary hover:bg-primary/90 text-white shadow-xl shadow-primary/30"
+                                >
+                                    {isSubmitting ? (
+                                        <>
+                                            <Loader2 size={18} className="animate-spin" /> {t('buttons.saving')}
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Sparkles size={18} /> {t('buttons.publish')}
+                                        </>
+                                    )}
+                                </Button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                <p className="text-center text-xs text-muted-foreground pt-4">
+                    {t('footer.termsText')}
+                </p>
+            </div>
+        </FormProvider>
     );
 }
-

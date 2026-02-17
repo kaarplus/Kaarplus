@@ -4,13 +4,7 @@ import jwt from "jsonwebtoken";
 
 import { AuthError, ForbiddenError } from "../utils/errors";
 
-const JWT_SECRET: string = (() => {
-  const secret = process.env.JWT_SECRET;
-  if (!secret) {
-    throw new Error("JWT_SECRET environment variable is required");
-  }
-  return secret;
-})();
+const JWT_SECRET: string | undefined = process.env.JWT_SECRET;
 
 interface DecodedToken {
   id: string;
@@ -38,6 +32,10 @@ export function requireAuth(req: Request, _res: Response, next: NextFunction): v
 
     if (!token) {
       throw new AuthError("Authentication required");
+    }
+
+    if (!JWT_SECRET) {
+      throw new AuthError("Server configuration error");
     }
 
     const decoded = jwt.verify(token, JWT_SECRET, { algorithms: ["HS256"] }) as DecodedToken;

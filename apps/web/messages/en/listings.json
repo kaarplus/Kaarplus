@@ -12,7 +12,9 @@
         "bodyType": "Body Type",
         "location": "Location",
         "make": "Make",
-        "model": "Model"
+        "model": "Model",
+        "from": "From",
+        "to": "To"
     },
     "sort": {
         "label": "Sort by",
@@ -26,7 +28,9 @@
     "results": {
         "found": "Found {count} cars",
         "noResults": "No results found",
-        "noResultsDesc": "Try adjusting your filter criteria"
+        "noResultsDesc": "Try adjusting your filter criteria",
+        "showing": "Showing {start} to {end} of {total} vehicles",
+        "clearAll": "Clear all filters"
     },
     "card": {
         "year": "Year",
@@ -50,5 +54,27 @@
         "location": "Location",
         "published": "Published",
         "views": "Views"
-    }
+    },
+    "favorites": {
+        "add": "Add to favorites",
+        "remove": "Remove from favorites",
+        "added": "Added to favorites",
+        "removed": "Removed from favorites",
+        "addedDesc": "The vehicle has been added to your favorites",
+        "removedDesc": "The vehicle has been removed from your favorites",
+        "error": "Failed to update favorites",
+        "loginRequired": "Login required",
+        "loginRequiredDesc": "Please log in to add vehicles to your favorites"
+    },
+    "badges": {
+        "hotDeal": "HOT DEAL",
+        "new": "NEW",
+        "certified": "CERTIFIED"
+    },
+    "status": {
+        "sold": "SOLD",
+        "active": "Active",
+        "pending": "Pending"
+    },
+    "noDescription": "Vehicle in excellent technical and visual condition. Service history verified."
 }

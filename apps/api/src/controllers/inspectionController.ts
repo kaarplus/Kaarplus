@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from "express";
 import { emailService } from "../services/emailService";
 import { inspectionService } from "../services/inspectionService";
 import { BadRequestError } from "../utils/errors";
+import { logger } from "../utils/logger";
 
 const VALID_STATUSES = Object.values(InspectionStatus);
 
@@ -75,11 +76,17 @@ export async function updateInspectionStatus(req: Request, res: Response, next: 
             reportUrl,
         );
 
-        // Send email notification (non-blocking)
+        // Send email notification (non-blocking with proper error logging)
         if (result.requesterEmail) {
             emailService
                 .sendInspectionStatusEmail(result.requesterEmail, result.listingTitle, status)
-                .catch(() => {});
+                .catch((err) => {
+                    logger.error("Failed to send inspection status email", {
+                        error: err instanceof Error ? err.message : "Unknown error",
+                        email: result.requesterEmail,
+                        inspectionId: req.params.id,
+                    });
+                });
         }
 
         res.json({ data: result.data });

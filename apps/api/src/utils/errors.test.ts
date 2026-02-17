@@ -106,9 +106,9 @@ describe('Error Classes', () => {
             expect(error.details).toEqual(details);
         });
 
-        it('should allow empty message and undefined details', () => {
+        it('should have default message and undefined details', () => {
             const error = new ValidationError();
-            expect(error.message).toBe('');
+            expect(error.message).toBe('Validation failed');
             expect(error.details).toBeUndefined();
         });
     });

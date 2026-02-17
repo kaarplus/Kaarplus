@@ -18,8 +18,10 @@ import { SlidersHorizontal } from "lucide-react";
 import { JsonLd } from "@/components/shared/json-ld";
 import { generateBreadcrumbJsonLd } from "@/lib/seo";
 import { SITE_URL } from "@/lib/constants";
+import { useTranslation } from "react-i18next";
 
 export default function ListingsPage() {
+    const { t } = useTranslation('listings');
     const [listings, setListings] = useState<VehicleSummary[]>([]);
     const [total, setTotal] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
@@ -57,7 +59,6 @@ export default function ListingsPage() {
 
     useEffect(() => {
         fetchListings();
-        // fetchListings depends on filter state which is captured via individual deps below
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         filters.make,
@@ -106,7 +107,7 @@ export default function ListingsPage() {
                                         <SheetTrigger asChild>
                                             <Button variant="outline" size="sm" className="lg:hidden h-9 px-3 gap-2">
                                                 <SlidersHorizontal size={16} />
-                                                Filtrid
+                                                {t('filters.title')}
                                             </Button>
                                         </SheetTrigger>
                                         <SheetContent side="left" className="p-0 w-[300px]">
@@ -139,10 +140,10 @@ export default function ListingsPage() {
                             </div>
                         ) : (
                             <div className="py-20 text-center border rounded-xl bg-card border-dashed">
-                                <h3 className="text-lg font-semibold">Tulemusi ei leitud</h3>
-                                <p className="text-muted-foreground mt-1">Proovige muuta filtreid või otsingusõna.</p>
+                                <h3 className="text-lg font-semibold">{t('results.noResults')}</h3>
+                                <p className="text-muted-foreground mt-1">{t('results.noResultsDesc')}</p>
                                 <Button variant="outline" className="mt-4" onClick={filters.resetFilters}>
-                                    Puhasta kõik filtrid
+                                    {t('results.clearAll')}
                                 </Button>
                             </div>
                         )}
@@ -151,7 +152,11 @@ export default function ListingsPage() {
                         {!isLoading && total > 20 && (
                             <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-border pt-8">
                                 <p className="text-sm text-muted-foreground">
-                                    Näitan {((filters.page - 1) * 20) + 1} kuni {Math.min(filters.page * 20, total)} sõidukit {total}-st
+                                    {t('results.showing', { 
+                                        start: ((filters.page - 1) * 20) + 1, 
+                                        end: Math.min(filters.page * 20, total), 
+                                        total: total 
+                                    })}
                                 </p>
                                 <Pagination
                                     currentPage={filters.page}

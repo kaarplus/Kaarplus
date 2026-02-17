@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 
 import { favoriteService } from "../services/favoriteService";
+import { NotFoundError, ConflictError, ErrorCode } from "../utils/errors";
 
 /**
  * GET /api/user/favorites
@@ -38,11 +39,11 @@ export async function addFavorite(req: Request, res: Response, next: NextFunctio
     } catch (error) {
         if (error instanceof Error) {
             if (error.message === "LISTING_NOT_FOUND") {
-                res.status(404).json({ error: "Kuulutust ei leitud" });
+                next(new NotFoundError("Listing not found", ErrorCode.LISTING_NOT_FOUND));
                 return;
             }
             if (error.message === "ALREADY_FAVORITED") {
-                res.status(409).json({ error: "Kuulutus on juba lemmikutes" });
+                next(new ConflictError("Listing is already in favorites", ErrorCode.ALREADY_FAVORITED));
                 return;
             }
         }
@@ -61,10 +62,10 @@ export async function removeFavorite(req: Request, res: Response, next: NextFunc
 
         await favoriteService.removeFavorite(userId, listingId);
 
-        res.json({ data: { message: "Kuulutus eemaldatud lemmikutest" } });
+        res.json({ data: { message: "Listing removed from favorites" } });
     } catch (error) {
         if (error instanceof Error && error.message === "FAVORITE_NOT_FOUND") {
-            res.status(404).json({ error: "Lemmikut ei leitud" });
+            next(new NotFoundError("Favorite not found", ErrorCode.FAVORITE_NOT_FOUND));
             return;
         }
         next(error);

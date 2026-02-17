@@ -108,8 +108,9 @@ export class ReviewService {
         if (data.listingId) {
             const existing = await prisma.review.findUnique({
                 where: {
-                    reviewerId_listingId: {
+                    reviewerId_targetId_listingId: {
                         reviewerId,
+                        targetId: data.targetId,
                         listingId: data.listingId,
                     },
                 },

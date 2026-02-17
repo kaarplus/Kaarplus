@@ -87,6 +87,7 @@ export function SaveSearchModal({ trigger }: SaveSearchModalProps) {
 
             const response = await fetch(`${API_URL}/api/user/saved-searches`, {
                 method: "POST",
+                credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
                 },

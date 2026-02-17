@@ -24,6 +24,7 @@ import {
     getThread,
     getUnreadCount,
     sendMessage,
+    markMessagesAsRead,
 } from "../controllers/messageController";
 import {
     getSavedSearches,
@@ -72,6 +73,7 @@ userRouter.get("/messages", readLimiter, getConversations);
 userRouter.get("/messages/thread", readLimiter, getThread);
 userRouter.get("/messages/unread-count", readLimiter, getUnreadCount);
 userRouter.post("/messages", writeLimiter, sendMessage);
+userRouter.patch("/messages/mark-read", writeLimiter, markMessagesAsRead);
 
 // GDPR export is expensive - add stricter rate limit
 userRouter.get("/gdpr/export", readLimiter, exportData);

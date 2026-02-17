@@ -73,5 +73,11 @@
         "daysAgo": "{{count}} days ago",
         "weeksAgo": "{{count}} weeks ago",
         "monthsAgo": "{{count}} months ago"
+    },
+    "details": "Details",
+    "saved": "Saved",
+    "buttons": {
+        "save": "Save",
+        "contact": "Contact"
     }
 }

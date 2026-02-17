@@ -73,5 +73,11 @@
         "daysAgo": "{{count}} päeva tagasi",
         "weeksAgo": "{{count}} nädalat tagasi",
         "monthsAgo": "{{count}} kuud tagasi"
+    },
+    "details": "Detailid",
+    "saved": "Salvestatud",
+    "buttons": {
+        "save": "Salvesta",
+        "contact": "Võta ühendust"
     }
 }

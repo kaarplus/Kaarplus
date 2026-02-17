@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { SITE_NAME } from "@/lib/constants";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
+import { UserMenu } from "@/components/auth/user-menu";
 import { Car, PlusCircle } from "lucide-react";
 
 export function Header() {
@@ -40,13 +41,9 @@ export function Header() {
         {/* Action buttons and language switcher */}
         <div className="flex items-center gap-4">
           <LanguageSwitcher />
-
-          <Link
-            href="/login"
-            className="hidden sm:block text-sm font-medium transition-colors hover:text-primary"
-          >
-            {t('nav.login')}
-          </Link>
+          
+          {/* User Menu with Login/Logout */}
+          <UserMenu />
 
           <Link
             href="/sell"

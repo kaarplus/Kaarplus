@@ -50,7 +50,7 @@ describe('passwordResetService', () => {
             let capturedExpires: Date | null = null;
             vi.mocked(prisma.passwordResetToken.create).mockImplementation((args: any) => {
                 capturedExpires = args.data.expires;
-                return Promise.resolve({ id: 'token-1', ...args.data });
+                return Promise.resolve({ id: 'token-1', ...args.data }) as any;
             });
 
             await passwordResetService.createResetToken(email);
