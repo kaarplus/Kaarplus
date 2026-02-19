@@ -182,7 +182,7 @@ authRouter.post("/forgot-password", async (req: Request, res: Response) => {
 
 		if (!resetToken) {
 			// Log error but don't expose to client
-			console.error("[Password Reset] Failed to create reset token for:", email);
+			logger.error("[Password Reset] Failed to create reset token", { email });
 			res.json({ message: "If an account exists, a password reset email has been sent." });
 			return;
 		}
@@ -191,11 +191,13 @@ authRouter.post("/forgot-password", async (req: Request, res: Response) => {
 		await emailService.sendPasswordResetEmail(email, resetToken, "et");
 
 		// Log for security audit
-		console.log(`[Password Reset] Token generated and email sent to: ${email}`);
+		logger.info("[Password Reset] Token generated and email sent", { email });
 
 		res.json({ message: "If an account exists, a password reset email has been sent." });
 	} catch (error) {
-		console.error("[Password Reset] Error processing forgot-password request:", error);
+		logger.error("[Password Reset] Error processing forgot-password request", {
+			error: error instanceof Error ? error.message : String(error),
+		});
 		// Still return success to prevent enumeration
 		res.json({ message: "If an account exists, a password reset email has been sent." });
 	}
@@ -261,7 +263,9 @@ authRouter.post("/reset-password", async (req: Request, res: Response) => {
 		if (error instanceof BadRequestError) {
 			throw error;
 		}
-		console.error("[Password Reset] Error resetting password:", error);
+		logger.error("[Password Reset] Error resetting password", {
+			error: error instanceof Error ? error.message : String(error),
+		});
 		throw new BadRequestError("Failed to reset password. Please try again.");
 	}
 });
@@ -309,7 +313,7 @@ authRouter.post("/change-password", requireAuth, async (req: Request, res: Respo
 	});
 
 	// Log for security audit
-	console.log(`[Password Change] Password changed for user: ${user.email}`);
+	logger.info("[Password Change] Password changed", { email: user.email });
 
 	res.json({ message: "Password changed successfully" });
 });

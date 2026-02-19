@@ -97,7 +97,7 @@ describe('ContactSellerDialog', () => {
 
 		await waitFor(() => {
 			expect(fetch).toHaveBeenCalledWith(
-				expect.stringContaining(`/api/listings/${listingId}/contact`),
+				expect.stringContaining(`/api/v1/listings/${listingId}/contact`),
 				expect.objectContaining({
 					method: 'POST',
 				})

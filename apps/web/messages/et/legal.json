@@ -125,5 +125,86 @@
 				"content": "Privaatsusega seotud küsimuste korral võtke ühendust: privacy@kaarplus.ee"
 			}
 		}
+	},
+	"cookiesPolicy": {
+		"title": "Küpsiste poliitika",
+		"effectiveDate": "Kehtiv alates: 1. jaanuar 2026",
+		"sections": {
+			"whatAreCookies": {
+				"title": "1. Mis on küpsised?",
+				"content": "Küpsised on väikesed tekstifailid, mida veebisait salvestab teie seadmesse. Need aitavad meil pakkuda paremat kasutajakogemust ja analüüsida veebisaidi kasutamist."
+			},
+			"necessary": {
+				"title": "2. Vajalikud küpsised",
+				"description": "Need küpsised on hädavajalikud veebisaidi toimimiseks. Neid ei saa keelata.",
+				"table": {
+					"cookie": "Küpsis",
+					"purpose": "Otstarve",
+					"validity": "Kehtivus",
+					"rows": [
+						{
+							"name": "kaarplus_session",
+							"purpose": "Kasutaja autentimine",
+							"validity": "Seanss"
+						},
+						{
+							"name": "kaarplus_cookie_consent",
+							"purpose": "Küpsiste nõusoleku salvestamine",
+							"validity": "1 aasta"
+						},
+						{
+							"name": "csrf_token",
+							"purpose": "Turvameede vormide kaitsmiseks",
+							"validity": "Seanss"
+						}
+					]
+				}
+			},
+			"analytical": {
+				"title": "3. Analüütilised küpsised",
+				"description": "Aitavad meil mõista, kuidas külastajad veebisaidiga suhtlevad. Need küpsised koguvad anonüümseid andmeid.",
+				"table": {
+					"cookie": "Küpsis",
+					"purpose": "Otstarve",
+					"validity": "Kehtivus",
+					"rows": [
+						{
+							"name": "_ga",
+							"purpose": "Google Analytics — külastajate eristamine",
+							"validity": "2 aastat"
+						},
+						{
+							"name": "_ga_*",
+							"purpose": "Google Analytics — seansi olek",
+							"validity": "2 aastat"
+						}
+					]
+				}
+			},
+			"marketing": {
+				"title": "4. Turundusküpsised",
+				"description": "Kasutatakse teile asjakohaste reklaamide kuvamiseks.",
+				"table": {
+					"cookie": "Küpsis",
+					"purpose": "Otstarve",
+					"validity": "Kehtivus",
+					"rows": [
+						{
+							"name": "_fbp",
+							"purpose": "Facebook — reklaamide jälgimine",
+							"validity": "3 kuud"
+						}
+					]
+				}
+			},
+			"management": {
+				"title": "5. Küpsiste haldamine",
+				"content": "Saate oma küpsiste eelistusi igal ajal muuta, vajutades lehe jaluses olevat \"Küpsiste seaded\" linki. Samuti saate küpsised oma brauseris keelata, kuid see võib mõjutada veebisaidi toimimist."
+			},
+			"contact": {
+				"title": "6. Kontakt",
+				"content": "Küsimuste korral:"
+			}
+		}
 	}
 }

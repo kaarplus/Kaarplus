@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Heart, CreditCard } from "lucide-react";
+import { Heart, Phone, MessageCircle } from "lucide-react";
 import { PriceDisplay } from "@/components/shared/price-display";
 import { ShareButton } from "@/components/shared/share-button";
 import { ContactSellerDialog } from "@/components/car-detail/contact-seller-dialog";
@@ -21,6 +21,8 @@ interface PriceCardProps {
 	includeVat: boolean;
 	status?: string;
 	isFavorited?: boolean;
+	sellerPhone?: string | null;
+	sellerName?: string | null;
 }
 
 export function PriceCard({
@@ -29,9 +31,11 @@ export function PriceCard({
 	price,
 	includeVat,
 	status,
-	isFavorited: initialIsFavorited
+	isFavorited: initialIsFavorited,
+	sellerPhone,
+	sellerName,
 }: PriceCardProps) {
-	const { t, i18n } = useTranslation('carDetail');
+	const { t } = useTranslation('carDetail');
 	const { toast } = useToast();
 	const { data: session } = useSession();
 	const isAuthenticated = !!session;
@@ -45,16 +49,6 @@ export function PriceCard({
 			loadFavorites();
 		}
 	}, [isAuthenticated, isLoaded, loadFavorites]);
-
-	const currencyLocale = i18n.language === 'et' ? "et-EE" : i18n.language === 'ru' ? "ru-RU" : "en-US";
-
-	const formatCurrency = (val: number) => {
-		return new Intl.NumberFormat(currencyLocale, {
-			style: "currency",
-			currency: "EUR",
-			maximumFractionDigits: 0
-		}).format(val);
-	};
 
 	const handleToggleFavorite = async () => {
 		if (!isAuthenticated) {
@@ -84,12 +78,33 @@ export function PriceCard({
 
 	const shareUrl = `/listings/${listingId}`;
 
+	// Format phone number for tel: link
+	const formatPhoneForCall = (phone: string): string => {
+		// Remove all non-numeric characters
+		const cleaned = phone.replace(/\D/g, '');
+		// Add Estonia country code if not present
+		if (cleaned.startsWith('5') && cleaned.length === 7 || cleaned.length === 8) {
+			return `+372${cleaned}`;
+		}
+		return `+${cleaned}`;
+	};
+
+	const handleCallClick = () => {
+		if (!sellerPhone) {
+			toast({
+				title: t('contactSeller.noPhone'),
+				description: t('contactSeller.noPhoneDesc'),
+				variant: "destructive",
+			});
+		}
+	};
+
 	return (
 		<div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-sm space-y-6">
 			<div className="flex items-start justify-between">
 				<div>
 					<Badge className="bg-primary/10 text-primary border-primary/20 uppercase text-[10px] font-bold tracking-wider px-2 py-0.5">
-						{t('priceCard.goodPrice')}
+						{status === "ACTIVE" ? t('priceCard.available') : t('priceCard.status', { status })}
 					</Badge>
 					<div className="mt-2">
 						<PriceDisplay price={price} includeVat={includeVat} size="lg" />
@@ -98,27 +113,49 @@ export function PriceCard({
 						</p>
 					</div>
 				</div>
-				<div className="text-right">
-					<div className="text-slate-400 text-xs line-through">
-						{formatCurrency(price * 1.05)}
-					</div>
-					<div className="text-primary text-xs font-bold">-{formatCurrency(price * 0.05)}</div>
-				</div>
 			</div>
 
-			<p className="text-slate-500 text-sm flex items-center gap-1.5">
-				{t('priceCard.excellentChoice')} <span className="font-semibold text-slate-800 dark:text-white">{t('priceCard.saveCompared')}</span>
-			</p>
+			{/* Seller Info */}
+			{sellerName && (
+				<div className="text-sm text-slate-600 dark:text-slate-400">
+					<span className="font-medium">{t('priceCard.seller')}:</span> {sellerName}
+				</div>
+			)}
 
+			{/* Contact Actions */}
 			<div className="space-y-3">
-				<Button asChild className="w-full h-12 font-bold bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 gap-2 rounded-xl text-white">
-					<Link href={`/listings/${listingId}/purchase`}>
-						<CreditCard size={18} /> {t('priceCard.buyNow')}
-					</Link>
-				</Button>
+				{/* Call Button */}
+				{sellerPhone ? (
+					<Button
+						asChild
+						className="w-full h-12 font-bold bg-green-600 hover:bg-green-700 shadow-lg shadow-green-600/20 gap-2 rounded-xl text-white"
+						onClick={handleCallClick}
+					>
+						<a href={`tel:${formatPhoneForCall(sellerPhone)}`}>
+							<Phone size={18} /> {t('priceCard.callSeller')} {sellerPhone}
+						</a>
+					</Button>
+				) : (
+					<Button
+						disabled
+						className="w-full h-12 font-bold gap-2 rounded-xl"
+						variant="outline"
+					>
+						<Phone size={18} /> {t('priceCard.noPhone')}
+					</Button>
+				)}
+
+				{/* Message Button */}
 				<ContactSellerDialog
 					listingId={listingId}
 					listingTitle={listingTitle}
+					triggerButton={
+						<Button 
+							className="w-full h-12 font-bold bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 gap-2 rounded-xl text-white"
+						>
+							<MessageCircle size={18} /> {t('priceCard.messageSeller')}
+						</Button>
+					}
 				/>
 			</div>
 
@@ -150,14 +187,15 @@ export function PriceCard({
 				</Button>
 			</div>
 
+			{/* Price Comparison Info */}
 			<div className="pt-2 grid grid-cols-2 gap-4">
 				<div className="text-center">
 					<div className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">{t('priceCard.marketAverage')}</div>
-					<div className="font-bold text-sm">{formatCurrency(price * 1.02)}</div>
+					<div className="font-bold text-sm">{new Intl.NumberFormat('et-EE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(price * 1.02)}</div>
 				</div>
 				<div className="text-center">
 					<div className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">{t('priceCard.yourGain')}</div>
-					<div className="font-bold text-primary text-sm">{formatCurrency(price * 0.02)}</div>
+					<div className="font-bold text-primary text-sm">{new Intl.NumberFormat('et-EE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(price * 0.02)}</div>
 				</div>
 			</div>
 		</div>

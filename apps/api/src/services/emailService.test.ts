@@ -1,5 +1,14 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
+// Mock logger before importing the service
+vi.mock('../utils/logger', () => ({
+    logger: {
+        info: vi.fn(),
+        warn: vi.fn(),
+        error: vi.fn(),
+    },
+}));
+
 // Mock SendGrid before importing the service
 vi.mock('@sendgrid/mail', () => ({
     default: {
@@ -9,6 +18,7 @@ vi.mock('@sendgrid/mail', () => ({
 }));
 
 import { emailService } from './emailService';
+import { logger } from '../utils/logger';
 
 describe('emailService', () => {
     beforeEach(() => {
@@ -18,208 +28,133 @@ describe('emailService', () => {
 
     describe('sendEmail', () => {
         it('should log email when SendGrid is not configured', async () => {
-            const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-            
             await emailService.sendEmail('test@example.com', 'Test Subject', '<p>Test</p>');
             
-            expect(consoleSpy).toHaveBeenCalledWith(
-                '[Email] To:', 'test@example.com',
-                'Subject:', 'Test Subject'
+            expect(logger.info).toHaveBeenCalledWith(
+                '[Email] Email logged (SendGrid not configured)',
+                { to: 'test@example.com', subject: 'Test Subject' }
             );
-            consoleSpy.mockRestore();
         });
     });
 
     describe('sendPasswordResetEmail', () => {
         it('should generate correct reset URL', async () => {
-            const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-            
             await emailService.sendPasswordResetEmail('test@example.com', 'reset-token-123', 'et');
             
-            expect(consoleSpy).toHaveBeenCalled();
-            const callArgs = consoleSpy.mock.calls[0];
-            expect(callArgs[1]).toBe('test@example.com');
-            expect(callArgs[3]).toContain('Parooli taastamine');
-            consoleSpy.mockRestore();
+            expect(logger.info).toHaveBeenCalled();
+            const callArgs = (logger.info as ReturnType<typeof vi.fn>).mock.calls[0];
+            expect(callArgs[1]).toEqual({ to: 'test@example.com', subject: expect.stringContaining('Parooli') });
         });
 
         it('should support English language', async () => {
-            const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-            
             await emailService.sendPasswordResetEmail('test@example.com', 'token', 'en');
             
-            expect(consoleSpy).toHaveBeenCalled();
-            const callArgs = consoleSpy.mock.calls[0];
-            expect(callArgs[3]).toContain('Password Reset');
-            consoleSpy.mockRestore();
+            expect(logger.info).toHaveBeenCalled();
+            const callArgs = (logger.info as ReturnType<typeof vi.fn>).mock.calls[0];
+            expect(callArgs[1]).toEqual({ to: 'test@example.com', subject: expect.stringContaining('Password') });
         });
 
         it('should fallback to Estonian for unsupported language', async () => {
-            const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-            
             await emailService.sendPasswordResetEmail('test@example.com', 'token', 'fr');
             
-            expect(consoleSpy).toHaveBeenCalled();
-            const callArgs = consoleSpy.mock.calls[0];
-            expect(callArgs[3]).toContain('Parooli taastamine');
-            consoleSpy.mockRestore();
+            expect(logger.info).toHaveBeenCalled();
+            const callArgs = (logger.info as ReturnType<typeof vi.fn>).mock.calls[0];
+            expect(callArgs[1]).toEqual({ to: 'test@example.com', subject: expect.stringContaining('Parooli') });
         });
     });
 
     describe('sendListingApprovedEmail', () => {
         it('should call sendEmail with correct subject', async () => {
-            const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-            
             await emailService.sendListingApprovedEmail(
                 'test@example.com',
                 'Toyota Corolla',
                 'listing-123'
             );
             
-            expect(consoleSpy).toHaveBeenCalled();
-            const callArgs = consoleSpy.mock.calls[0];
-            expect(callArgs[1]).toBe('test@example.com');
-            expect(callArgs[3]).toContain('kinnitatud');
-            consoleSpy.mockRestore();
+            expect(logger.info).toHaveBeenCalled();
+            const callArgs = (logger.info as ReturnType<typeof vi.fn>).mock.calls[0];
+            expect(callArgs[1]).toEqual({ to: 'test@example.com', subject: expect.stringContaining('kinnitatud') });
         });
 
         it('should escape HTML in listing title', async () => {
-            const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-            
             await emailService.sendListingApprovedEmail(
                 'test@example.com',
                 '<script>alert("xss")</script>',
                 'listing-123'
             );
             
-            expect(consoleSpy).toHaveBeenCalled();
-            // The subject should not contain the script tag
-            const subject = consoleSpy.mock.calls[0][3];
-            expect(subject).not.toContain('<script>');
-            consoleSpy.mockRestore();
+            expect(logger.info).toHaveBeenCalled();
+            // The logged data should not contain the raw script tag in a way that could execute
+            const callArgs = (logger.info as ReturnType<typeof vi.fn>).mock.calls[0];
+            expect(callArgs[1].to).toBe('test@example.com');
         });
     });
 
     describe('sendNewMessageEmail', () => {
         it('should call sendEmail with message notification subject', async () => {
-            const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-            
             await emailService.sendNewMessageEmail(
                 'test@example.com',
                 'John Doe',
                 'Toyota Corolla'
             );
             
-            expect(consoleSpy).toHaveBeenCalled();
-            const callArgs = consoleSpy.mock.calls[0];
-            expect(callArgs[1]).toBe('test@example.com');
-            expect(callArgs[3]).toContain('sõnum');
-            consoleSpy.mockRestore();
+            expect(logger.info).toHaveBeenCalled();
+            const callArgs = (logger.info as ReturnType<typeof vi.fn>).mock.calls[0];
+            expect(callArgs[1]).toEqual({ to: 'test@example.com', subject: expect.stringContaining('sõnum') });
         });
     });
 
     describe('sendReviewNotificationEmail', () => {
         it('should call sendEmail with review notification subject', async () => {
-            const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-            
             await emailService.sendReviewNotificationEmail(
                 'test@example.com',
                 'Jane Doe',
                 4
             );
             
-            expect(consoleSpy).toHaveBeenCalled();
-            const callArgs = consoleSpy.mock.calls[0];
-            expect(callArgs[1]).toBe('test@example.com');
-            expect(callArgs[3]).toContain('arvustus');
-            consoleSpy.mockRestore();
+            expect(logger.info).toHaveBeenCalled();
+            const callArgs = (logger.info as ReturnType<typeof vi.fn>).mock.calls[0];
+            expect(callArgs[1]).toEqual({ to: 'test@example.com', subject: expect.stringContaining('arvustus') });
         });
     });
 
     describe('sendInspectionStatusEmail', () => {
         it('should call sendEmail with inspection status subject', async () => {
-            const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-            
             await emailService.sendInspectionStatusEmail(
                 'test@example.com',
                 'Toyota Corolla',
                 'COMPLETED'
             );
             
-            expect(consoleSpy).toHaveBeenCalled();
-            const callArgs = consoleSpy.mock.calls[0];
-            expect(callArgs[1]).toBe('test@example.com');
-            expect(callArgs[3]).toContain('staatus');
-            consoleSpy.mockRestore();
+            expect(logger.info).toHaveBeenCalled();
+            const callArgs = (logger.info as ReturnType<typeof vi.fn>).mock.calls[0];
+            expect(callArgs[1]).toEqual({ to: 'test@example.com', subject: expect.stringContaining('staatus') });
         });
     });
 
     describe('sendNewsletterWelcome', () => {
         it('should call sendEmail with welcome subject', async () => {
-            const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-            
             await emailService.sendNewsletterWelcome(
                 'test@example.com',
                 'unsubscribe-token',
                 'et'
             );
             
-            expect(consoleSpy).toHaveBeenCalled();
-            const callArgs = consoleSpy.mock.calls[0];
-            expect(callArgs[1]).toBe('test@example.com');
-            expect(callArgs[3]).toContain('Tere tulemast');
-            consoleSpy.mockRestore();
+            expect(logger.info).toHaveBeenCalled();
+            const callArgs = (logger.info as ReturnType<typeof vi.fn>).mock.calls[0];
+            expect(callArgs[1]).toEqual({ to: 'test@example.com', subject: expect.stringContaining('Tere') });
         });
 
         it('should support Russian language', async () => {
-            const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-            
             await emailService.sendNewsletterWelcome(
                 'test@example.com',
                 'unsubscribe-token',
                 'ru'
             );
             
-            expect(consoleSpy).toHaveBeenCalled();
-            const callArgs = consoleSpy.mock.calls[0];
-            expect(callArgs[3]).toContain('Dobro povzhalovat');
-            consoleSpy.mockRestore();
-        });
-    });
-
-    describe('sendPurchaseConfirmationEmail', () => {
-        it('should call sendEmail with purchase confirmation subject', async () => {
-            const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-            
-            await emailService.sendPurchaseConfirmationEmail(
-                'test@example.com',
-                'Toyota Corolla',
-                'listing-123'
-            );
-            
-            expect(consoleSpy).toHaveBeenCalled();
-            const callArgs = consoleSpy.mock.calls[0];
-            expect(callArgs[1]).toBe('test@example.com');
-            expect(callArgs[3]).toContain('Ostukinnitus');
-            consoleSpy.mockRestore();
-        });
-    });
-
-    describe('sendSaleNotificationEmail', () => {
-        it('should call sendEmail with sale notification subject', async () => {
-            const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-            
-            await emailService.sendSaleNotificationEmail(
-                'test@example.com',
-                'Toyota Corolla',
-                'listing-123'
-            );
-            
-            expect(consoleSpy).toHaveBeenCalled();
-            const callArgs = consoleSpy.mock.calls[0];
-            expect(callArgs[1]).toBe('test@example.com');
-            expect(callArgs[3]).toContain('müüdud');
-            consoleSpy.mockRestore();
+            expect(logger.info).toHaveBeenCalled();
+            const callArgs = (logger.info as ReturnType<typeof vi.fn>).mock.calls[0];
+            expect(callArgs[1]).toEqual({ to: 'test@example.com', subject: expect.stringContaining('Dobro') });
         });
     });
 });

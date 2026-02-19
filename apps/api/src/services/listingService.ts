@@ -1,9 +1,12 @@
 import { prisma, ListingStatus, Prisma } from "@kaarplus/database";
-import { socketService } from "./socketService";
 
 import { cacheService } from "../utils/cache";
 import { ForbiddenError, NotFoundError } from "../utils/errors";
+import { logger } from "../utils/logger";
+import { validateRanges } from "../utils/validation";
 
+import { emailService } from "./emailService";
+import { socketService } from "./socketService";
 import { UploadService } from "./uploadService";
 
 const uploadService = new UploadService();
@@ -59,7 +62,10 @@ export class ListingService {
 		cacheService.invalidatePattern("search:");
 	}
 
-	async getAllListings(query: ListingQuery, isAdmin: boolean = false): Promise<any> {
+	async getAllListings(query: ListingQuery, isAdmin: boolean = false): Promise<{
+		data: unknown[];
+		meta: { page: number; pageSize: number; total: number; totalPages: number };
+	}> {
 		const {
 			page,
 			pageSize,
@@ -87,28 +93,21 @@ export class ListingService {
 			location,
 		} = query;
 
-		// Validate year range
-		if (yearMin && yearMax && yearMin > yearMax) {
-			throw new Error("yearMin cannot be greater than yearMax");
-		}
+		// Validate all ranges using DRY helper
+		validateRanges(
+			[yearMin, yearMax, "year"],
+			[priceMin, priceMax, "price"],
+			[mileageMin, mileageMax, "mileage"],
+			[powerMin, powerMax, "power"]
+		);
 
-		// Validate price range
-		if (priceMin && priceMax && priceMin > priceMax) {
-			throw new Error("priceMin cannot be greater than priceMax");
-		}
 
-		// Validate mileage range
-		if (mileageMin && mileageMax && mileageMin > mileageMax) {
-			throw new Error("mileageMin cannot be greater than mileageMax");
-		}
+		// Ensure page and pageSize are numbers (handling potential string inputs)
+		const pageNum = Number(page) || 1;
+		const limit = Number(pageSize) || 20;
 
-		// Validate power range
-		if (powerMin && powerMax && powerMin > powerMax) {
-			throw new Error("powerMin cannot be greater than powerMax");
-		}
-
-		const skip = (page - 1) * pageSize;
-		const take = pageSize;
+		const skip = (pageNum - 1) * limit;
+		const take = limit;
 
 		const where: Prisma.ListingWhereInput = {};
 
@@ -178,8 +177,11 @@ export class ListingService {
 		// Only cache public searches
 		const cacheKey = !isAdmin ? `search:results:${JSON.stringify(query)}` : null;
 		if (cacheKey) {
-			const cached = cacheService.get(cacheKey);
-			if (cached) return cached as any;
+			const cached = cacheService.get<{
+				data: unknown[];
+				meta: { page: number; pageSize: number; total: number; totalPages: number };
+			}>(cacheKey);
+			if (cached) return cached;
 		}
 
 		const [listings, total] = await Promise.all([
@@ -212,10 +214,10 @@ export class ListingService {
 		const result = {
 			data: listings,
 			meta: {
-				page,
-				pageSize,
+				page: pageNum,
+				pageSize: limit,
 				total,
-				totalPages: Math.ceil(total / pageSize),
+				totalPages: Math.ceil(total / limit),
 			},
 		};
 
@@ -228,10 +230,10 @@ export class ListingService {
 
 
 
-	async getListingById(id: string): Promise<any> {
+	async getListingById(id: string): Promise<unknown> {
 		const cacheKey = `search:listing:${id}`;
-		const cached = cacheService.get(cacheKey);
-		if (cached) return cached as any;
+		const cached = cacheService.get<unknown>(cacheKey);
+		if (cached) return cached;
 
 		const listing = await prisma.listing.findUnique({
 			where: { id },
@@ -263,7 +265,7 @@ export class ListingService {
 				where: { id },
 				data: { viewCount: { increment: 1 } },
 			})
-		).catch(err => console.error("Failed to increment view count:", err));
+		).catch(err => logger.warn("Failed to increment view count", { error: err instanceof Error ? err.message : String(err) }));
 
 		cacheService.set(cacheKey, listing, 600); // 10 minutes cache for details
 		return listing;
@@ -335,25 +337,123 @@ export class ListingService {
 		const listing = await prisma.listing.findUnique({ where: { id } });
 		if (!listing) throw new NotFoundError("Listing not found");
 
-		return prisma.listing.findMany({
+		// Define similarity criteria with price and year ranges
+		const priceMin = Number(listing.price) * 0.7; // 30% below
+		const priceMax = Number(listing.price) * 1.3; // 30% above
+		const yearMin = listing.year - 3;
+		const yearMax = listing.year + 3;
+
+		// Fetch potential similar listings with multiple criteria
+		const candidates = await prisma.listing.findMany({
 			where: {
 				id: { not: id },
 				status: "ACTIVE",
+				// Must match at least one of these key criteria
 				OR: [
 					{ make: listing.make },
 					{ bodyType: listing.bodyType },
+					{ 
+						AND: [
+							{ price: { gte: priceMin, lte: priceMax } },
+							{ year: { gte: yearMin, lte: yearMax } },
+						],
+					},
 				],
 			},
-			take: 4,
+			take: 20, // Fetch more to score and rank
 			include: {
 				images: {
 					where: { verified: true },
 					orderBy: { order: "asc" },
 					take: 1,
 				},
+				user: {
+					select: {
+						id: true,
+						name: true,
+						role: true,
+						dealershipId: true,
+					},
+				},
 			},
-			orderBy: { createdAt: "desc" },
 		});
+
+		// Score each candidate based on similarity to the original listing
+		const scoredCandidates = candidates.map((candidate) => {
+			let score = 0;
+
+			// Same make and model (highest weight: 40 points)
+			if (candidate.make === listing.make) {
+				score += 20;
+				if (candidate.model === listing.model) {
+					score += 20;
+				}
+			}
+
+			// Same body type (15 points)
+			if (candidate.bodyType === listing.bodyType) {
+				score += 15;
+			}
+
+			// Price similarity (max 20 points)
+			const candidatePrice = Number(candidate.price);
+			const priceDiff = Math.abs(candidatePrice - Number(listing.price));
+			const priceDiffPercent = priceDiff / Number(listing.price);
+			if (priceDiffPercent <= 0.1) {
+				score += 20; // Within 10%
+			} else if (priceDiffPercent <= 0.2) {
+				score += 15; // Within 20%
+			} else if (priceDiffPercent <= 0.3) {
+				score += 10; // Within 30%
+			}
+
+			// Year similarity (max 15 points)
+			const yearDiff = Math.abs(candidate.year - listing.year);
+			if (yearDiff === 0) {
+				score += 15; // Same year
+			} else if (yearDiff <= 1) {
+				score += 12; // 1 year difference
+			} else if (yearDiff <= 2) {
+				score += 8; // 2 years difference
+			} else if (yearDiff <= 3) {
+				score += 5; // 3 years difference
+			}
+
+			// Same fuel type (5 points)
+			if (candidate.fuelType === listing.fuelType) {
+				score += 5;
+			}
+
+			// Same transmission (5 points)
+			if (candidate.transmission === listing.transmission) {
+				score += 5;
+			}
+
+			// Same location/region (bonus 5 points)
+			if (candidate.location === listing.location) {
+				score += 5;
+			}
+
+			// Boost recent listings slightly (max 3 points)
+			const daysSincePublished = candidate.publishedAt
+				? Math.floor((Date.now() - new Date(candidate.publishedAt).getTime()) / (1000 * 60 * 60 * 24))
+				: 365;
+			if (daysSincePublished <= 7) {
+				score += 3; // Published within a week
+			} else if (daysSincePublished <= 30) {
+				score += 1; // Published within a month
+			}
+
+			return { candidate, score };
+		});
+
+		// Sort by score (descending) and take top 8
+		const topMatches = scoredCandidates
+			.sort((a, b) => b.score - a.score)
+			.slice(0, 8)
+			.map(({ candidate }) => candidate);
+
+		return topMatches;
 	}
 
 	async contactSeller(
@@ -375,12 +475,12 @@ export class ListingService {
 
 		const message = await prisma.message.create({
 			data: {
-				senderId: senderId || null,
 				recipientId: listing.userId,
 				listingId: listing.id,
 				subject: `Päring kuulutuse kohta: ${listing.make} ${listing.model}`,
 				body: messageBody,
-			},
+				...(senderId && { senderId }),
+			} as unknown as Prisma.MessageUncheckedCreateInput,
 			include: {
 				sender: {
 					select: {
@@ -394,11 +494,30 @@ export class ListingService {
 
 		// Notify recipient via Socket.io if initialized
 		try {
-			if (socketService.isInitialized()) {
-				socketService.emitNewMessage(message as any);
+			if (socketService.isInitialized() && message.senderId) {
+				socketService.emitNewMessage(message as unknown as Parameters<typeof socketService.emitNewMessage>[0]);
 			}
 		} catch (error) {
-			console.error("[ListingService] Failed to emit socket message:", error);
+			logger.warn("[ListingService] Failed to emit socket message", {
+				error: error instanceof Error ? error.message : String(error),
+			});
+		}
+
+		// Send email notification to seller (async, non-blocking)
+		if (listing.user?.email) {
+			const senderName = senderId
+				? (message.sender?.name || "Kasutaja")
+				: contactData.name;
+
+			emailService.sendNewMessageEmail(
+				listing.user.email,
+				senderName || "Huviline",
+				`${listing.make} ${listing.model}`
+			).catch(err => {
+				logger.warn("[ListingService] Failed to send email notification", {
+					error: err instanceof Error ? err.message : String(err),
+				});
+			});
 		}
 
 		return message;

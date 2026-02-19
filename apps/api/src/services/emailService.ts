@@ -1,3 +1,5 @@
+import { logger } from "../utils/logger";
+
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
 const FROM_EMAIL = process.env.SENDGRID_FROM_EMAIL || "noreply@kaarplus.ee";
 const FROM_NAME = process.env.SENDGRID_FROM_NAME || "Kaarplus";
@@ -38,7 +40,7 @@ export class EmailService {
             sgMail.default.setApiKey(SENDGRID_API_KEY!);
             this.sgMail = sgMail.default;
         } catch {
-            console.warn("[Email] @sendgrid/mail not installed. Emails will be logged to console.");
+            logger.warn("[Email] @sendgrid/mail not installed. Emails will be logged to console.");
         }
     }
 
@@ -46,7 +48,7 @@ export class EmailService {
         await this.ready;
 
         if (!SENDGRID_API_KEY || !this.sgMail) {
-            console.log("[Email] To:", to, "Subject:", subject);
+            logger.info("[Email] Email logged (SendGrid not configured)", { to, subject });
             return;
         }
 
@@ -61,7 +63,7 @@ export class EmailService {
                 html,
             });
         } catch (error) {
-            console.error("[Email] Failed to send email:", error);
+            logger.error("[Email] Failed to send email", { error: error instanceof Error ? error.message : String(error) });
             throw new Error(`Failed to send email: ${error instanceof Error ? error.message : "Unknown error"}`);
         }
     }
@@ -158,36 +160,6 @@ export class EmailService {
         const subject = subjects[language] || subjects["en"];
         const html = bodies[language] || bodies["en"];
 
-        await this.sendEmail(email, subject, html);
-    }
-
-    async sendPurchaseConfirmationEmail(email: string, listingTitle: string, listingId: string): Promise<void> {
-        const safeTitle = escapeHtml(listingTitle);
-        const subject = "Ostukinnitus | Purchase confirmation";
-        const html = `
-            <h2>Täname ostu eest!</h2>
-            <p>Olete edukalt ostnud sõiduki: <strong>${safeTitle}</strong>.</p>
-            <p>Müüja võtab teiega peagi ühendust, et kokku leppida üleandmine.</p>
-            <p><a href="${FRONTEND_URL}/listings/${encodeURIComponent(listingId)}">Vaata kuulutust</a></p>
-            <hr />
-            <p><em>Thank you for your purchase of "${safeTitle}". The seller will contact you soon.</em></p>
-        `;
-        await this.sendEmail(email, subject, html);
-    }
-
-    async sendSaleNotificationEmail(email: string, listingTitle: string, listingId: string): Promise<void> {
-        const safeTitle = escapeHtml(listingTitle);
-        const encodedId = encodeURIComponent(listingId);
-        const subject = "Teie sõiduk on müüdud! | Your vehicle has been sold!";
-        const html = `
-            <h2>Õnnitleme! Teie auto on müüdud</h2>
-            <p>Sõiduk "<strong>${safeTitle}</strong>" on edukalt müüdud Kaarplus platvormil.</p>
-            <p>Palun võtke ostjaga ühendust ja leppige kokku vormistamine.</p>
-            <p><a href="${FRONTEND_URL}/listings/${encodedId}">Vaata müüdud kuulutust</a></p>
-            <p><a href="${FRONTEND_URL}/dashboard/listings">Halda oma kuulutusi</a></p>
-            <hr />
-            <p><em>Congratulations! Your vehicle "${safeTitle}" has been sold on Kaarplus. <a href="${FRONTEND_URL}/listings/${encodedId}">View listing</a></em></p>
-        `;
         await this.sendEmail(email, subject, html);
     }
 

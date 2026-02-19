@@ -17,6 +17,17 @@ export function ImageGallery({ images }: ImageGalleryProps) {
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [zoom, setZoom] = useState(1);
 
+    // Define navigation functions before they're used in effects
+    const goNext = useCallback(() => {
+        setActiveIndex((prev) => (prev + 1) % images.length);
+        setZoom(1);
+    }, [images.length]);
+
+    const goPrev = useCallback(() => {
+        setActiveIndex((prev) => (prev - 1 + images.length) % images.length);
+        setZoom(1);
+    }, [images.length]);
+
     // Handle keyboard navigation
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -27,17 +38,17 @@ export function ImageGallery({ images }: ImageGalleryProps) {
                     setIsFullscreen(false);
                     break;
                 case 'ArrowLeft':
-                    prev();
+                    goPrev();
                     break;
                 case 'ArrowRight':
-                    next();
+                    goNext();
                     break;
             }
         };
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [isFullscreen, activeIndex, images.length]);
+    }, [isFullscreen, goPrev, goNext]);
 
     // Prevent body scroll when fullscreen is open
     useEffect(() => {
@@ -50,16 +61,6 @@ export function ImageGallery({ images }: ImageGalleryProps) {
             document.body.style.overflow = '';
         };
     }, [isFullscreen]);
-
-    const next = useCallback(() => {
-        setActiveIndex((prev) => (prev + 1) % images.length);
-        setZoom(1);
-    }, [images.length]);
-
-    const prev = useCallback(() => {
-        setActiveIndex((prev) => (prev - 1 + images.length) % images.length);
-        setZoom(1);
-    }, [images.length]);
 
     const openFullscreen = useCallback(() => {
         setIsFullscreen(true);
@@ -115,7 +116,7 @@ export function ImageGallery({ images }: ImageGalleryProps) {
                     {images.length > 1 && (
                         <>
                             <button
-                                onClick={prev}
+                                onClick={goPrev}
                                 className="absolute inset-y-0 left-0 flex items-center px-4 opacity-0 group-hover:opacity-100 transition-opacity z-10"
                             >
                                 <div className="bg-white/90 hover:bg-white text-slate-800 p-2 rounded-full shadow-lg transition-all">
@@ -123,7 +124,7 @@ export function ImageGallery({ images }: ImageGalleryProps) {
                                 </div>
                             </button>
                             <button
-                                onClick={next}
+                                onClick={goNext}
                                 className="absolute inset-y-0 right-0 flex items-center px-4 opacity-0 group-hover:opacity-100 transition-opacity z-10"
                             >
                                 <div className="bg-white/90 hover:bg-white text-slate-800 p-2 rounded-full shadow-lg transition-all">
@@ -211,7 +212,7 @@ export function ImageGallery({ images }: ImageGalleryProps) {
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    prev();
+                                    goPrev();
                                 }}
                                 className="absolute left-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
                             >
@@ -220,7 +221,7 @@ export function ImageGallery({ images }: ImageGalleryProps) {
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    next();
+                                    goNext();
                                 }}
                                 className="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
                             >

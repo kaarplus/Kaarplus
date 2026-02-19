@@ -4,6 +4,14 @@ import { emailService } from "../services/emailService";
 import { cacheService } from "../utils/cache";
 import { NotFoundError, BadRequestError } from "../utils/errors";
 
+// Type definitions for admin service responses
+export interface AdminStats {
+    pendingListings: number;
+    activeUsers: number;
+    totalListings: number;
+    verifiedToday: number;
+}
+
 export class AdminService {
     private invalidateSearchCache() {
         cacheService.invalidatePattern("search:");
@@ -227,10 +235,10 @@ export class AdminService {
         };
     }
 
-    async getStats(): Promise<any> {
+    async getStats(): Promise<AdminStats> {
         const cacheKey = "admin:stats";
-        const cached = cacheService.get(cacheKey);
-        if (cached) return cached as any;
+        const cached = cacheService.get<AdminStats>(cacheKey);
+        if (cached) return cached;
 
         const today = new Date();
         today.setHours(0, 0, 0, 0);

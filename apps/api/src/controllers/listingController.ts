@@ -1,186 +1,185 @@
 import { Request, Response } from "express";
 
-import {
-    createListingSchema,
-    updateListingSchema,
-    listingQuerySchema,
-    contactSellerSchema,
-    addImagesSchema,
-    reorderImagesSchema,
-} from "../schemas/listing";
 import { AdService } from "../services/adService";
 import { ListingService, ListingQuery } from "../services/listingService";
 import { SearchService } from "../services/searchService";
-import { BadRequestError } from "../utils/errors";
+import { logger } from "../utils/logger";
+import { isAdmin, requireUserId } from "../utils/validation";
 
 const listingService = new ListingService();
 const adService = new AdService();
 const searchService = new SearchService();
 
 export const getAllListings = async (req: Request, res: Response) => {
-    const result = listingQuerySchema.safeParse(req.query);
-    if (!result.success) {
-        throw new BadRequestError(result.error.issues[0].message);
+  // Validation is handled by middleware, data is in req.validatedQuery
+  const query = (req.validatedQuery || req.query) as unknown as ListingQuery;
+  const admin = isAdmin(req);
+  const listings = await listingService.getAllListings(query, admin);
+
+  // If it's the first page and not admin view, prepend sponsored listings
+  if (!admin && query.page === 1) {
+    try {
+      const context = {
+        fuelType: query.fuelType,
+        bodyType: query.bodyType,
+      };
+      const sponsoredData = await adService.getSponsoredListingsForSearch(context);
+
+      if (sponsoredData && sponsoredData.length > 0) {
+        const sponsoredListings = sponsoredData.map((s) => ({
+          ...s.listing,
+          isSponsored: true,
+        }));
+
+        // filter out sponsored listings if they already exist in standard listings to avoid duplicates
+        const sponsoredIds = new Set(sponsoredListings.map((l) => l.id));
+        listings.data = [
+          ...sponsoredListings,
+          ...listings.data.filter((l) => !(sponsoredIds.has((l as { id: string }).id))),
+        ];
+      }
+    } catch (error) {
+      // Log error but don't fail the request - ads are non-critical
+      logger.warn("[ListingController] Failed to fetch sponsored listings", {
+        error: error instanceof Error ? error.message : "Unknown error",
+      });
     }
+  }
 
-    const isAdmin = req.user?.role === "ADMIN";
-    const listings = await listingService.getAllListings(result.data as ListingQuery, isAdmin) as any;
-
-    // If it's the first page and not admin view, prepend sponsored listings
-    if (!isAdmin && result.data.page === 1) {
-        try {
-            const context = {
-                fuelType: result.data.fuelType,
-                bodyType: result.data.bodyType,
-            };
-            const sponsoredData = await adService.getSponsoredListingsForSearch(context);
-
-            if (sponsoredData && sponsoredData.length > 0) {
-                const sponsoredListings = sponsoredData.map(s => ({
-                    ...s.listing,
-                    isSponsored: true
-                }));
-
-                // filter out sponsored listings if they already exist in standard listings to avoid duplicates
-                const sponsoredIds = new Set(sponsoredListings.map(l => l.id));
-                listings.data = [
-                    ...sponsoredListings,
-                    ...listings.data.filter((l: any) => !sponsoredIds.has(l.id))
-                ];
-
-                // Update total count if needed (optional, usually sponsored are "extra")
-                // listings.total += sponsoredListings.length;
-            }
-        } catch (error) {
-            // Log error but don't fail the request - ads are non-critical
-            console.error("[ListingController] Failed to fetch sponsored listings:", error);
-        }
-    }
-
-    res.json(listings);
+  res.json(listings);
 };
 
 export const getListingById = async (req: Request, res: Response) => {
-    const listing = await listingService.getListingById(req.params.id as string);
-    res.json({ data: listing });
+  const listing = await listingService.getListingById(String(req.params.id));
+  res.json({ data: listing });
 };
 
 export const createListing = async (req: Request, res: Response) => {
-    const result = createListingSchema.safeParse(req.body);
-    if (!result.success) {
-        throw new BadRequestError(result.error.issues[0].message);
-    }
-
-    const userId = req.user!.id;
-    const listing = await listingService.createListing(userId, result.data);
-    res.status(201).json({ data: listing });
+  // Body is already validated by middleware
+  const data = req.body;
+  const userId = requireUserId(req);
+  const listing = await listingService.createListing(userId, data);
+  res.status(201).json({ data: listing });
 };
 
 export const updateListing = async (req: Request, res: Response) => {
-    const result = updateListingSchema.safeParse(req.body);
-    if (!result.success) {
-        throw new BadRequestError(result.error.issues[0].message);
-    }
-
-    const userId = req.user!.id;
-    const isAdmin = req.user!.role === "ADMIN";
-    const listing = await listingService.updateListing(req.params.id as string, userId, isAdmin, result.data);
-    res.json({ data: listing });
+  // Body is already validated by middleware
+  const data = req.body;
+  const userId = requireUserId(req);
+  const admin = isAdmin(req);
+  const listing = await listingService.updateListing(
+    String(req.params.id),
+    userId,
+    admin,
+    data
+  );
+  res.json({ data: listing });
 };
 
 export const deleteListing = async (req: Request, res: Response) => {
-    const userId = req.user!.id;
-    const isAdmin = req.user!.role === "ADMIN";
-    await listingService.deleteListing(req.params.id as string, userId, isAdmin);
-    res.status(204).send();
+  const userId = requireUserId(req);
+  const admin = isAdmin(req);
+  await listingService.deleteListing(String(req.params.id), userId, admin);
+  res.status(204).send();
 };
 
 export const getSimilarListings = async (req: Request, res: Response) => {
-    const listings = await listingService.getSimilarListings(req.params.id as string);
-    res.json({ data: listings });
+  const listings = await listingService.getSimilarListings(String(req.params.id));
+  res.json({ data: listings });
 };
 
 export const contactSeller = async (req: Request, res: Response) => {
-    const result = contactSellerSchema.safeParse(req.body);
-    if (!result.success) {
-        throw new BadRequestError(result.error.issues[0].message);
-    }
-
-    // Pass sender ID if user is authenticated
-    const senderId = req.user?.id;
-    await listingService.contactSeller(req.params.id as string, result.data, senderId);
-    res.status(200).json({ message: "Message sent successfully" });
+  // Body is already validated by middleware
+  const data = req.body;
+  // Pass sender ID if user is authenticated
+  const senderId = getUserId(req);
+  await listingService.contactSeller(String(req.params.id), data, senderId);
+  res.status(200).json({ message: "Message sent successfully" });
 };
 
 export const addImages = async (req: Request, res: Response) => {
-    const result = addImagesSchema.safeParse(req.body);
-    if (!result.success) {
-        throw new BadRequestError(result.error.issues[0].message);
-    }
-
-    const userId = req.user!.id;
-    const isAdmin = req.user!.role === "ADMIN";
-    const images = await listingService.addImages(req.params.id as string, userId, isAdmin, result.data.images);
-    res.status(201).json({ data: images });
+  // Body is already validated by middleware
+  const { images } = req.body;
+  const userId = requireUserId(req);
+  const admin = isAdmin(req);
+  const result = await listingService.addImages(
+    String(req.params.id),
+    userId,
+    admin,
+    images
+  );
+  res.status(201).json({ data: result });
 };
 
 export const reorderImages = async (req: Request, res: Response) => {
-    const result = reorderImagesSchema.safeParse(req.body);
-    if (!result.success) {
-        throw new BadRequestError(result.error.issues[0].message);
-    }
-
-    const userId = req.user!.id;
-    const isAdmin = req.user!.role === "ADMIN";
-    await listingService.reorderImages(req.params.id as string, userId, isAdmin, result.data.imageOrders);
-    res.status(200).json({ message: "Images reordered successfully" });
+  // Body is already validated by middleware
+  const { imageOrders } = req.body;
+  const userId = requireUserId(req);
+  const admin = isAdmin(req);
+  await listingService.reorderImages(
+    String(req.params.id),
+    userId,
+    admin,
+    imageOrders
+  );
+  res.status(200).json({ message: "Images reordered successfully" });
 };
 
 export const deleteImage = async (req: Request, res: Response) => {
-    const userId = req.user!.id;
-    const isAdmin = req.user!.role === "ADMIN";
-    await listingService.deleteImage(req.params.id as string, req.params.imageId as string, userId, isAdmin);
-    res.status(204).send();
+  const userId = requireUserId(req);
+  const admin = isAdmin(req);
+  await listingService.deleteImage(
+    String(req.params.id),
+    String(req.params.imageId),
+    userId,
+    admin
+  );
+  res.status(204).send();
 };
 
 /**
  * Get all filter options for the search functionality
  * Returns makes, models grouped by make, years, body types, fuel types, etc.
  */
-export const getFilterOptions = async (req: Request, res: Response) => {
-    const options = await searchService.getFilterOptions();
-    res.json({ data: options });
+export const getFilterOptions = async (_req: Request, res: Response) => {
+  const options = await searchService.getFilterOptions();
+  res.json({ data: options });
 };
 
 /**
  * Get featured listings for the home page (newest, electric, hybrid)
  */
 export const getFeaturedListings = async (req: Request, res: Response) => {
-    const { category = 'all', limit = '8' } = req.query;
-    const limitNum = Math.min(parseInt(limit as string, 10) || 8, 20);
+  const category = String(req.query.category || "all");
+  const limit = Math.min(parseInt(String(req.query.limit), 10) || 8, 20);
 
-    let listings;
-    
-    switch (category) {
-        case 'electric':
-            listings = await listingService.getListingsByFuelType('Electric', limitNum);
-            break;
-        case 'hybrid':
-            listings = await listingService.getListingsByFuelType('Hybrid', limitNum);
-            break;
-        case 'newest':
-        default:
-            listings = await listingService.getNewestListings(limitNum);
-            break;
-    }
+  let listings;
 
-    res.json({ data: listings });
+  switch (category) {
+    case "electric":
+      listings = await listingService.getListingsByFuelType("Electric", limit);
+      break;
+    case "hybrid":
+      listings = await listingService.getListingsByFuelType("Hybrid", limit);
+      break;
+    case "newest":
+    default:
+      listings = await listingService.getNewestListings(limit);
+      break;
+  }
+
+  res.json({ data: listings });
 };
 
 /**
  * Get body type counts for category grid
  */
 export const getBodyTypeCounts = async (_req: Request, res: Response) => {
-    const bodyTypes = await listingService.getBodyTypeCounts();
-    res.json({ data: bodyTypes });
+  const bodyTypes = await listingService.getBodyTypeCounts();
+  res.json({ data: bodyTypes });
 };
+
+// Helper to get optional user ID
+function getUserId(req: Request): string | undefined {
+  return req.user?.id;
+}

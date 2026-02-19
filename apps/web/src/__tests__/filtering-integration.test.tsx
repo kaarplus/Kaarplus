@@ -65,19 +65,19 @@ describe('Filtering Integration Audit (Frontend)', () => {
 		});
 
 		global.fetch = vi.fn().mockImplementation((url) => {
-			if (url.includes('/api/search/makes')) {
+			if (url.includes('/api/v1/search/makes')) {
 				return Promise.resolve({
 					ok: true,
 					json: () => Promise.resolve({ data: ['BMW', 'Tesla'] }),
 				});
 			}
-			if (url.includes('/api/search/models')) {
+			if (url.includes('/api/v1/search/models')) {
 				return Promise.resolve({
 					ok: true,
 					json: () => Promise.resolve({ data: ['Model S', 'Model 3'] }),
 				});
 			}
-			if (url.includes('/api/search/filters')) {
+			if (url.includes('/api/v1/search/filters')) {
 				return Promise.resolve({
 					ok: true,
 					json: () => Promise.resolve({

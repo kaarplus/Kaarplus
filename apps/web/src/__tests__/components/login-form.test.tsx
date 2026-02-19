@@ -3,7 +3,6 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { LoginForm } from '@/components/auth/login-form';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useToast } from '@/hooks/use-toast';
 
 // Mock next-auth/react specifically
 vi.mock('next-auth/react', () => ({
@@ -18,10 +17,14 @@ vi.mock('@/hooks/use-toast', () => ({
     })),
 }));
 
+// Mock next/navigation
+vi.mock('next/navigation', () => ({
+    useRouter: vi.fn(),
+}));
+
 describe('LoginForm', () => {
     const mockPush = vi.fn();
     const mockRefresh = vi.fn();
-    const { toast } = (useToast as any)();
 
     beforeEach(() => {
         vi.clearAllMocks();
@@ -29,6 +32,8 @@ describe('LoginForm', () => {
             push: mockPush,
             refresh: mockRefresh,
         });
+        // Mock fetch for the login API call
+        global.fetch = vi.fn();
     });
 
     it('renders login form correctly', () => {
@@ -51,8 +56,13 @@ describe('LoginForm', () => {
         });
     });
 
-    it('calls signIn when form is submitted with valid data', async () => {
+    it('calls fetch and signIn when form is submitted with valid data', async () => {
+        (fetch as any).mockResolvedValueOnce({
+            ok: true,
+            json: () => Promise.resolve({ user: { id: '1', email: 'test@example.com' } }),
+        });
         (signIn as any).mockResolvedValue({ error: null });
+
         render(<LoginForm />);
 
         fireEvent.change(screen.getByPlaceholderText('login.emailPlaceholder'), {
@@ -65,17 +75,34 @@ describe('LoginForm', () => {
         fireEvent.click(screen.getByRole('button', { name: /login.submit/i }));
 
         await waitFor(() => {
+            expect(fetch).toHaveBeenCalledWith(
+                '/api/v1/auth/login',
+                expect.objectContaining({
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: 'test@example.com', password: 'password123' }),
+                })
+            );
+        });
+
+        await waitFor(() => {
             expect(signIn).toHaveBeenCalledWith('credentials', expect.objectContaining({
                 email: 'test@example.com',
                 password: 'password123',
+                redirect: false,
             }));
         });
     });
 
-    it('handles sign in error', async () => {
+    it('handles login error from API', async () => {
         const mockToast = vi.fn();
+        const { useToast } = await import('@/hooks/use-toast');
         (useToast as any).mockReturnValue({ toast: mockToast });
-        (signIn as any).mockResolvedValue({ error: 'CredentialsSignin' });
+
+        (fetch as any).mockResolvedValueOnce({
+            ok: false,
+            json: () => Promise.resolve({ message: 'Invalid credentials' }),
+        });
 
         render(<LoginForm />);
 

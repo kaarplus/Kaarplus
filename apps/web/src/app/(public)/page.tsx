@@ -1,62 +1,42 @@
 import type { Metadata } from "next";
-import { HeroSection } from "@/components/landing/hero-section";
-import { VehicleCategories } from "@/components/landing/vehicle-categories";
-import { CategoryGrid } from "@/components/landing/category-grid";
-import { ValuePropositions } from "@/components/landing/value-propositions";
-import { PopularBrands } from "@/components/landing/popular-brands";
-import { ReviewsCarousel } from "@/components/landing/reviews-carousel";
-import { StatisticsSection } from "@/components/landing/statistics-section";
-import { FaqSection } from "@/components/landing/faq-section";
-import { NewsletterSignup } from "@/components/landing/newsletter-signup";
-
-import { JsonLd } from "@/components/shared/json-ld";
+import { HomeSearch } from "@/components/home/home-search";
+import { PremiumListings } from "@/components/home/premium-listings";
+import { LatestListings } from "@/components/home/latest-listings";
+import { AppPromo } from "@/components/home/app-promo";
 import { AdSlot } from "@/components/shared/ad-slot";
 import { generateWebsiteJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/shared/json-ld";
+
+
 
 export const metadata: Metadata = {
-  title: "Kaarplus | Autode ost ja müük Eestis - Elektri- ja hübriidautod",
-  description:
-    "Eesti kaasaegseim autode ost-müügi platvorm. Kontrollitud elektriautod, hübriidid ja sisepõlemismootoriga sõidukid. Turvalised tehingud ja usaldusväärsed müüjad.",
+	title: "Kaarplus | Buy and Sell Cars in Estonia",
+	description: "Estonia's largest car marketplace.",
 };
 
 export default function HomePage() {
-  const websiteJsonLd = generateWebsiteJsonLd();
+	const websiteJsonLd = generateWebsiteJsonLd();
 
-  return (
-    <main className="flex min-h-screen flex-col">
-      <JsonLd data={websiteJsonLd} />
-      {/* 1. Hero Section + Search Bar (integrated) */}
-      <HeroSection />
+	return (
+		<main className="flex min-h-screen flex-col bg-white dark:bg-black">
+			<JsonLd data={websiteJsonLd} />
 
-      {/* Ad: Billboard after hero */}
-      <AdSlot placementId="HOME_BILLBOARD" className="container px-4 -mt-4 mb-8" />
+			{/* 1. Main Search Bar */}
+			<HomeSearch />
 
-      {/* 2. Vehicle Categories (Buy / Electric / Hybrid tabs) */}
-      <VehicleCategories />
+			{/* Ad: Billboard after search */}
+			<AdSlot placementId="HOME_BILLBOARD" className="container px-4 my-6" />
 
-      {/* 3. Category Grid (8 body types with icons) */}
-      <CategoryGrid />
+			{/* 2. Premium Listings (VIP) */}
+			<PremiumListings />
 
-      {/* Ad: Featured Partners */}
-      <AdSlot placementId="HOME_PARTNERS" className="container px-4 my-8" />
+			{/* 3. Latest Listings (Grid) */}
+			<LatestListings />
 
-      {/* 4. Value Propositions (4 cards) */}
-      <ValuePropositions />
 
-      {/* 5. Popular Brands (8 brands) */}
-      <PopularBrands />
 
-      {/* 6. Customer Reviews (Carvago-style) */}
-      <ReviewsCarousel />
+			<AppPromo />
 
-      {/* 7. Statistics (Animated counters) */}
-      <StatisticsSection />
-
-      {/* 8. FAQ Accordion */}
-      <FaqSection />
-
-      {/* 9. Newsletter Signup */}
-      <NewsletterSignup />
-    </main>
-  );
+		</main>
+	);
 }

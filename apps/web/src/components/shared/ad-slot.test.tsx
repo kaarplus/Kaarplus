@@ -252,7 +252,7 @@ describe("AdSlot", () => {
 
       await waitFor(() => {
         expect(global.fetch).toHaveBeenCalledWith(
-          expect.stringContaining("/api/content-blocks/HOME_BILLBOARD")
+          expect.stringContaining("/api/v1/content-blocks/HOME_BILLBOARD")
         );
       });
     });
@@ -330,7 +330,7 @@ describe("AdSlot", () => {
         expect(engageCalls).toHaveLength(1);
 
         const [url, options] = engageCalls[0];
-        expect(url).toContain(`/api/content-blocks/ad-1/engage`);
+        expect(url).toContain(`/api/v1/content-blocks/ad-1/engage`);
         expect(options).toEqual(
           expect.objectContaining({
             method: "POST",

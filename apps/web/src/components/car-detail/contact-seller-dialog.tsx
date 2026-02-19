@@ -24,6 +24,7 @@ import Link from "next/link";
 interface ContactSellerDialogProps {
 	listingId: string;
 	listingTitle: string;
+	triggerButton?: React.ReactNode;
 }
 
 interface FormData {
@@ -33,7 +34,7 @@ interface FormData {
 	message: string;
 }
 
-export function ContactSellerDialog({ listingId, listingTitle }: ContactSellerDialogProps) {
+export function ContactSellerDialog({ listingId, listingTitle, triggerButton }: ContactSellerDialogProps) {
 	const { t } = useTranslation("carDetail");
 	const { toast } = useToast();
 	const { data: session } = useSession();
@@ -122,12 +123,14 @@ export function ContactSellerDialog({ listingId, listingTitle }: ContactSellerDi
 	return (
 		<Dialog open={isOpen} onOpenChange={setIsOpen}>
 			<DialogTrigger asChild>
-				<Button
-					variant="outline"
-					className="w-full h-12 border-2 text-primary border-primary hover:bg-primary/5 font-bold gap-2 rounded-xl"
-				>
-					<MessageSquare size={18} /> {t("priceCard.contactSeller")}
-				</Button>
+				{triggerButton || (
+					<Button
+						variant="outline"
+						className="w-full h-12 border-2 text-primary border-primary hover:bg-primary/5 font-bold gap-2 rounded-xl"
+					>
+						<MessageSquare size={18} /> {t("priceCard.contactSeller")}
+					</Button>
+				)}
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
 				{isSuccess ? (

@@ -7,7 +7,6 @@ import { dealershipRouter } from "./dealerships";
 import { listingsRouter } from "./listings";
 import { mobileRouter } from "./mobile";
 import { newsletterRouter } from "./newsletter";
-import { paymentsRouter } from "./payments";
 import { reviewsRouter } from "./reviews";
 import { searchRouter } from "./search";
 import { uploadsRouter } from "./uploads";
@@ -30,7 +29,7 @@ apiRouter.use("/auth", authRouter);
 apiRouter.use("/listings", listingsRouter);
 apiRouter.use("/search", searchRouter);
 apiRouter.use("/user", userRouter);
-apiRouter.use("/payments", paymentsRouter);
+
 apiRouter.use("/admin", adminRouter);
 apiRouter.use("/webhooks", webhooksRouter);
 apiRouter.use("/uploads", uploadsRouter);
