@@ -1,4 +1,4 @@
-import { prisma, ListingStatus, Prisma } from "@kaarplus/database";
+import { prisma, ListingStatus, UserRole, Prisma } from "@kaarplus/database";
 
 import { parseBodyType, getBodyTypeValues } from "../utils/bodyTypes";
 import { cacheService } from "../utils/cache";
@@ -244,14 +244,13 @@ export class ListingService {
 			where: { id },
 			include: {
 				images: {
+					where: { verified: true },
 					orderBy: { order: "asc" },
 				},
 				user: {
 					select: {
 						id: true,
-						email: true,
 						name: true,
-						phone: true,
 						role: true,
 						dealershipId: true,
 						image: true,
@@ -280,7 +279,7 @@ export class ListingService {
 		const user = await prisma.user.findUnique({ where: { id: userId } });
 		if (!user) throw new NotFoundError("User not found");
 
-		if (user.role === "USER") {
+		if (user.role === UserRole.USER) {
 			const activeCount = await prisma.listing.count({
 				where: {
 					userId,

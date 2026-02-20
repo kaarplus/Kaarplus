@@ -18,7 +18,7 @@ vi.mock('@kaarplus/database', () => ({
     },
 }));
 
-import { getUserDashboardStats, getUserListings, getUserProfile, updateUserProfile } from './dashboardService';
+import { getUserDashboardStats, getUserListings, getUserProfile, updateUserProfile, updateNotificationPrefs } from './dashboardService';
 
 import { prisma } from '@kaarplus/database';
 
@@ -96,6 +96,22 @@ describe('DashboardService', () => {
             expect(prisma.user.update).toHaveBeenCalledWith(expect.objectContaining({
                 where: { id: userId },
                 data: updateData,
+            }));
+        });
+    });
+
+    describe('updateNotificationPrefs', () => {
+        it('should update and return user notification preferences', async () => {
+            const userId = 'u1';
+            const prefs = { email: true, messages: false };
+            const mockUser = { notificationPrefs: prefs };
+            vi.mocked(prisma.user.update).mockResolvedValue(mockUser as any);
+
+            const result = await updateNotificationPrefs(userId, prefs);
+            expect(result).toEqual(mockUser);
+            expect(prisma.user.update).toHaveBeenCalledWith(expect.objectContaining({
+                where: { id: userId },
+                data: { notificationPrefs: prefs },
             }));
         });
     });

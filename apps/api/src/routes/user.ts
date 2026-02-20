@@ -5,6 +5,7 @@ import {
     getMyListings,
     getProfile,
     patchProfile,
+    updateNotificationPrefs,
 } from "../controllers/dashboardController";
 import {
     getUserFavorites,
@@ -33,7 +34,9 @@ import {
     deleteSavedSearch,
 } from "../controllers/savedSearchController";
 import { requireAuth } from "../middleware/auth";
-import { readLimiter, writeLimiter } from "../middleware/rateLimiter";
+import { readLimiter, writeLimiter, strictLimiter } from "../middleware/rateLimiter";
+import { validate } from "../middleware/validate";
+import { updateNotificationPrefsSchema } from "../schemas/user";
 
 export const userRouter = Router();
 
@@ -56,6 +59,7 @@ userRouter.get("/dashboard/stats", readLimiter, getDashboardStats);
 userRouter.get("/listings", readLimiter, getMyListings);
 userRouter.get("/profile", readLimiter, getProfile);
 userRouter.patch("/profile", writeLimiter, patchProfile);
+userRouter.patch("/notifications", writeLimiter, validate(updateNotificationPrefsSchema), updateNotificationPrefs);
 
 // Saved searches
 userRouter.get("/saved-searches", readLimiter, getSavedSearches);
@@ -75,5 +79,5 @@ userRouter.get("/messages/unread-count", readLimiter, getUnreadCount);
 userRouter.post("/messages", writeLimiter, sendMessage);
 userRouter.patch("/messages/mark-read", writeLimiter, markMessagesAsRead);
 
-// GDPR export is expensive - add stricter rate limit
-userRouter.get("/gdpr/export", readLimiter, exportData);
+// GDPR export is expensive - use strict rate limit (10 req/15min)
+userRouter.get("/gdpr/export", strictLimiter, exportData);

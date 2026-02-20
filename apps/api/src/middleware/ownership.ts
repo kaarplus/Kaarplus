@@ -1,4 +1,4 @@
-import { prisma } from "@kaarplus/database";
+import { prisma, UserRole } from "@kaarplus/database";
 import { Request, Response, NextFunction } from "express";
 
 import { ForbiddenError, NotFoundError, AuthError } from "../utils/errors";
@@ -36,7 +36,7 @@ export async function requireListingOwnership(
         }
 
         // Admins bypass ownership check
-        if (user.role === "ADMIN") {
+        if (user.role === UserRole.ADMIN) {
             return next();
         }
 
@@ -77,7 +77,7 @@ export async function requireMessageOwnership(
             return next(new NotFoundError("Message not found"));
         }
 
-        if (user.role === "ADMIN") {
+        if (user.role === UserRole.ADMIN) {
             return next();
         }
 

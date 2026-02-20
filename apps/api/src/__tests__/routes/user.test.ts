@@ -98,4 +98,26 @@ describe('User Routes', () => {
             expect(response.body.data).toBeDefined();
         });
     });
+
+    describe('Notifications', () => {
+        it('should update notification preferences', async () => {
+            const token = createAuthToken('user-123');
+            const newPrefs = { email: false, messages: true, marketing: true };
+            const mockUser = { id: 'user-123', notificationPrefs: newPrefs };
+
+            (prisma.user.update as any).mockResolvedValue(mockUser);
+
+            const response = await request(app)
+                .patch('/api/user/notifications')
+                .set('Cookie', [`token=${token}`])
+                .send(newPrefs);
+
+            expect(response.status).toBe(200);
+            expect(response.body.data).toEqual(mockUser);
+            expect(prisma.user.update).toHaveBeenCalledWith(expect.objectContaining({
+                where: { id: 'user-123' },
+                data: { notificationPrefs: newPrefs },
+            }));
+        });
+    });
 });

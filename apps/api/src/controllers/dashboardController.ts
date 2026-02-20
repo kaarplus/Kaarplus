@@ -5,6 +5,7 @@ import {
     getUserListings,
     getUserProfile,
     updateUserProfile,
+    updateNotificationPrefs as updateNotificationPrefsService,
 } from "../services/dashboardService";
 import { NotFoundError, ErrorCode } from "../utils/errors";
 
@@ -75,6 +76,22 @@ export const patchProfile = async (
         const { name, phone } = req.body;
 
         const user = await updateUserProfile(userId, { name, phone });
+        res.json({ data: user });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const updateNotificationPrefs = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const userId = req.user!.id;
+        const prefs = req.body;
+
+        const user = await updateNotificationPrefsService(userId, prefs);
         res.json({ data: user });
     } catch (error) {
         next(error);

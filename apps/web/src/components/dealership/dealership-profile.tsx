@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { ListingGrid } from "@/components/listings/listing-grid";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar } from "@/components/ui/avatar";
+import { ContactDealershipDialog } from "@/components/dealership/contact-dealership-dialog";
 
 interface DealershipProfileProps {
     dealership: ListingDetailed['user']; // ListingDetailed includes User fields
@@ -111,9 +112,15 @@ export function DealershipProfile({ dealership, listings }: DealershipProfilePro
                         )}
                     </div>
 
-                    <Button className="w-full font-bold h-12 gap-2">
-                        <MessageSquare size={18} /> {t('buttons.contact')}
-                    </Button>
+                    <ContactDealershipDialog
+                        dealershipId={dealership.id}
+                        dealershipName={dealership.name || "Dealership"}
+                        triggerButton={
+                            <Button className="w-full font-bold h-12 gap-2">
+                                <MessageSquare size={18} /> {t('buttons.contact')}
+                            </Button>
+                        }
+                    />
                 </div>
             </div>
 

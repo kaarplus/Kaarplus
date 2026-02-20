@@ -5,6 +5,12 @@ export const verifyListingSchema = z.object({
     reason: z.string().optional(),
 });
 
+export const verifyInspectionSchema = z.object({
+    status: z.enum(["APPROVED", "REJECTED", "COMPLETED", "FAILED"]),
+    inspectorNotes: z.string().optional(),
+    reportUrl: z.string().url().optional(),
+});
+
 export const adminQuerySchema = z.object({
     page: z.coerce.number().int().min(1).default(1),
     pageSize: z.coerce.number().int().min(1).max(100).default(20),

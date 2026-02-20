@@ -118,6 +118,13 @@
         },
         "save": "Save changes"
     },
+    "messaging": {
+        "errors": {
+            "conversations_load_failed": "Failed to load conversations",
+            "thread_load_failed": "Failed to load messages",
+            "message_send_failed": "Failed to send message"
+        }
+    },
     "savedSearches": {
         "title": "Saved searches",
         "description": "Manage your saved search filters and email notifications.",

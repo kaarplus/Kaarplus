@@ -58,6 +58,7 @@ model User {
   savedSearches   SavedSearch[]
   reviewsGiven    Review[]      @relation("ReviewsGiven")
   reviewsReceived Review[]      @relation("ReviewsReceived")
+  notificationPrefs Json?         // User notification preferences
   inspections     VehicleInspection[]
   buyerPayments   Payment[]     @relation("BuyerPayments")
   sellerPayments  Payment[]     @relation("SellerPayments")

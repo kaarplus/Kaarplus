@@ -38,7 +38,7 @@ export function createApp() {
 			},
 		})
 	);
-	app.use(express.urlencoded({ extended: true }));
+	app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 	// --- Static File Serving (Development) ---
 	if (process.env.NODE_ENV === "development") {

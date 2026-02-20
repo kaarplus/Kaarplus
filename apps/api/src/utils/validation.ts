@@ -4,6 +4,7 @@
  */
 
 import { AppError, BadRequestError } from "./errors";
+import { UserRole } from "@kaarplus/database";
 
 /**
  * Validates that min <= max for range parameters
@@ -90,7 +91,7 @@ export function requireUserId(req: { user?: { id: string } }): string {
  * Checks if user has admin role
  */
 export function isAdmin(req: { user?: { role: string } }): boolean {
-  return req.user?.role === "ADMIN";
+  return req.user?.role === UserRole.ADMIN;
 }
 
 /**

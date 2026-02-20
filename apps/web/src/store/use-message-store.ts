@@ -84,7 +84,7 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
 			set({ conversations, isLoadingConversations: false });
 		} catch (error) {
 			console.error("Failed to load conversations:", error);
-			set({ isLoadingConversations: false, error: "Vestluste laadimine ebaõnnestus" });
+			set({ isLoadingConversations: false, error: "conversations_load_failed" });
 		}
 	},
 
@@ -111,7 +111,7 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
 			set({ currentThread, isLoadingThread: false });
 		} catch (error) {
 			console.error("Failed to load thread:", error);
-			set({ isLoadingThread: false, error: "Sõnumite laadimine ebaõnnestus" });
+			set({ isLoadingThread: false, error: "thread_load_failed" });
 		}
 	},
 
@@ -142,7 +142,7 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
 			return true;
 		} catch (error) {
 			console.error("Failed to send message:", error);
-			set({ isSending: false, error: "Sõnumi saatmine ebaõnnestus" });
+			set({ isSending: false, error: "message_send_failed" });
 			return false;
 		}
 	},

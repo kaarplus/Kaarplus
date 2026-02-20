@@ -1,6 +1,8 @@
 import * as Sentry from "@sentry/node";
 import { nodeProfilingIntegration } from "@sentry/profiling-node";
 
+import { logger } from "./logger";
+
 export function initSentry() {
     if (process.env.SENTRY_DSN) {
         Sentry.init({
@@ -16,8 +18,8 @@ export function initSentry() {
             profilesSampleRate: 1.0,
             environment: process.env.NODE_ENV || "development",
         });
-        console.log("Sentry initialized");
+        logger.info("Sentry initialized");
     } else if (process.env.NODE_ENV === "production") {
-        console.warn("Sentry DSN not found, skipping initialization.");
+        logger.warn("Sentry DSN not found, skipping initialization.");
     }
 }

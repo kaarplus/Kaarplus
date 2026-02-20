@@ -22,6 +22,7 @@ import { useSession } from "next-auth/react";
 import { API_URL } from "@/lib/constants";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PasswordSettings } from "./password-settings";
 
 interface UserProfile {
   id: string;
@@ -31,6 +32,12 @@ interface UserProfile {
   image: string | null;
   role: string;
   createdAt: string;
+  notificationPrefs?: {
+    email: boolean;
+    messages: boolean;
+    favorites: boolean;
+    marketing: boolean;
+  };
 }
 
 export function SettingsPage() {
@@ -41,7 +48,7 @@ export function SettingsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  
+
   const [notifications, setNotifications] = useState({
     email: true,
     messages: true,
@@ -62,6 +69,14 @@ export function SettingsPage() {
       })
       .then((json) => {
         setProfile(json.data);
+        if (json.data.notificationPrefs) {
+          setNotifications({
+            email: json.data.notificationPrefs.email ?? true,
+            messages: json.data.notificationPrefs.messages ?? true,
+            favorites: json.data.notificationPrefs.favorites ?? false,
+            marketing: json.data.notificationPrefs.marketing ?? false,
+          });
+        }
       })
       .catch(() => {
         // Profile will remain null — form fields show empty
@@ -69,8 +84,28 @@ export function SettingsPage() {
       .finally(() => setIsLoading(false));
   }, [session?.user]);
 
-  const toggleNotification = (key: keyof typeof notifications) => {
-    setNotifications((prev) => ({ ...prev, [key]: !prev[key] }));
+  const toggleNotification = async (key: keyof typeof notifications) => {
+    const newPrefs = { ...notifications, [key]: !notifications[key] };
+    setNotifications(newPrefs);
+
+    try {
+      await fetch(`${API_URL}/user/notifications`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(newPrefs),
+      });
+      toast({
+        title: t('settings.notifications.success', { defaultValue: 'Preferences updated' }),
+      });
+    } catch (error) {
+      // Revert on error
+      setNotifications(notifications);
+      toast({
+        variant: "destructive",
+        title: t('settings.notifications.error', { defaultValue: 'Update failed' }),
+      });
+    }
   };
 
   const handleExportData = async () => {
@@ -79,11 +114,11 @@ export function SettingsPage() {
       const res = await fetch(`${API_URL}/user/gdpr/export`, {
         credentials: "include",
       });
-      
+
       if (!res.ok) throw new Error('Export failed');
-      
+
       const data = await res.json();
-      
+
       // Download as JSON file
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = window.URL.createObjectURL(blob);
@@ -94,7 +129,7 @@ export function SettingsPage() {
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
-      
+
       toast({
         title: t('settings.gdpr.export.success', { defaultValue: 'Andmed eksporditud' }),
         description: t('settings.gdpr.export.successDesc', { defaultValue: 'Teie andmed on alla laaditud' }),
@@ -114,21 +149,21 @@ export function SettingsPage() {
     if (!confirm(t('settings.gdpr.delete.confirm', { defaultValue: 'Kas olete kindel? See tegevus on pöördumatu.' }))) {
       return;
     }
-    
+
     setIsDeleting(true);
     try {
       const res = await fetch(`${API_URL}/user/gdpr/delete`, {
         method: "DELETE",
         credentials: "include",
       });
-      
+
       if (!res.ok) throw new Error('Delete failed');
-      
+
       toast({
         title: t('settings.gdpr.delete.success', { defaultValue: 'Konto kustutatud' }),
         description: t('settings.gdpr.delete.successDesc', { defaultValue: 'Teie konto on edukalt kustutatud' }),
       });
-      
+
       // Redirect to home
       window.location.href = '/';
     } catch (error) {
@@ -307,6 +342,9 @@ export function SettingsPage() {
         </div>
       </Card>
 
+      {/* Security section (Password) */}
+      <PasswordSettings />
+
       {/* GDPR section */}
       <Card className="rounded-xl border p-6">
         <div className="flex items-center gap-3 mb-6">
@@ -328,9 +366,9 @@ export function SettingsPage() {
                 {t('settings.gdpr.export.description')}
               </p>
             </div>
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               onClick={handleExportData}
               disabled={isExporting}
             >
@@ -354,9 +392,9 @@ export function SettingsPage() {
                 {t('settings.gdpr.delete.description')}
               </p>
             </div>
-            <Button 
-              variant="destructive" 
-              size="sm" 
+            <Button
+              variant="destructive"
+              size="sm"
               onClick={handleDeleteAccount}
               disabled={isDeleting}
             >

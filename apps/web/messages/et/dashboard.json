@@ -118,6 +118,13 @@
         },
         "save": "Salvesta muudatused"
     },
+    "messaging": {
+        "errors": {
+            "conversations_load_failed": "Vestluste laadimine ebaõnnestus",
+            "thread_load_failed": "Sõnumite laadimine ebaõnnestus",
+            "message_send_failed": "Sõnumi saatmine ebaõnnestus"
+        }
+    },
     "savedSearches": {
         "title": "Salvestatud otsingud",
         "description": "Hallake oma salvestatud otsingufiltreid ja e-posti teavitusi.",

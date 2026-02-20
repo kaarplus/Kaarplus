@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import { NotFoundError } from '../utils/errors';
 
-// Mock must be before importing the service
 vi.mock('@kaarplus/database', () => ({
     prisma: {
         user: {
@@ -12,12 +11,28 @@ vi.mock('@kaarplus/database', () => ({
         listing: {
             findMany: vi.fn(),
         },
+        message: {
+            create: vi.fn(),
+        }
     },
 }));
 
-import { DealershipService } from './dealershipService';
+vi.mock('../services/emailService', () => ({
+    emailService: {
+        sendNewMessageEmail: vi.fn().mockResolvedValue(true),
+    }
+}));
 
+vi.mock('../services/socketService', () => ({
+    socketService: {
+        isInitialized: vi.fn().mockReturnValue(true),
+        emitNewMessage: vi.fn(),
+    }
+}));
+import { DealershipService } from './dealershipService';
 import { prisma } from '@kaarplus/database';
+import { emailService } from './emailService';
+import { socketService } from './socketService';
 
 describe('DealershipService', () => {
     let service: DealershipService;
@@ -66,6 +81,62 @@ describe('DealershipService', () => {
             expect(prisma.listing.findMany).toHaveBeenCalledWith(expect.objectContaining({
                 where: { userId: '1', status: 'ACTIVE' },
             }));
+        });
+    });
+
+    describe('contactDealership', () => {
+        it('should send a message to the dealership successfully without senderId', async () => {
+            const dealershipId = 'd1';
+            const mockDealership = { id: dealershipId, role: 'DEALERSHIP', email: 'dealer@test.com' };
+            const contactData = { name: 'John Doe', email: 'john@example.com', message: 'Hi there' };
+            const mockMessage = { id: 'm1', recipientId: dealershipId, body: 'Sõnum' };
+
+            vi.mocked(prisma.user.findFirst).mockResolvedValue(mockDealership as any);
+            vi.mocked(prisma.message.create).mockResolvedValue(mockMessage as any);
+
+            const result = await service.contactDealership(dealershipId, contactData);
+
+            expect(result).toEqual(mockMessage);
+            expect(prisma.message.create).toHaveBeenCalledWith(expect.objectContaining({
+                data: expect.objectContaining({
+                    recipientId: dealershipId,
+                    subject: `Päring esindusele: ${contactData.name}`,
+                })
+            }));
+            expect(emailService.sendNewMessageEmail).toHaveBeenCalledWith(
+                mockDealership.email,
+                contactData.name,
+                "Teie esindusele"
+            );
+        });
+
+        it('should send a message to the dealership successfully with senderId', async () => {
+            const dealershipId = 'd1';
+            const senderId = 'u1';
+            const mockDealership = { id: dealershipId, role: 'DEALERSHIP', email: 'dealer@test.com' };
+            const contactData = { name: 'Jane Doe', email: 'jane@example.com', message: 'Hi dealer' };
+            const mockMessage = { id: 'm1', recipientId: dealershipId, senderId, sender: { name: 'Jane Doe' } };
+
+            vi.mocked(prisma.user.findFirst).mockResolvedValue(mockDealership as any);
+            vi.mocked(prisma.message.create).mockResolvedValue(mockMessage as any);
+
+            await service.contactDealership(dealershipId, contactData, senderId);
+
+            expect(prisma.message.create).toHaveBeenCalledWith(expect.objectContaining({
+                data: expect.objectContaining({
+                    recipientId: dealershipId,
+                    senderId,
+                    body: contactData.message,
+                })
+            }));
+            expect(socketService.emitNewMessage).toHaveBeenCalledWith(mockMessage);
+        });
+
+        it('should throw NotFoundError if dealership not found', async () => {
+            vi.mocked(prisma.user.findFirst).mockResolvedValue(null);
+
+            const contactData = { name: 'John', email: 'john@test.com', message: 'Hello' };
+            await expect(service.contactDealership('999', contactData)).rejects.toThrow(NotFoundError);
         });
     });
 });

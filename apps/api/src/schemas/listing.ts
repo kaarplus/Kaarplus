@@ -73,9 +73,17 @@ export const contactSellerSchema = z.object({
     phone: z.string().optional(),
 });
 
+const S3_URL_PATTERN = /^https:\/\/[\w-]+\.s3\.[\w-]+\.amazonaws\.com\/.+$/;
+
 export const addImagesSchema = z.object({
     images: z.array(z.object({
-        url: z.string().url("Invalid image URL"),
+        url: z.string().url("Invalid image URL").refine(
+            (url) => {
+                if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") return true;
+                return S3_URL_PATTERN.test(url);
+            },
+            "Image URL must be a valid S3 URL in production"
+        ),
         order: z.number().int().min(0),
     })),
 });

@@ -76,6 +76,7 @@ export async function getUserProfile(userId: string) {
             image: true,
             role: true,
             createdAt: true,
+            notificationPrefs: true,
         },
     });
 
@@ -97,6 +98,22 @@ export async function updateUserProfile(
             image: true,
             role: true,
             createdAt: true,
+            notificationPrefs: true,
+        },
+    });
+
+    return user;
+}
+
+export async function updateNotificationPrefs(
+    userId: string,
+    prefs: any
+) {
+    const user = await prisma.user.update({
+        where: { id: userId },
+        data: { notificationPrefs: prefs },
+        select: {
+            notificationPrefs: true,
         },
     });
 

@@ -27,6 +27,11 @@ vi.mock('@kaarplus/database', () => ({
 		PENDING: 'PENDING',
 		SOLD: 'SOLD',
 	},
+	UserRole: {
+		USER: 'USER',
+		DEALERSHIP: 'DEALERSHIP',
+		ADMIN: 'ADMIN',
+	},
 }));
 
 import { ListingService } from './listingService';

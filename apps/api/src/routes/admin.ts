@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import * as adController from "../controllers/adController";
 import * as adminController from "../controllers/adminController";
+import * as inspectionController from "../controllers/inspectionController";
 import { requireAuth, requireRole } from "../middleware/auth";
 import {
   adminLimiter,
@@ -17,7 +18,7 @@ import {
   adQuerySchema,
   analyticsQuerySchema,
 } from "../schemas/ad";
-import { adminQuerySchema, verifyListingSchema } from "../schemas/admin";
+import { adminQuerySchema, verifyListingSchema, verifyInspectionSchema } from "../schemas/admin";
 import { asyncHandler } from "../utils/asyncHandler";
 
 export const adminRouter = Router();
@@ -41,6 +42,14 @@ adminRouter.patch(
   writeLimiter,
   validate(verifyListingSchema),
   asyncHandler(adminController.verifyListing)
+);
+
+// Inspections
+adminRouter.patch(
+  "/inspections/:id",
+  writeLimiter,
+  validate(verifyInspectionSchema),
+  asyncHandler(inspectionController.updateInspectionStatus)
 );
 
 // Users
