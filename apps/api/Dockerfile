@@ -1,30 +1,35 @@
 FROM node:20-alpine
 
-# Set working directory
+# Install build dependencies for native modules (like bcrypt)
+# Alpine needs these to compile C++ modules
+RUN apk add --no-cache python3 make g++
+
 WORKDIR /app
 
-# Copy root package.json and workspace package.json files
+# Copy root package.json and lockfile
 COPY package*.json ./
-COPY apps/api/package*.json ./apps/api/
-COPY packages/database/package*.json ./packages/database/
 
-# Install dependencies (ignoring scripts initially to avoid prisma errors)
+# Copy workspace package.json files
+# This allows npm ci to see the workspace structure before installing
+COPY apps/api/package.json ./apps/api/
+COPY packages/database/package.json ./packages/database/
+
+# Install dependencies for the API and Database workspaces
+# We ignore scripts to prevent prisma from trying to run before we have the schema
 RUN npm ci --workspace=apps/api --workspace=@kaarplus/database --include-workspace-root
 
-# Copy source code
+# Copy the rest of the source code
 COPY . .
 
 # Generate Prisma client
 RUN npx prisma generate --schema packages/database/prisma/schema.prisma
 
-# Build the API
+# Build the API (TypeScript compilation)
 RUN npm run build --workspace=apps/api
 
-# Expose port
+# Set environment
+ENV NODE_ENV=production
 EXPOSE 4000
 
-# Set production env
-ENV NODE_ENV=production
-
-# Start the server
+# Start the application
 CMD ["node", "apps/api/dist/index.js"]
