@@ -13,10 +13,11 @@ COPY package*.json ./
 # This allows npm ci to see the workspace structure and generate the database client
 COPY apps/api/package.json ./apps/api/
 COPY packages/database/package.json ./packages/database/
+COPY packages/typescript-config/package.json ./packages/typescript-config/
 COPY packages/database/prisma/schema.prisma ./packages/database/prisma/
 
 # Install dependencies for the API and Database workspaces
-RUN npm ci --workspace=apps/api --workspace=@kaarplus/database --include-workspace-root
+RUN npm ci --workspace=apps/api --workspace=@kaarplus/database --workspace=@kaarplus/typescript-config --include-workspace-root
 
 # Copy the rest of the source code
 COPY . .
