@@ -11,8 +11,7 @@ import { EquipmentCheckboxes } from "./equipment-checkboxes";
 import { cn } from "@/lib/utils";
 
 import { useTranslation } from "react-i18next";
-import { useState, useEffect } from "react";
-import { FUEL_TYPES, TRANSMISSION_TYPES, DRIVE_TYPES, API_URL, ESTONIAN_CITIES } from "@/lib/constants";
+import { FUEL_TYPES, TRANSMISSION_TYPES, DRIVE_TYPES, ESTONIAN_CITIES, CAR_MAKES } from "@/lib/constants";
 
 const CONDITIONS = ["New", "Excellent", "Used", "Damaged"] as const;
 
@@ -24,21 +23,7 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
     const { t } = useTranslation('sell');
     const { register, formState: { errors }, watch, setValue } = useFormContext<SellFormValues>();
 
-    const [makes, setMakes] = useState<string[]>([]);
-    const [isLoadingMakes, setIsLoadingMakes] = useState(true);
-
-    useEffect(() => {
-        fetch(`${API_URL}/search/makes`)
-            .then((res) => {
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                return res.json();
-            })
-            .then((json) => setMakes(json.data || []))
-            .catch(() => {
-                // Makes will remain empty — user can still type manually
-            })
-            .finally(() => setIsLoadingMakes(false));
-    }, []);
+    const makes = [...CAR_MAKES];
 
     const fuelTypes = [...FUEL_TYPES];
     const transmissions = [...TRANSMISSION_TYPES];
