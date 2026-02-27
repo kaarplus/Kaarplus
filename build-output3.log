@@ -1,0 +1,20 @@
+
+> @kaarplus/web@1.0.0 build
+> next build
+
+   ▲ Next.js 15.5.12
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 8.6s
+   Skipping linting
+   Checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/43) ...
+npm error Lifecycle script `build` failed with error:
+npm error code 130
+npm error path /Users/elnuraghabayli/Desktop/Kaarplus/apps/web
+npm error workspace @kaarplus/web@1.0.0
+npm error location /Users/elnuraghabayli/Desktop/Kaarplus/apps/web
+npm error command failed
+npm error command sh -c next build
