@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import { VehicleSummary } from "@/types/vehicle";
 import { API_URL } from "@/lib/constants";
 import { useTranslation } from "react-i18next";
-import { Favorite } from "@kaarplus/database";
 
 const PAGE_SIZE = 12;
 
