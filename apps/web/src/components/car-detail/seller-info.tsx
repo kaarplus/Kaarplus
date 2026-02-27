@@ -51,16 +51,17 @@ export function SellerInfo({ seller, location }: SellerInfoProps) {
                     </div>
                     <div className="flex items-center gap-1 mt-1">
                         <span className="text-xs text-muted-foreground">{isDealership ? t('seller.dealership') : t('seller.privateSeller')}</span>
-                        {isUser && <span className="text-xs text-muted-foreground ml-1">({t('seller.verifiedUser')})</span>}
                     </div>
                 </div>
             </div>
 
             <div className="space-y-3 pt-2">
-                <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
-                    <ShieldCheck size={16} className="text-primary" />
-                    <span>{isDealership ? t('seller.officialPartner') : t('seller.verifiedSeller')}</span>
-                </div>
+                {isDealership && (
+                    <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
+                        <ShieldCheck size={16} className="text-primary" />
+                        <span>{t('seller.officialPartner')}</span>
+                    </div>
+                )}
                 {/* ... location and phone ... */}
                 <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
                     <MapPin size={16} className="text-primary" />
@@ -82,20 +83,6 @@ export function SellerInfo({ seller, location }: SellerInfoProps) {
                 </Button>
             )}
 
-            <div className="grid grid-cols-3 gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
-                <div className="flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity cursor-help" title={t('seller.history')}>
-                    <ShieldCheck size={28} className="text-slate-700" />
-                    <span className="text-[9px] font-extrabold uppercase text-center">{t('seller.history')}</span>
-                </div>
-                <div className="flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity cursor-help" title={t('seller.warranty')}>
-                    <Star size={28} className="text-slate-700" />
-                    <span className="text-[9px] font-extrabold uppercase text-center">{t('seller.warranty')}</span>
-                </div>
-                <div className="flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity cursor-help" title={t('seller.verified')}>
-                    <MapPin size={28} className="text-slate-700" />
-                    <span className="text-[9px] font-extrabold uppercase text-center">{t('seller.verified')}</span>
-                </div>
-            </div>
         </div>
     );
 }
