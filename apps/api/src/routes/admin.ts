@@ -64,6 +64,16 @@ adminRouter.get(
   validate(adminQuerySchema, "query"),
   asyncHandler(adminController.getUsers)
 );
+adminRouter.patch(
+  "/users/:id/role",
+  writeLimiter,
+  asyncHandler(adminController.updateUserRole)
+);
+adminRouter.delete(
+  "/users/:id",
+  writeLimiter,
+  asyncHandler(adminController.deleteUser)
+);
 
 // Analytics & Stats
 adminRouter.get(

@@ -22,6 +22,9 @@ export const createListingSchema = z.object({
     description: z.string().max(5000, "Description is too long").nullable().optional(),
     features: z.record(z.string(), z.boolean()).default({}),
     location: z.string().min(1, "Location is required"),
+    contactName: z.string().optional(),
+    contactEmail: z.string().email().optional().or(z.literal("")),
+    contactPhone: z.string().optional(),
 });
 
 export const updateListingSchema = createListingSchema.partial();

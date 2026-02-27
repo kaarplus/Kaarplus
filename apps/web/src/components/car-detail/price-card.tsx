@@ -150,7 +150,7 @@ export function PriceCard({
 					listingId={listingId}
 					listingTitle={listingTitle}
 					triggerButton={
-						<Button 
+						<Button
 							className="w-full h-12 font-bold bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 gap-2 rounded-xl text-white"
 						>
 							<MessageCircle size={18} /> {t('priceCard.messageSeller')}
@@ -185,18 +185,6 @@ export function PriceCard({
 					/>
 					{isFavorited ? t('priceCard.saved') : t('priceCard.save')}
 				</Button>
-			</div>
-
-			{/* Price Comparison Info */}
-			<div className="pt-2 grid grid-cols-2 gap-4">
-				<div className="text-center">
-					<div className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">{t('priceCard.marketAverage')}</div>
-					<div className="font-bold text-sm">{new Intl.NumberFormat('et-EE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(price * 1.02)}</div>
-				</div>
-				<div className="text-center">
-					<div className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">{t('priceCard.yourGain')}</div>
-					<div className="font-bold text-primary text-sm">{new Intl.NumberFormat('et-EE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(price * 0.02)}</div>
-				</div>
 			</div>
 		</div>
 	);

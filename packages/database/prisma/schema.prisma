@@ -95,6 +95,9 @@ model Listing {
   features           Json            // Flexible features storage
   registrationDate   DateTime?
   location           String          // City/region in Estonia
+  contactName        String?         // Contact name from sell form
+  contactEmail       String?         // Contact email from sell form
+  contactPhone       String?         // Contact phone from sell form
   viewCount          Int             @default(0)
   favoriteCount      Int             @default(0)
   verifiedAt         DateTime?

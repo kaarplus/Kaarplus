@@ -257,6 +257,9 @@ export function SellWizard() {
 					description: cleanValue(values.description),
 					features: values.features,
 					location: values.location,
+					contactName: values.contactName || null,
+					contactEmail: values.contactEmail || null,
+					contactPhone: values.contactPhone || null,
 				};
 
 				// 2. Create Listing

@@ -270,4 +270,27 @@ export class AdminService {
         cacheService.set(cacheKey, result, 60); // 1 minute cache
         return result;
     }
+
+    async updateUserRole(id: string, role: "USER" | "DEALERSHIP" | "ADMIN") {
+        const user = await prisma.user.findUnique({ where: { id } });
+        if (!user) throw new NotFoundError("User not found");
+
+        const updated = await prisma.user.update({
+            where: { id },
+            data: { role },
+            select: { id: true, email: true, name: true, role: true, createdAt: true },
+        });
+        return updated;
+    }
+
+    async deleteUser(id: string) {
+        const user = await prisma.user.findUnique({ where: { id } });
+        if (!user) throw new NotFoundError("User not found");
+
+        // Soft delete
+        await prisma.user.update({
+            where: { id },
+            data: { deletedAt: new Date() },
+        });
+    }
 }

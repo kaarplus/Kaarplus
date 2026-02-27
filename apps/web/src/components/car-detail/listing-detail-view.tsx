@@ -123,8 +123,8 @@ export function ListingDetailView({ listing }: ListingDetailViewProps) {
 							price={Number(listing.price)}
 							includeVat={listing.priceVatIncluded}
 							isFavorited={listing.isFavorited}
-							sellerPhone={listing.user?.phone}
-							sellerName={listing.user?.name}
+							sellerPhone={(listing as any).contactPhone || listing.user?.phone}
+							sellerName={(listing as any).contactName || listing.user?.name}
 						/>
 						<SellerInfo
 							seller={listing.user}

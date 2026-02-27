@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslation } from "react-i18next";
-import { Search, MoreHorizontal, Mail, Calendar, Loader2 } from "lucide-react";
+import { Search, Mail, Calendar, Loader2, Shield, UserX, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,9 +13,31 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+	DropdownMenuSub,
+	DropdownMenuSubTrigger,
+	DropdownMenuSubContent,
+} from "@/components/ui/dropdown-menu";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useEffect, useState } from "react";
 import { API_URL } from "@/lib/constants";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useToast } from "@/hooks/use-toast";
 
 interface User {
 	id: string;
@@ -27,46 +49,72 @@ interface User {
 
 export default function AdminUsersPage() {
 	const { t } = useTranslation("admin");
+	const { toast } = useToast();
 	const [users, setUsers] = useState<User[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [searchQuery, setSearchQuery] = useState("");
+	const [deleteTarget, setDeleteTarget] = useState<User | null>(null);
+	const [isDeleting, setIsDeleting] = useState(false);
 
-	useEffect(() => {
-		// Fetch users from admin API
-		fetch(`${API_URL}/admin/users`, {
-			credentials: "include",
-		})
+	const fetchUsers = () => {
+		setIsLoading(true);
+		fetch(`${API_URL}/admin/users`, { credentials: "include" })
 			.then((res) => res.json())
-			.then((json) => {
-				setUsers(json.data || []);
-			})
+			.then((json) => setUsers(json.data || []))
 			.catch(console.error)
 			.finally(() => setIsLoading(false));
-	}, []);
+	};
+
+	useEffect(() => { fetchUsers(); }, []);
 
 	const filteredUsers = users.filter(user =>
 		user.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
 		user.email.toLowerCase().includes(searchQuery.toLowerCase())
 	);
 
-	const formatDate = (dateStr: string) => {
-		return new Date(dateStr).toLocaleDateString('et-EE', {
-			day: "2-digit",
-			month: "2-digit",
-			year: "numeric",
-		});
-	};
+	const formatDate = (dateStr: string) =>
+		new Date(dateStr).toLocaleDateString('et-EE', { day: "2-digit", month: "2-digit", year: "numeric" });
 
 	const getRoleBadgeVariant = (role: string) => {
 		switch (role) {
-			case 'ADMIN':
-				return 'default';
-			case 'DEALERSHIP':
-				return 'secondary';
-			case 'USER':
-				return 'outline';
-			default:
-				return 'secondary';
+			case 'ADMIN': return 'default';
+			case 'DEALERSHIP': return 'secondary';
+			default: return 'outline';
+		}
+	};
+
+	const handleChangeRole = async (userId: string, newRole: string) => {
+		try {
+			const res = await fetch(`${API_URL}/admin/users/${userId}/role`, {
+				method: "PATCH",
+				headers: { "Content-Type": "application/json" },
+				credentials: "include",
+				body: JSON.stringify({ role: newRole }),
+			});
+			if (!res.ok) throw new Error("Failed to update role");
+			toast({ title: "Role updated", description: `User role changed to ${newRole}` });
+			fetchUsers();
+		} catch {
+			toast({ title: "Error", description: "Failed to update role", variant: "destructive" });
+		}
+	};
+
+	const handleDeleteUser = async () => {
+		if (!deleteTarget) return;
+		setIsDeleting(true);
+		try {
+			const res = await fetch(`${API_URL}/admin/users/${deleteTarget.id}`, {
+				method: "DELETE",
+				credentials: "include",
+			});
+			if (!res.ok && res.status !== 204) throw new Error("Failed to delete user");
+			toast({ title: "User deleted", description: `${deleteTarget.email} has been removed` });
+			setDeleteTarget(null);
+			fetchUsers();
+		} catch {
+			toast({ title: "Error", description: "Failed to delete user", variant: "destructive" });
+		} finally {
+			setIsDeleting(false);
 		}
 	};
 
@@ -161,9 +209,41 @@ export default function AdminUsersPage() {
 										</div>
 									</TableCell>
 									<TableCell className="text-right">
-										<Button variant="ghost" size="icon" className="group-hover:text-primary transition-colors">
-											<MoreHorizontal size={18} />
-										</Button>
+										<DropdownMenu>
+											<DropdownMenuTrigger asChild>
+												<Button variant="ghost" size="sm" className="gap-1 h-8 text-xs font-semibold">
+													Actions <ChevronDown size={14} />
+												</Button>
+											</DropdownMenuTrigger>
+											<DropdownMenuContent align="end" className="w-48">
+												<DropdownMenuLabel className="text-xs">User: {user.name || user.email}</DropdownMenuLabel>
+												<DropdownMenuSeparator />
+												<DropdownMenuSub>
+													<DropdownMenuSubTrigger className="gap-2 text-sm">
+														<Shield size={14} /> Change Role
+													</DropdownMenuSubTrigger>
+													<DropdownMenuSubContent>
+														{(["USER", "DEALERSHIP", "ADMIN"] as const).map((role) => (
+															<DropdownMenuItem
+																key={role}
+																disabled={user.role === role}
+																onClick={() => handleChangeRole(user.id, role)}
+																className="text-sm"
+															>
+																{role === user.role ? `✓ ${role}` : role}
+															</DropdownMenuItem>
+														))}
+													</DropdownMenuSubContent>
+												</DropdownMenuSub>
+												<DropdownMenuSeparator />
+												<DropdownMenuItem
+													onClick={() => setDeleteTarget(user)}
+													className="text-destructive focus:text-destructive gap-2 text-sm"
+												>
+													<UserX size={14} /> Delete User
+												</DropdownMenuItem>
+											</DropdownMenuContent>
+										</DropdownMenu>
 									</TableCell>
 								</TableRow>
 							))
@@ -171,6 +251,28 @@ export default function AdminUsersPage() {
 					</TableBody>
 				</Table>
 			</div>
+
+			{/* Delete Confirmation Dialog */}
+			<AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+				<AlertDialogContent>
+					<AlertDialogHeader>
+						<AlertDialogTitle>Delete User</AlertDialogTitle>
+						<AlertDialogDescription>
+							Are you sure you want to delete <strong>{deleteTarget?.email}</strong>? This action cannot be undone. The user and their listings will be removed.
+						</AlertDialogDescription>
+					</AlertDialogHeader>
+					<AlertDialogFooter>
+						<AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+						<AlertDialogAction
+							onClick={handleDeleteUser}
+							disabled={isDeleting}
+							className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+						>
+							{isDeleting ? <><Loader2 size={14} className="animate-spin mr-2" /> Deleting...</> : "Delete User"}
+						</AlertDialogAction>
+					</AlertDialogFooter>
+				</AlertDialogContent>
+			</AlertDialog>
 		</div>
 	);
 }

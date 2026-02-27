@@ -34,3 +34,14 @@ export const getStats = async (_req: Request, res: Response) => {
   const result = await adminService.getStats();
   res.json({ data: result });
 };
+
+export const updateUserRole = async (req: Request, res: Response) => {
+  const { role } = req.body as { role: "USER" | "DEALERSHIP" | "ADMIN" };
+  const user = await adminService.updateUserRole(String(req.params.id), role);
+  res.json({ data: user });
+};
+
+export const deleteUser = async (req: Request, res: Response) => {
+  await adminService.deleteUser(String(req.params.id));
+  res.status(204).send();
+};
